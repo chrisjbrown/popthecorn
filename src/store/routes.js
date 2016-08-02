@@ -9,10 +9,10 @@ import ScanPage from 'base/containers/scan-page';
 
 export default (
   <Route path="/" component={ App }>
-    <IndexRoute component={ CounterPage }/>
-    <Route path="about" component={ AboutPage }/>
-    <Route path="picklist" component={ PickListPage }/>
-    <Route path="settings" component={ SettingsPage }/>
-    <Route path="scan" component={ ScanPage }/>
+    <IndexRoute component={ PickListPage }/>
+    // <Route path="counter" component={ CounterPage }/>
+    // <Route path="about" component={ AboutPage }/>
+    // <Route path="settings" component={ SettingsPage }/>
+    // <Route path="scan" component={ ScanPage }/>
   </Route>
 );

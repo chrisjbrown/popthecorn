@@ -1,10 +1,10 @@
-import React, { Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 
 class Navigator extends Component {
   static propTypes = {
     children: PropTypes.node,
     testid: PropTypes.string,
-  }
+  };
 
   constructor(props) {
     super(props);

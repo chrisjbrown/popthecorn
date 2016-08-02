@@ -22,7 +22,7 @@ const history = syncHistoryWithStore(browserHistory, store);
 if ('serviceWorker' in navigator) {
   const register = require('serviceworker!./sw.js');
   register({ scope: '/' }).then(() => {
-    store.dispatch( initPushState() );
+    store.dispatch(initPushState());
   });
 } else {
   console.warn('Service workers aren\'t supported in this browser.');

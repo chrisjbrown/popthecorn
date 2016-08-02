@@ -5,7 +5,7 @@ export function subscribe() {
   // pushButton.disabled = true;
 
   return navigator.serviceWorker.ready.then((serviceWorkerRegistration) => {
-    return serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true})
+    return serviceWorkerRegistration.pushManager.subscribe({ userVisibleOnly: true })
       .then((subscription) => {
         // The subscription was successful
         // isPushEnabled = true;
@@ -24,12 +24,14 @@ export function subscribe() {
           // to manually change the notification permission to
           // subscribe to push messages
           console.warn('Permission for Notifications was denied');
+
           // pushButton.disabled = true;
         } else {
           // A problem occurred with the subscription; common reasons
           // include network errors, and lacking gcm_sender_id and/or
           // gcm_user_visible_only in the manifest.
           console.error('Unable to subscribe to push.', e);
+
           // pushButton.disabled = false;
           // pushButton.textContent = 'Enable Push Messages';
         }

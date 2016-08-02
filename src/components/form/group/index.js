@@ -4,7 +4,7 @@ class FormGroup extends Component {
   static propTypes = {
     children: PropTypes.node,
     testid: PropTypes.string,
-  }
+  };
 
   constructor(props) {
     super(props);

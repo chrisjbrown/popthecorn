@@ -16,8 +16,6 @@ class Logo extends Component {
     );
   }
 
-  contructor() {}
-
 }
 
 export default Logo;

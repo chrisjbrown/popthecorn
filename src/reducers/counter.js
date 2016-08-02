@@ -8,17 +8,18 @@ const INITIAL_STATE = fromJS({
 function counterReducer(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
 
-  case INCREMENT_COUNTER:
-    return state.update('count', (value) => value + 1);
-
-  case DECREMENT_COUNTER:
-    return state.update('count', (value) => value - 1);
-
-  case LOGOUT_USER:
-    return state.merge(INITIAL_STATE);
-
-  default:
-    return state;
+    case INCREMENT_COUNTER: {
+      return state.update('count', (value) => value + 1);
+    }
+    case DECREMENT_COUNTER: {
+      return state.update('count', (value) => value - 1);
+    }
+    case LOGOUT_USER: {
+      return state.merge(INITIAL_STATE);
+    }
+    default: {
+      return state;
+    }
   }
 }
 

@@ -8,7 +8,7 @@ class Button extends Component {
     className: PropTypes.string,
     type: PropTypes.oneOf(['button', 'submit', 'reset']),
     onClick: PropTypes.func,
-  }
+  };
 
   constructor(props) {
     super(props);

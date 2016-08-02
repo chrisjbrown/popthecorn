@@ -8,11 +8,11 @@ export default function promiseMiddleware({ dispatch }) {
 
     const { types, payload, meta } = action;
     const { promise, data } = payload;
-    const [ PENDING, FULFILLED, REJECTED ] = types;
+    const [PENDING, FULFILLED, REJECTED] = types;
 
-   /**
-    * Dispatch the pending action
-    */
+    /**
+     * Dispatch the pending action
+     */
     dispatch({
       type: PENDING,
       ...data && { payload: data },

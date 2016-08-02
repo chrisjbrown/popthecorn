@@ -41,8 +41,8 @@ class App extends Component {
   render() {
     const { session, children, login, logout } = this.props;
 
-    const token = session.get('token', false);
-    const isLoggedIn = token && token !== null && typeof token !== 'undefined';
+    // const token = session.get('token', false);
+    const isLoggedIn = true; // token && token !== null && typeof token !== 'undefined';
     const firstName = session.getIn(['user', 'first'], '');
     const lastName = session.getIn(['user', 'last'], '');
 
@@ -57,27 +57,27 @@ class App extends Component {
           <NavigatorItem mr>
             <Logo />
           </NavigatorItem>
-          <NavigatorItem isVisible={ isLoggedIn } mr>
-            <Link to="/">Counter</Link>
+          <NavigatorItem isVisible={ false } mr>
+            <Link to="/counter">Counter</Link>
           </NavigatorItem>
-          <NavigatorItem isVisible={ isLoggedIn } mr>
+          <NavigatorItem isVisible={ false } mr>
             <Link to="/about">About Us</Link>
           </NavigatorItem>
           <NavigatorItem isVisible={ isLoggedIn } mr>
-            <Link to="/picklist">Pick List</Link>
+            <Link to="/">Pick List</Link>
           </NavigatorItem>
-          <NavigatorItem isVisible={ isLoggedIn } mr>
+          <NavigatorItem isVisible={ false } mr>
             <Link to="/settings">Settings</Link>
           </NavigatorItem>
-          <NavigatorItem isVisible={ isLoggedIn }>
+          <NavigatorItem isVisible={ false }>
             <Link to="/scan">Scan</Link>
           </NavigatorItem>
           <div className="flex flex-auto"></div>
-          <NavigatorItem isVisible={ isLoggedIn } mr>
+          <NavigatorItem isVisible={ false } mr>
             <div data-testid="user-profile" className="h3">{ `${firstName} ${lastName}` }</div>
           </NavigatorItem>
-          <NavigatorItem isVisible={ isLoggedIn }>
-            <Button onClick={ logout } className="bg-red white">
+          <NavigatorItem isVisible={ false }>
+            <Button disabled onClick={ logout } className="bg-red white">
               Logout
             </Button>
           </NavigatorItem>

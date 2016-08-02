@@ -1,9 +1,15 @@
 const testing = process.env.TEST;
 const production = process.env.NODE_ENV === 'production';
 
+const eslintloader = [];
+
+if (!production) {
+  eslintloader.push('eslint-loader');
+}
+
 exports.eslint = {
   test: /\.jsx?$/,
-  loader: 'eslint-loader',
+  loaders: eslintloader,
 };
 
 exports.css = {

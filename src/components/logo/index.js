@@ -11,7 +11,7 @@ class Logo extends Component {
         <img style={ styles }
           src={ LogoImage }
           data-ref="logo-image"
-          alt="DBK Picker" />
+          alt="DBK Stock Runner" />
       </div>
     );
   }

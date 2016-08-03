@@ -1,5 +1,6 @@
 const path = require('path');
-const proxy = require('./server/webpack-dev-proxy');
+
+// const proxy = require('./server/webpack-dev-proxy');
 const plugins = require('./webpack/plugins');
 const postcss = require('./webpack/postcss');
 const loaders = require('./webpack/loaders');
@@ -28,13 +29,13 @@ module.exports = {
     libraryTarget: 'umd',
   },
 
-  devtool: 'source-map',
+  devtool: !devmode ? 'source-map' : 'inline-source-map',
 
   plugins: plugins,
 
   devServer: {
     historyApiFallback: { index: '/' },
-    proxy: Object.assign({}, proxy(), { '/api/*': 'http://localhost:3000' }),
+    // proxy: Object.assign({}, proxy(), { '/api/*': 'http://localhost:3000' }),
     inline: true,
   },
 

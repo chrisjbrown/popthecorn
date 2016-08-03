@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { togglePush } from 'base/actions/session';
-import Button from 'base/components/button';
+import Toggle from 'material-ui/Toggle';
 import Container from 'base/components/container';
+import { List, ListItem } from 'material-ui/List';
 
 function mapStateToProps(state) {
   return {
@@ -12,7 +13,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggle: (pushEnabled) => dispatch(togglePush(pushEnabled)),
+    togglePushNotifications: (pushEnabled) => dispatch(togglePush(pushEnabled)),
   };
 }
 
@@ -20,7 +21,7 @@ class SettingsPage extends Component {
 
   static propTypes = {
     pushEnabled: React.PropTypes.bool,
-    toggle: React.PropTypes.func,
+    togglePushNotifications: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -28,16 +29,22 @@ class SettingsPage extends Component {
   }
 
   render() {
-    const {toggle, pushEnabled} = this.props;
+    const {togglePushNotifications, pushEnabled} = this.props;
     return (
       <Container size={4} center>
         <h2 className="caps">
-          SettingsPage
+          Settings Page
         </h2>
 
-        <Button onClick={toggle.bind(this, pushEnabled)}>
-          { pushEnabled ? 'Disable Push Messages' : 'Enable Push Messages' }
-        </Button>
+        <List>
+          <ListItem>
+            <Toggle
+              label={ 'Push Messages' }
+              toggled={ pushEnabled }
+              onToggle={ togglePushNotifications.bind(this, pushEnabled) }
+            />
+          </ListItem>
+        </List>
       </Container>
     );
   }

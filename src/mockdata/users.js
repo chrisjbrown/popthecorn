@@ -1,0 +1,32 @@
+const Users = [
+  {
+    'id': '1',
+    'Username': 'admin',
+    'Password': 'superuser',
+    'First': 'Super',
+    'Last': 'Dave',
+  },
+  {
+    'id': '2',
+    'Username': 'guest',
+    'Password': 'letmein',
+    'First': 'Guest',
+    'Last': 'Visitor',
+  },
+  {
+    'id': '3',
+    'Username': 'user',
+    'Password': 'pass',
+    'First': 'John',
+    'Last': 'Doe',
+  },
+  {
+    'id': '4',
+    'Username': 'alice',
+    'Password': 'x',
+    'First': 'Alice',
+    'Last': 'Carroll',
+  },
+];
+
+export default Users;

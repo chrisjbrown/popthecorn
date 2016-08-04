@@ -1,5 +1,4 @@
 require('./manifest.json');
-import { initPushState } from 'base/actions/session';
 
 import 'es5-shim';
 import 'es6-shim';
@@ -21,9 +20,7 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 if ('serviceWorker' in navigator) {
   const register = require('serviceworker!./sw.js');
-  register({ scope: '/' }).then(() => {
-    store.dispatch(initPushState());
-  });
+  register({ scope: '/' });
 } else {
   console.warn('Service workers aren\'t supported in this browser.');
 }

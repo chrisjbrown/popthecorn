@@ -6,7 +6,7 @@ import FormGroup from '../form/group';
 import FormLabel from '../form/label';
 import FormError from '../form/error';
 import Input from '../form/input';
-import Button from '../button';
+import RaisedButton from 'material-ui/RaisedButton';
 import Alert from '../alert';
 
 class LoginForm extends Component {
@@ -47,13 +47,18 @@ class LoginForm extends Component {
           </FormError>
         </FormGroup>
 
-        <FormGroup testid="login-submit">
-          <Button type="submit" className="mr1" id="qa-login-button">
-            Login
-          </Button>
-          <Button onClick={ resetForm } type="reset" className="bg-red" id="qa-clear-button">
-            Clear
-          </Button>
+        <FormGroup testid="login-submit" className="right">
+          <RaisedButton
+            label="Clear"
+            onTouchTap={ resetForm }
+            className="mr2"
+          />
+          <RaisedButton
+            label="Login"
+            primary={ true }
+            type="submit"
+            onTouchTap={ handleSubmit }
+          />
         </FormGroup>
       </Form>
     );

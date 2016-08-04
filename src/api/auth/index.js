@@ -1,24 +1,11 @@
-// import { post } from '../server/';
 import Users from 'base/mockdata/users';
 
-// const LOGIN_ERR_MSG = `
-//   The username or password you have entered is invalid.
-// `;
-
-export function login(user) {
-  return authenticateUser(user.username, user.password, Users);
-  // return post('/auth/login', user)
-  // .then(json => resolve(json.meta))
-  // .then(null, () => reject(new Error(LOGIN_ERR_MSG)));
-  // });
-}
-
-function authenticateUser(username, password, users) {
+export function login(credentials) {
   return new Promise((resolve, reject) => {
-    if (username && password) {
-      const authorized = users.filter(
-        (user) => {
-          return (user.Username === username) && (user.Password === password);
+    if (credentials.username && credentials.password) {
+      const authorized = Users.filter(
+        (userFound) => {
+          return (userFound.Username === credentials.username) && (userFound.Password === credentials.password);
         });
       if (authorized.length > 0) {
         resolve({

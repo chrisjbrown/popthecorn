@@ -4,8 +4,8 @@ import sessionReducer from '../reducers/session';
 
 import {
   LOGIN_USER_PENDING,
-  LOGIN_USER_SUCCESS,
-  LOGIN_USER_ERROR,
+  LOGIN_USER_FULFILLED,
+  LOGIN_USER_REJECTED,
   LOGOUT_USER,
 } from '../../src/constants/index';
 
@@ -28,9 +28,9 @@ describe('Session Reducer', () => {
     });
   });
 
-  describe('on LOGIN_USER_SUCCESS', () => {
+  describe('on LOGIN_USER_FULFILLED', () => {
     it('should save the username', () => {
-      state = fireAction(sessionReducer, state, LOGIN_USER_SUCCESS, { token: 1234 });
+      state = fireAction(sessionReducer, state, LOGIN_USER_FULFILLED, { token: 1234 });
 
       assert(!state.get('isLoading'));
       assert(!state.get('hasError'));
@@ -38,7 +38,7 @@ describe('Session Reducer', () => {
     });
   });
 
-  describe('on LOGIN_USER_ERROR', () => {
+  describe('on LOGIN_USER_REJECTED', () => {
     it('should save the username', () => {
       state = fireAction(sessionReducer, state, LOGIN_USER_ERROR);
 
@@ -46,7 +46,6 @@ describe('Session Reducer', () => {
       assert(state.get('hasError'));
     });
   });
-
 
   describe('on LOGOUT_USER', () => {
     it('should save the username', () => {

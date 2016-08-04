@@ -1,14 +1,11 @@
+import { bindActionCreators } from 'redux';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-import { loginUser, logoutUser } from 'base/actions/session';
-
-import Content from 'base/components/content';
-import LoginModal from 'base/components/login/login-modal';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -18,24 +15,15 @@ import AccessibilityIcon from 'material-ui/svg-icons/action/accessibility';
 import MenuItem from 'material-ui/MenuItem';
 import Drawer from 'material-ui/Drawer';
 import { List, ListItem } from 'material-ui/List';
+import Snackbar from 'material-ui/Snackbar';
+
+import Content from 'base/components/content';
+import LoginModal from 'base/components/login/login-modal';
+import * as SessionActions from 'base/actions/session';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
-
-function mapStateToProps(state) {
-  return {
-    session: state.session,
-    router: state.router,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    login: () => dispatch(loginUser()),
-    logout: () => dispatch(logoutUser()),
-  };
-}
 
 const muiTheme = getMuiTheme();
 
@@ -44,8 +32,10 @@ class App extends Component {
   static propTypes = {
     children: PropTypes.node,
     session: PropTypes.object,
-    login: PropTypes.func,
-    logout: PropTypes.func,
+    error: PropTypes.object,
+    loginUser: PropTypes.func,
+    logoutUser: PropTypes.func,
+    removeErr: PropTypes.func,
   };
 
   constructor(props, context) {
@@ -57,17 +47,20 @@ class App extends Component {
   }
 
   render() {
-    const { session, children, login, logout } = this.props;
+    const { session, error, loginUser, logoutUser, children } = this.props;
     const { drawerOpen } = this.state;
 
+    const errorMsg = error.get('message', false);
     const token = session.get('token', false);
-    const isLoggedIn = token && token !== null && typeof token !== 'undefined';
+
+    const displayError = (errorMsg && errorMsg !== null && typeof errorMsg !== 'undefined') ? true : false;
+    const isLoggedIn = (token && token !== null && typeof token !== 'undefined') ? true : false;
 
     return (
       <MuiThemeProvider muiTheme={ muiTheme }>
         <div>
           <LoginModal
-            onSubmit={ login }
+            onSubmit={ loginUser.bind(this) }
             isPending={ session.get('isLoading', false) }
             hasError={ session.get('hasError', false) }
             open={ !isLoggedIn } />
@@ -88,7 +81,7 @@ class App extends Component {
                 }
                 targetOrigin={ {horizontal: 'right', vertical: 'top'} }
                 anchorOrigin={ {horizontal: 'right', vertical: 'top'} }>
-                <MenuItem onTouchTap={ logout } primaryText="Sign out" />
+                <MenuItem onTouchTap={ logoutUser } primaryText="Sign out" />
               </IconMenu>
             }
           />
@@ -113,6 +106,11 @@ class App extends Component {
           <Content isVisible={ isLoggedIn }>
             { children }
           </Content>
+          <Snackbar
+            open={ displayError }
+            message={ displayError ? errorMsg : '' }
+            autoHideDuration={3000}
+          />
         </div>
       </MuiThemeProvider>
     );
@@ -132,6 +130,10 @@ class App extends Component {
 }
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
+  state => ({
+    session: state.session,
+    router: state.router,
+    error: state.error,
+  }),
+  dispatch => bindActionCreators(SessionActions, dispatch)
 )(App);

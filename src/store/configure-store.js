@@ -1,35 +1,34 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
 import persistState from 'redux-localstorage';
-import thunk from 'redux-thunk';
-import promiseMiddleware from '../middleware/promise-middleware';
+import createSagaMiddleware from 'redux-saga';
 import { browserHistory } from 'react-router';
 import { routerMiddleware } from 'react-router-redux';
 import logger from './logger';
 import rootReducer from '../reducers';
+import initSagas from 'base/sagas';
 
 function configureStore(initialState) {
-  const store = compose(
-    _getMiddleware(),
-    ..._getEnhancers()
-  )(createStore)(rootReducer, initialState);
+  const sagaMiddleware = createSagaMiddleware();
 
-  _enableHotLoader(store);
-  return store;
-}
-
-function _getMiddleware() {
-  let middleware = [
+  let middlewares = [
+    sagaMiddleware,
     routerMiddleware(browserHistory),
-    promiseMiddleware,
-    thunk,
   ];
 
   if (__DEV__) {
-    middleware = [...middleware, logger];
+    middlewares = [...middlewares, logger];
   }
 
-  return applyMiddleware(...middleware);
+  const store = compose(
+    applyMiddleware(...middlewares),
+    ..._getEnhancers()
+  )(createStore)(rootReducer, initialState);
+
+  sagaMiddleware.run(initSagas);
+
+  _enableHotLoader(store);
+  return store;
 }
 
 function _getEnhancers() {
@@ -55,7 +54,7 @@ function _enableHotLoader(store) {
 
 function _getStorageConfig() {
   return {
-    key: 'react-redux-seed',
+    key: 'stockrunner',
     serialize: (store) => {
       return store && store.session ?
         JSON.stringify(store.session.toJS()) : store;

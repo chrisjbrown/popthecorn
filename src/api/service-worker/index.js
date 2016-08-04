@@ -15,6 +15,7 @@ export function subscribe() {
         // TODO: Send the subscription.endpoint to your server
         // and save it to send a push message at a later date
         // return sendSubscriptionToServer(subscription);
+
         return subscription;
       })
       .catch((e) => {
@@ -24,13 +25,14 @@ export function subscribe() {
           // to manually change the notification permission to
           // subscribe to push messages
           console.warn('Permission for Notifications was denied');
-
-          // pushButton.disabled = true;
+          throw new Error('Permission for Notifications was denied');
         } else {
           // A problem occurred with the subscription; common reasons
           // include network errors, and lacking gcm_sender_id and/or
           // gcm_user_visible_only in the manifest.
           console.error('Unable to subscribe to push.', e);
+
+          throw new Error('Unable to subscribe to push.');
 
           // pushButton.disabled = false;
           // pushButton.textContent = 'Enable Push Messages';
@@ -55,7 +57,7 @@ export function unsubscribe() {
           // isPushEnabled = false;
           // pushButton.disabled = false;
           // pushButton.textContent = 'Enable Push Messages';
-          return {};
+          return false;
         }
 
         // var subscriptionId = pushSubscription.subscriptionId;
@@ -80,9 +82,11 @@ export function unsubscribe() {
           // pushButton.disabled = false;
           // pushButton.textContent = 'Enable Push Messages';
           console.error(e);
+          throw new Error('Failed to unsubscribe from push');
         });
       }).catch((e) => {
         console.error('Error thrown while unsubscribing from push messaging.', e);
+        throw new Error('Error thrown while unsubscribing from push messaging');
       });
   });
 }

@@ -1,8 +1,8 @@
 import {
-  LOGIN_USER_PENDING,
-  LOGIN_USER_SUCCESS,
-  LOGIN_USER_ERROR,
-  LOGOUT_USER,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_ERROR,
+  LOGOUT,
   PUSH_ENABLE,
   PUSH_DISABLE,
 } from 'base/constants';
@@ -19,21 +19,21 @@ const INITIAL_STATE = fromJS({
 
 function sessionReducer(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
-    case LOGIN_USER_PENDING:
+    case LOGIN_REQUEST:
       return state.merge(fromJS({
         token: null,
         user: {},
         hasError: false,
         isLoading: true,
       }));
-    case LOGIN_USER_SUCCESS:
+    case LOGIN_SUCCESS:
       return state.merge(fromJS({
-        token: action.payload.token,
-        user: action.payload.profile,
+        token: action.user.token,
+        user: action.user.profile,
         hasError: false,
         isLoading: false,
       }));
-    case LOGIN_USER_ERROR:
+    case LOGIN_ERROR:
       return state.merge(fromJS({
         hasError: true,
         isLoading: false,
@@ -46,7 +46,7 @@ function sessionReducer(state = INITIAL_STATE, action = {}) {
       return state.merge(fromJS({
         pushEnabled: false,
       }));
-    case LOGOUT_USER:
+    case LOGOUT:
       return state.merge(INITIAL_STATE);
     default:
       return state;

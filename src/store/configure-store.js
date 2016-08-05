@@ -5,7 +5,7 @@ import createSagaMiddleware from 'redux-saga';
 import { browserHistory } from 'react-router';
 import { routerMiddleware } from 'react-router-redux';
 import logger from './logger';
-import rootReducer from '../reducers';
+import rootReducer from 'base/reducers';
 import initSagas from 'base/sagas';
 
 function configureStore(initialState) {

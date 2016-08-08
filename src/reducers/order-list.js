@@ -21,7 +21,7 @@ function orderListReducer(state = INITIAL_STATE, action = {}) {
       }));
     case ORDER_LIST_SUCCESS:
       return state.merge(fromJS({
-        orders: action.payload.orderList,
+        orders: action.payload.items,
         hasError: false,
         isLoading: false,
       }));

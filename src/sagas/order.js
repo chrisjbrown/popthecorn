@@ -9,8 +9,8 @@ import {
 
 export function* watchOrder() {
   while (true) {
-    const orderId = yield take(ORDER_REQUEST);
-    yield call(order, orderId);
+    const requestAction = yield take(ORDER_REQUEST);
+    yield call(order, requestAction.payload.orderId);
   }
 }
 

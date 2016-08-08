@@ -28,3 +28,11 @@
 @import 'basscss-position';
 @import 'basscss-border';
 @import 'basscss-hide';
+
+.navbar {
+  height: 64px;
+}
+
+main {
+  padding-top: 64px;
+}

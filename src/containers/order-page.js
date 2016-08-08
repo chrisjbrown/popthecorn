@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import CircularProgress from 'material-ui/CircularProgress';
+import Avatar from 'material-ui/Avatar';
 
 import Container from 'base/components/container';
 import * as OrderActions from 'base/actions/order';
@@ -12,10 +12,7 @@ import * as OrderActions from 'base/actions/order';
 class OrderPage extends Component {
 
   static propTypes = {
-    products: PropTypes.array,
-    id: PropTypes.number,
-    name: PropTypes.string,
-    customer: PropTypes.string,
+    order: PropTypes.object,
     params: PropTypes.object,
     requestOrder: PropTypes.func,
     isLoading: PropTypes.bool,
@@ -38,29 +35,41 @@ class OrderPage extends Component {
   }
 
   renderOrder() {
-    const { products, customer, id, name } = this.props;
+    const orderData = this.props.order.get('orderData');
 
-    const productListItems = products.map((product) => {
+    if (orderData !== null) {
+      const { product, customer, order } = orderData.toJS();
+
       return (
-        <ListItem key={ product.id }>
-          <div>{ product.name }</div>
-          <div>{ product.type }</div>
-          <div>{ product.price }</div>
-        </ListItem>
+        <div>
+          <h3>
+            <div>Customer: { customer.name }</div>
+            <div>ID: { order.id }</div>
+          </h3>
+
+          <Avatar className="mx-auto" style={ {display: 'block'} } src={ product.imageUrl } size={ 100 } />
+
+          <div>
+            <div className="clearfix mt3">
+              <span className="left">Product Name:</span>
+              <span className="right">{ product.name }</span>
+            </div>
+            <div className="clearfix mt3">
+              <span className="left">Description:</span>
+              <span className="right">{ product.description }</span>
+            </div>
+            <div className="clearfix mt3">
+              <span className="left">Price:</span>
+              <span className="right">{ product.price }</span>
+            </div>
+          </div>
+        </div>
       );
-    });
+    }
 
     return (
       <div>
-        <h3>
-          <div>Customer: { customer }</div>
-          <div>ID: { id }</div>
-          <div>Name: { name }</div>
-        </h3>
-
-        <List>
-          { productListItems.length > 0 ? productListItems : 'no products in order' }
-        </List>
+        no products found
       </div>
     );
   }
@@ -85,10 +94,7 @@ class OrderPage extends Component {
 
 export default connect(
   state => ({
-    id: state.order.get('id'),
-    name: state.order.get('name'),
-    customer: state.order.get('customer'),
-    products: state.order.get('products').toJS(),
+    order: state.order,
     hasError: state.order.get('hasError'),
     isLoading: state.order.get('isLoading'),
   }),

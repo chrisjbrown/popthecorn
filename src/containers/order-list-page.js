@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 import { List, ListItem } from 'material-ui/List';
-import StarIcon from 'material-ui/svg-icons/action/stars';
 import Divider from 'material-ui/Divider';
+import Avatar from 'material-ui/Avatar';
 import CircularProgress from 'material-ui/CircularProgress';
 
 import Container from 'base/components/container';
@@ -41,10 +41,11 @@ class OrderListPage extends Component {
     const orderListItems = orders.map((order, i) => {
       return (
         <div key={ i }>
-          <Link to={ '/orders/' + order.id }>
+          <Link to={ '/orders/' + order.order.id }>
             <ListItem
-              primaryText={ order.name }
-              leftIcon={<StarIcon />}
+              primaryText={ order.customer.name }
+              secondaryText={ order.order.id }
+              leftAvatar={<Avatar src={order.product.imageUrl} />}
             />
           </Link>
           <Divider />

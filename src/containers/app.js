@@ -66,6 +66,8 @@ class App extends Component {
             open={ !isLoggedIn } />
 
           <AppBar
+            className="navbar"
+            style={ {position: 'fixed'} }
             iconElementLeft={
               <IconButton
                 onTouchTap={ this.toggleDrawer.bind(this) }>
@@ -103,7 +105,7 @@ class App extends Component {
               leftIcon={<AccessibilityIcon />} />
             </List>
           </Drawer>
-          <Content isVisible={ isLoggedIn }>
+          <Content style isVisible={ isLoggedIn }>
             { children }
           </Content>
           <Snackbar

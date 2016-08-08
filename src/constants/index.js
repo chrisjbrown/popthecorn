@@ -12,6 +12,14 @@ export const PUSH_ENABLE = 'App/PUSH_ENABLE';
 export const PUSH_DISABLE = 'App/PUSH_DISABLE';
 export const PUSH_SUBSCRIPTION = 'App/PUSH_SUBSCRIPTION';
 
+export const ORDER_REQUEST = 'App/ORDER_REQUEST';
+export const ORDER_SUCCESS = 'App/ORDER_SUCCESS';
+export const ORDER_ERROR = 'App/ORDER_ERROR';
+
+export const ORDER_LIST_REQUEST = 'App/ORDER_LIST_REQUEST';
+export const ORDER_LIST_SUCCESS = 'App/ORDER_LIST_SUCCESS';
+export const ORDER_LIST_ERROR = 'App/ORDER_LIST_ERROR';
+
 export const ADD_ERROR = 'App/ADD_ERROR';
 export const REMOVE_ERROR = 'App/REMOVE_ERROR';
 

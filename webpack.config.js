@@ -29,7 +29,7 @@ module.exports = {
     libraryTarget: 'umd',
   },
 
-  devtool: !devmode ? 'source-map' : 'inline-source-map',
+  devtool: !devmode ? 'source-map' : 'cheap-module-eval-source-map',
 
   plugins: plugins,
 

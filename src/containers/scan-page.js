@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Button from 'base/components/button';
-import Container from 'base/components/container';
+import Button from 'app/components/button';
+import Container from 'app/components/container';
 import Quagga from 'quagga';
 
 function mapStateToProps() {

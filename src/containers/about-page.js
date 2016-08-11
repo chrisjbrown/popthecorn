@@ -1,7 +1,7 @@
-import React, { Component  } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Container from '../components/container';
+import Container from 'app/components/container';
 
 function mapStateToProps() {
   return {};

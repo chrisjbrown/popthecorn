@@ -1,16 +1,14 @@
-import {
-  LOGIN_REQUEST,
-  LOGOUT,
-  PUSH_SUBSCRIPTION,
-  PUSH_TOGGLE,
-} from 'base/constants';
-
+// Triggered on login
+export const PUSH_SUBSCRIPTION = 'App/PUSH_SUBSCRIPTION';
 export function initPushState() {
   return {
     type: PUSH_SUBSCRIPTION,
   };
 }
 
+export const PUSH_TOGGLE = 'App/PUSH_TOGGLE';
+export const PUSH_ENABLE = 'App/PUSH_ENABLE';
+export const PUSH_DISABLE = 'App/PUSH_DISABLE';
 export function togglePush(pushEnabled) {
   return {
     type: PUSH_TOGGLE,
@@ -20,12 +18,44 @@ export function togglePush(pushEnabled) {
   };
 }
 
-export function loginUser() {
+// Triggered whenever the user clicks the login submit button
+export const LOGIN_SUBMIT = 'App/LOGIN_SUBMIT';
+export function loginSubmit(data) {
   return {
-    type: LOGIN_REQUEST,
+    type: LOGIN_SUBMIT,
+    payload: data,
   };
 }
 
+// Triggered whenever a login request is dispatched from whenever point in the code
+export const LOGIN_REQUEST = 'App/LOGIN_REQUEST';
+export function loginRequest(data) {
+  return {
+    type: LOGIN_REQUEST,
+    payload: data,
+  };
+}
+
+// triggered when the login has succeded
+export const LOGIN_SUCCESS = 'App/LOGIN_SUCCESS';
+export function loginSuccess(data) {
+  return {
+    type: LOGIN_SUCCESS,
+    payload: data,
+  };
+}
+
+// triggered when the login failed
+export const LOGIN_ERROR = 'App/LOGIN_ERROR';
+export function loginError(errors) {
+  return {
+    type: LOGIN_ERROR,
+    error: true,
+    payload: errors,
+  };
+}
+
+export const LOGOUT = 'App/LOGOUT';
 export function logoutUser() {
   return {
     type: LOGOUT,

@@ -1,19 +1,21 @@
-import { take, put, fork, cancel, select, call } from 'redux-saga/effects';
+import { take, put, fork, call, race } from 'redux-saga/effects';
 import { takeLatest } from 'redux-saga';
-import { login } from 'base/api/auth/';
-import { initialiseState, unsubscribe, subscribe } from 'base/api/service-worker/';
+import { startSubmit, stopSubmit } from 'redux-form';
+
+import { authAPI } from 'app/api/auth/';
+import { initialiseState, unsubscribe, subscribe } from 'app/api/service-worker/';
+import { loginRequest, loginSuccess, loginError, resetForm } from 'app/actions';
 
 import {
   LOGIN_ERROR,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGOUT,
+  LOGIN_SUBMIT,
   PUSH_SUBSCRIPTION,
   PUSH_TOGGLE,
   PUSH_ENABLE,
   PUSH_DISABLE,
-  FORM_RESET,
-} from 'base/constants';
+} from 'app/actions';
 
 export function* watchInit() {
   while (true) {
@@ -55,38 +57,61 @@ export function* togglePush(action) {
   }
 }
 
-export function* watchLogin() {
+function* handleLoginSubmit() {
   while (true) {
-    yield take(LOGIN_REQUEST);
+    // wait for a login submit
+    const { payload } = yield take(LOGIN_SUBMIT);
 
-    const getCredentials = (state) => {
-      return {
-        username: state.form.login.username.value,
-        password: state.form.login.password.value,
-      };
-    };
+    // start submitting the form
+    yield put(startSubmit('login'));
 
-    const credentials = yield select(getCredentials);
+    // put a login request
+    yield put(loginRequest(payload.values));
 
-    // fork return a Task object
-    const task = yield fork(authorize, credentials);
-    const action = yield take([LOGOUT, LOGIN_ERROR]);
-    if (action.type === LOGOUT) {
-      yield cancel(task);
+    // wait for a response
+    const { error, success } = yield race({
+      success: take(LOGIN_SUCCESS),
+      error: take(LOGIN_ERROR),
+    });
+
+    // if not an error, pop the screen
+    if (!error) {
+      // finalize the form
+
+      payload.resolve();
+      yield put(stopSubmit('login', { _error: '' }));
+
+      yield put(resetForm('login'));
+
+      yield put(loginSuccess(success.payload));
+    } else {
+      // finalize the form
+
+      payload.reject(error.payload.message);
+      yield put(stopSubmit('login', { _error: error.payload.message }));
     }
-
-    yield put({ type: FORM_RESET, form: 'login' });
   }
 }
 
-export function* authorize(credentials) {
-  try {
-    const user = yield call(login, credentials);
-    yield put({ type: LOGIN_SUCCESS, user });
-    yield call(initPushSubscription);
-    return user;
-  } catch (error) {
-    yield put({ type: LOGIN_ERROR, error });
-    return error;
+function* handleLoginRequest() {
+  while (true) {
+    try {
+      // wait for a login request
+      const { payload } = yield take(LOGIN_REQUEST);
+
+      // call the api
+      const user = yield call(authAPI, payload);
+
+      // call the success
+      yield put(loginSuccess(user));
+    } catch (e) {
+      // call the error
+      yield put(loginError(e));
+    }
   }
+}
+
+export function* initAuthSagas() {
+  yield fork(handleLoginRequest);
+  yield fork(handleLoginSubmit);
 }

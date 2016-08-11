@@ -5,7 +5,7 @@ import {
   LOGOUT,
   PUSH_ENABLE,
   PUSH_DISABLE,
-} from 'base/constants';
+} from 'app/actions';
 
 import { fromJS } from 'immutable';
 
@@ -28,8 +28,8 @@ function sessionReducer(state = INITIAL_STATE, action = {}) {
       }));
     case LOGIN_SUCCESS:
       return state.merge(fromJS({
-        token: action.user.token,
-        user: action.user.profile,
+        token: '123',
+        user: action.payload.data.id,
         hasError: false,
         isLoading: false,
       }));

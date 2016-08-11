@@ -6,8 +6,8 @@ import Divider from 'material-ui/Divider';
 import CircularProgress from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
 
-import Container from 'base/components/container';
-import * as OrderActions from 'base/actions/order';
+import Container from 'app/components/container';
+import * as OrderActions from 'app/actions/order';
 
 class OrderPage extends Component {
 

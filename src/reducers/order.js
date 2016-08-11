@@ -1,4 +1,4 @@
-import { ORDER_SUCCESS, ORDER_ERROR, ORDER_REQUEST } from 'base/constants';
+import { ORDER_SUCCESS, ORDER_ERROR, ORDER_REQUEST } from 'app/actions';
 import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({

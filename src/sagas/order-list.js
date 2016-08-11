@@ -1,11 +1,11 @@
 import { take, put, call } from 'redux-saga/effects';
-import { getOrderList } from 'base/api/order-list/';
+import { getOrderList } from 'app/api/order-list/';
 
 import {
   ORDER_LIST_REQUEST,
   ORDER_LIST_SUCCESS,
   ORDER_LIST_ERROR,
-} from 'base/constants';
+} from 'app/actions';
 
 export function* watchOrderList() {
   while (true) {

@@ -8,8 +8,8 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import CircularProgress from 'material-ui/CircularProgress';
 
-import Container from 'base/components/container';
-import * as OrderListActions from 'base/actions/order-list';
+import Container from 'app/components/container';
+import * as OrderListActions from 'app/actions/order-list';
 
 class OrderListPage extends Component {
 

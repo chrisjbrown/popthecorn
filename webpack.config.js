@@ -1,6 +1,5 @@
 const path = require('path');
 
-// const proxy = require('./server/webpack-dev-proxy');
 const plugins = require('./webpack/plugins');
 const postcss = require('./webpack/postcss');
 const loaders = require('./webpack/loaders');
@@ -29,14 +28,19 @@ module.exports = {
     libraryTarget: 'umd',
   },
 
-  devtool: !devmode ? 'source-map' : 'cheap-module-eval-source-map',
+  devtool: !devmode ? 'source-map' : 'cheap-module-source-map',
 
   plugins: plugins,
 
   devServer: {
     historyApiFallback: { index: '/' },
-    // proxy: Object.assign({}, proxy(), { '/api/*': 'http://localhost:3000' }),
-    inline: true,
+    proxy: {
+      '/dropshipper/*': {
+        target: 'https://ceres-dropshipper.sit.debijenkorf.nl',
+        secure: false,
+        changeOrigin: true,
+      },
+    },
   },
 
   module: {
@@ -55,7 +59,7 @@ module.exports = {
   resolve: {
     root: path.resolve(__dirname),
     alias: {
-      base: 'src',
+      app: 'src',
     },
     extensions: ['', '.js'],
   },

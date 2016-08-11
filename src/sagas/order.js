@@ -1,11 +1,11 @@
 import { take, put, call } from 'redux-saga/effects';
-import { getOrder } from 'base/api/order/';
+import { getOrder } from 'app/api/order/';
 
 import {
   ORDER_REQUEST,
   ORDER_SUCCESS,
   ORDER_ERROR,
-} from 'base/constants';
+} from 'app/actions';
 
 export function* watchOrder() {
   while (true) {

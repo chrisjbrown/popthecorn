@@ -1,4 +1,4 @@
-import OrderList from 'base/mockdata/order-list';
+import OrderList from 'app/mockdata/order-list';
 
 export function getOrderList() {
   return new Promise((resolve) => {

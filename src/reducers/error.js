@@ -1,4 +1,4 @@
-import { ADD_ERROR, REMOVE_ERROR } from '../constants';
+import { ADD_ERROR, REMOVE_ERROR } from 'app/actions';
 import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({

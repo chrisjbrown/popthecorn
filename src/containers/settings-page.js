@@ -1,9 +1,9 @@
 import { bindActionCreators } from 'redux';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as SessionActions from 'base/actions/session';
+import * as SessionActions from 'app/actions/session';
 import Toggle from 'material-ui/Toggle';
-import Container from 'base/components/container';
+import Container from 'app/components/container';
 import { List, ListItem } from 'material-ui/List';
 
 class SettingsPage extends Component {

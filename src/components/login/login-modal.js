@@ -7,8 +7,6 @@ class LoginModal extends Component {
 
   static propTypes = {
     open: PropTypes.bool,
-    isPending: PropTypes.bool,
-    hasError: PropTypes.bool,
     onSubmit: PropTypes.func,
   };
 
@@ -17,7 +15,7 @@ class LoginModal extends Component {
   }
 
   render() {
-    const { open, isPending, hasError, onSubmit } = this.props;
+    const { open, onSubmit } = this.props;
 
     const isModal = true;
 
@@ -30,8 +28,6 @@ class LoginModal extends Component {
         <h1 data-testid="login-header" className="mt0">Login</h1>
 
         <LoginForm
-          isPending={ isPending }
-          hasError={ hasError }
           onSubmit={ onSubmit } />
       </Dialog>
     );

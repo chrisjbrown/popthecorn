@@ -1,66 +1,64 @@
 import React, { Component, PropTypes } from 'react';
-import { reduxForm } from 'redux-form';
+import { reduxForm, Field } from 'redux-form';
 
-import Form from '../form';
-import FormGroup from '../form/group';
-import FormLabel from '../form/label';
-import FormError from '../form/error';
-import Input from '../form/input';
 import RaisedButton from 'material-ui/RaisedButton';
-import Alert from '../alert';
+import CircularProgress from 'material-ui/CircularProgress';
+
+import Alert from 'app/components/alert';
 
 class LoginForm extends Component {
 
   static propTypes = {
-    handleSubmit: PropTypes.func.isRequired,
-    resetForm: PropTypes.func.isRequired,
-    isPending: PropTypes.bool.isRequired,
-    hasError: PropTypes.bool.isRequired,
-    fields: PropTypes.object.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired,
+    submitting: PropTypes.bool,
+    error: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
   }
 
+  renderField({ input, label, type, meta: { touched, error } }) {
+    return (
+      <div>
+        <label>{label}</label>
+        <div>
+          <input className="input border" {...input} placeholder={label} type={type}/>
+          {touched && error && <span className="red">{error}</span>}
+        </div>
+      </div>
+    );
+  }
+
   render() {
-    const { handleSubmit, resetForm, isPending, hasError, fields: { username, password } } = this.props;
+    const { error, reset, submitting, onSubmit } = this.props;
 
     return (
-      <Form handleSubmit={ handleSubmit }>
-        <Alert data-testid="alert-loading" isVisible={ isPending }>Loading...</Alert>
-        <Alert data-testid="alert-error" id="qa-alert" isVisible={ hasError } status="error">Invalid username and password</Alert>
+      <form onSubmit={ onSubmit }>
 
-        <FormGroup testid="login-username">
-          <FormLabel id="qa-uname-label">Username</FormLabel>
-          <Input type="text" fieldDefinition={ username } id="qa-uname-input"/>
-          <FormError id="qa-uname-validation" isVisible={ !!(username.touched && username.error) }>
-            { username.error }
-          </FormError>
-        </FormGroup>
+        { submitting ? <CircularProgress size={ 1 }/> : [] }
+        <Alert isVisible={ !!error } status="error">Invalid employeeId and pin</Alert>
 
-        <FormGroup testid="login-password">
-          <FormLabel id="qa-password-label">Password</FormLabel>
-          <Input type="password" fieldDefinition={ password } id="qa-password-input" />
-          <FormError id="qa-password-validation" isVisible={ !!(password.touched && password.error) }>
-            { password.error }
-          </FormError>
-        </FormGroup>
 
-        <FormGroup testid="login-submit" className="right">
+        <Field name="employeeId" type="text" component={ this.renderField } label="Employee Id"/>
+        <Field name="pin" type="password" component={ this.renderField } label="Pin"/>
+
+        <div className="right">
           <RaisedButton
             label="Clear"
-            onTouchTap={ resetForm }
+            onTouchTap={ reset }
             className="mr2"
+            disabled={ submitting }
           />
           <RaisedButton
             label="Login"
             primary={ true }
             type="submit"
-            onTouchTap={ handleSubmit }
+            disabled={ submitting }
           />
-        </FormGroup>
-      </Form>
+        </div>
+      </form>
     );
   }
 }
@@ -68,12 +66,12 @@ class LoginForm extends Component {
 const validate = values => {
   const errors = {};
 
-  if (!values.username) {
-    errors.username = 'Username is required.';
+  if (!values.employeeId) {
+    errors.employeeId = 'EmployeeId is required.';
   }
 
-  if (!values.password) {
-    errors.password = 'Password is required.';
+  if (!values.pin) {
+    errors.pin = 'Pin is required.';
   }
 
   return errors;
@@ -81,9 +79,6 @@ const validate = values => {
 
 export default reduxForm({
   form: 'login',
-  fields: [
-    'username',
-    'password',
-  ],
   validate,
+  fields: ['employeeId', 'pin'],
 })(LoginForm);

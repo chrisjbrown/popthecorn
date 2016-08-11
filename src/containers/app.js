@@ -17,9 +17,9 @@ import Drawer from 'material-ui/Drawer';
 import { List, ListItem } from 'material-ui/List';
 import Snackbar from 'material-ui/Snackbar';
 
-import Content from 'base/components/content';
-import LoginModal from 'base/components/login/login-modal';
-import * as SessionActions from 'base/actions/session';
+import Content from 'app/components/content';
+import LoginModal from 'app/components/login/login-modal';
+import * as SessionActions from 'app/actions/session';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -32,8 +32,9 @@ class App extends Component {
   static propTypes = {
     children: PropTypes.node,
     session: PropTypes.object,
+    form: PropTypes.object,
     error: PropTypes.object,
-    loginUser: PropTypes.func,
+    loginSubmit: PropTypes.func,
     logoutUser: PropTypes.func,
     removeErr: PropTypes.func,
   };
@@ -47,7 +48,7 @@ class App extends Component {
   }
 
   render() {
-    const { session, error, loginUser, logoutUser, children } = this.props;
+    const { session, error, logoutUser, children } = this.props;
     const { drawerOpen } = this.state;
 
     const errorMsg = error.get('message', false);
@@ -60,12 +61,12 @@ class App extends Component {
       <MuiThemeProvider muiTheme={ muiTheme }>
         <div>
           <LoginModal
-            onSubmit={ loginUser.bind(this) }
-            isPending={ session.get('isLoading', false) }
-            hasError={ session.get('hasError', false) }
+            onSubmit={ this.handleLoginSubmit.bind(this) }
             open={ !isLoggedIn } />
 
           <AppBar
+            className="navbar"
+            style={ {position: 'fixed'} }
             iconElementLeft={
               <IconButton
                 onTouchTap={ this.toggleDrawer.bind(this) }>
@@ -103,7 +104,7 @@ class App extends Component {
               leftIcon={<AccessibilityIcon />} />
             </List>
           </Drawer>
-          <Content isVisible={ isLoggedIn }>
+          <Content style isVisible={ isLoggedIn }>
             { children }
           </Content>
           <Snackbar
@@ -122,6 +123,16 @@ class App extends Component {
     });
   }
 
+  handleLoginSubmit(event) {
+    event.preventDefault();
+    return new Promise((resolve, reject) => {
+      const values = this.props.form.login.values;
+      this.props.loginSubmit({values, resolve, reject});
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+
   toggleDrawer() {
     this.setState({
       drawerOpen: !this.state.drawerOpen,
@@ -134,6 +145,7 @@ export default connect(
     session: state.session,
     router: state.router,
     error: state.error,
+    form: state.form,
   }),
   dispatch => bindActionCreators(SessionActions, dispatch)
 )(App);

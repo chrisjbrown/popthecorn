@@ -1,28 +1,22 @@
-import Users from 'base/mockdata/users';
+import { BASE_URL } from 'app/api/server';
+const LOGIN_ERR_MSG = 'The username or password you have entered is invalid.';
 
-export function login(credentials) {
+export function authAPI(credentials) {
   return new Promise((resolve, reject) => {
-    if (credentials.username && credentials.password) {
-      const authorized = Users.filter(
-        (userFound) => {
-          return (userFound.Username === credentials.username) && (userFound.Password === credentials.password);
-        });
-      if (authorized.length > 0) {
-        resolve({
-          token: 'abcd1234',
-          profile: {
-            first: authorized[0].First,
-            last: authorized[0].Last,
-          },
-          data: {
-            msg: 'LOGIN SUCCESSFUL',
-          },
-        });
-      } else {
-        reject({ message: 'LOGIN FAILED' });
+    return fetch(BASE_URL + '/authenticate', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'employeeId=' + credentials.employeeId + '&pin=' + credentials.pin,
+    })
+    .then(response => response.json())
+    .then(json => {
+      if (json.error) {
+        return reject(new Error(json.error.reason));
       }
-    } else {
-      reject({ message: 'INVALID REQUEST' });
-    }
+      return resolve(json);
+    })
+    .then(null, () => reject(new Error(LOGIN_ERR_MSG)));
   });
 }

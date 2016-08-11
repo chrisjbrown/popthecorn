@@ -1,4 +1,5 @@
 import { BASE_URL } from 'app/api/server';
+
 const LOGIN_ERR_MSG = 'The username or password you have entered is invalid.';
 
 export function authAPI(credentials) {

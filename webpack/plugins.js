@@ -5,11 +5,14 @@ const SplitByPathPlugin = require('webpack-split-by-path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
+const endpoints = require('./endpoints');
+
 const basePlugins = [
   new webpack.DefinePlugin({
     __DEV__: process.env.NODE_ENV !== 'production',
     __TEST__: JSON.stringify(process.env.TEST),
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    __API__: JSON.stringify(endpoints.apiEndpoint),
   }),
   new HtmlWebpackPlugin({
     template: './src/index.html',

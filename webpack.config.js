@@ -3,6 +3,7 @@ const path = require('path');
 const plugins = require('./webpack/plugins');
 const postcss = require('./webpack/postcss');
 const loaders = require('./webpack/loaders');
+const endpoints = require('./webpack/endpoints');
 
 const devmode = process.env.NODE_ENV !== 'production';
 
@@ -36,7 +37,7 @@ module.exports = {
     historyApiFallback: { index: '/' },
     proxy: {
       '/dropshipper/*': {
-        target: 'https://ceres-dropshipper.sit.debijenkorf.nl',
+        target: endpoints.apiEndpoint,
         secure: false,
         changeOrigin: true,
       },

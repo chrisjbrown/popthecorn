@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 
-export const BASE_URL = '/dropshipper';
+export const BASE_URL = (__DEV__ ? '/dropshipper' : __API__);
 
 export function post(path, data) {
   return fetch(BASE_URL + path, {

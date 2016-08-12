@@ -12,7 +12,7 @@ import { fromJS } from 'immutable';
 const INITIAL_STATE = fromJS({
   token: null,
   user: {},
-  hasError: false,
+  dataError: '',
   isLoading: false,
   pushEnabled: false,
 });
@@ -23,19 +23,19 @@ function sessionReducer(state = INITIAL_STATE, action = {}) {
       return state.merge(fromJS({
         token: null,
         user: {},
-        hasError: false,
+        dataError: '',
         isLoading: true,
       }));
     case LOGIN_SUCCESS:
       return state.merge(fromJS({
         token: '123',
         user: action.payload.data.id,
-        hasError: false,
+        dataError: '',
         isLoading: false,
       }));
     case LOGIN_ERROR:
       return state.merge(fromJS({
-        hasError: true,
+        dataError: action.payload.error.message,
         isLoading: false,
       }));
     case PUSH_ENABLE:

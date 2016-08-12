@@ -5,6 +5,7 @@ const LOGIN_ERR_MSG = 'The username or password you have entered is invalid.';
 export function authAPI(credentials) {
   return new Promise((resolve, reject) => {
     return fetch(BASE_URL + '/authenticate', {
+      credentials: 'include',
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

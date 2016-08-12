@@ -12,10 +12,11 @@ import * as OrderActions from 'app/actions/order';
 class OrderPage extends Component {
 
   static propTypes = {
-    order: PropTypes.object,
+    orderData: PropTypes.object,
     params: PropTypes.object,
     requestOrder: PropTypes.func,
     isLoading: PropTypes.bool,
+    dataError: PropTypes.string,
   };
 
   constructor(props) {
@@ -34,33 +35,41 @@ class OrderPage extends Component {
     );
   }
 
-  renderOrder() {
-    const orderData = this.props.order.get('orderData');
+  renderError() {
+    return (
+      <strong> { this.props.dataError } </strong>
+    );
+  }
 
-    if (orderData !== null) {
-      const { product, customer, order } = orderData.toJS();
+  renderOrder() {
+    const orderData = this.props.orderData;
+
+    if (orderData.size > 0) {
+      const order = orderData.get('order');
+      const customer = orderData.get('customer');
+      const product = orderData.get('product');
 
       return (
         <div>
           <h3>
-            <div>Customer: { customer.name }</div>
-            <div>ID: { order.id }</div>
+            <div>Customer: { customer.get('name') }</div>
+            <div>ID: { order.get('id') }</div>
           </h3>
 
-          <Avatar className="mx-auto" style={ {display: 'block'} } src={ product.imageUrl } size={ 100 } />
+          <Avatar className="mx-auto" style={ {display: 'block'} } src={ product.get('imageUrl') } size={ 100 } />
 
           <div>
             <div className="clearfix mt3">
               <span className="left">Product Name:</span>
-              <span className="right">{ product.name }</span>
+              <span className="right">{ product.get('name') }</span>
             </div>
             <div className="clearfix mt3">
               <span className="left">Description:</span>
-              <span className="right">{ product.description }</span>
+              <span className="right">{ product.get('description') }</span>
             </div>
             <div className="clearfix mt3">
               <span className="left">Price:</span>
-              <span className="right">{ product.price }</span>
+              <span className="right">{ product.get('price') }</span>
             </div>
           </div>
         </div>
@@ -75,7 +84,7 @@ class OrderPage extends Component {
   }
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, dataError } = this.props;
 
     return (
       <Container testid="order" size={4} center>
@@ -85,7 +94,9 @@ class OrderPage extends Component {
 
         <Divider/>
 
-        { isLoading ? this.renderLoading() : this.renderOrder() }
+        { isLoading ? this.renderLoading() : [] }
+        { dataError ? this.renderError() : [] }
+        { !isLoading && !dataError ? this.renderOrder() : [] }
 
       </Container>
     );
@@ -94,8 +105,8 @@ class OrderPage extends Component {
 
 export default connect(
   state => ({
-    order: state.order,
-    hasError: state.order.get('hasError'),
+    orderData: state.order.get('orderData'),
+    dataError: state.order.get('dataError'),
     isLoading: state.order.get('isLoading'),
   }),
   dispatch => bindActionCreators(OrderActions, dispatch)

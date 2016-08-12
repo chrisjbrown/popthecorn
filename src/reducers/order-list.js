@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({
   orders: [],
-  hasError: false,
+  dataError: '',
   isLoading: false,
 });
 
@@ -12,17 +12,18 @@ function orderListReducer(state = INITIAL_STATE, action = {}) {
     case ORDER_LIST_REQUEST:
       return state.merge(fromJS({
         orders: [],
-        hasError: false,
+        dataError: '',
         isLoading: true,
       }));
     case ORDER_LIST_ERROR:
       return state.merge(fromJS({
-        hasError: true,
+        isLoading: false,
+        dataError: action.payload.message,
       }));
     case ORDER_LIST_SUCCESS:
       return state.merge(fromJS({
-        orders: action.payload.items,
-        hasError: false,
+        orders: action.payload.data.items,
+        dataError: '',
         isLoading: false,
       }));
     default:

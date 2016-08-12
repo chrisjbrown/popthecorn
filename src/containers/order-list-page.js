@@ -14,9 +14,10 @@ import * as OrderListActions from 'app/actions/order-list';
 class OrderListPage extends Component {
 
   static propTypes = {
-    orders: PropTypes.array,
+    orders: PropTypes.object,
     requestOrderList: PropTypes.func,
     isLoading: PropTypes.bool,
+    dataError: PropTypes.string,
   };
 
   constructor(props) {
@@ -35,17 +36,27 @@ class OrderListPage extends Component {
     );
   }
 
+  renderError() {
+    return (
+      <strong> Error requesting order list </strong>
+    );
+  }
+
   renderOrderList() {
-    const { orders } = this.props;
+    const orders = this.props.orders;
 
     const orderListItems = orders.map((order, i) => {
+      const detail = order.get('order');
+      const customer = order.get('customer');
+      const product = order.get('product');
+
       return (
         <div key={ i }>
-          <Link to={ '/orders/' + order.order.id }>
+          <Link to={ '/orders/' + detail.get('id') }>
             <ListItem
-              primaryText={ order.customer.name }
-              secondaryText={ order.order.id }
-              leftAvatar={<Avatar src={order.product.imageUrl} />}
+              primaryText={ customer.get('name') }
+              secondaryText={ detail.get('id') }
+              leftAvatar={<Avatar src={product.get('imageUrl')} />}
             />
           </Link>
           <Divider />
@@ -61,7 +72,7 @@ class OrderListPage extends Component {
   }
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, dataError } = this.props;
 
     return (
       <Container testid="orderlist" size={4} center>
@@ -69,7 +80,10 @@ class OrderListPage extends Component {
           Order List Page
         </h2>
 
-        { isLoading ? this.renderLoading() : this.renderOrderList() }
+        { isLoading ? this.renderLoading() : [] }
+        { dataError ? this.renderError() : [] }
+        { !isLoading && !dataError ? this.renderOrderList() : [] }
+
       </Container>
     );
   }
@@ -77,8 +91,8 @@ class OrderListPage extends Component {
 
 export default connect(
   state => ({
-    orders: state.orderList.get('orders').toJS(),
-    hasError: state.orderList.get('hasError'),
+    orders: state.orderList.get('orders'),
+    dataError: state.orderList.get('dataError'),
     isLoading: state.orderList.get('isLoading'),
   }),
   dispatch => bindActionCreators(OrderListActions, dispatch)

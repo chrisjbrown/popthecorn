@@ -1,10 +1,9 @@
 import { take, put, call } from 'redux-saga/effects';
 import { getOrder } from 'app/api/order/';
+import { orderError, orderSuccess } from 'app/actions/order';
 
 import {
   ORDER_REQUEST,
-  ORDER_SUCCESS,
-  ORDER_ERROR,
 } from 'app/actions';
 
 export function* watchOrder() {
@@ -17,16 +16,10 @@ export function* watchOrder() {
 export function* order(orderId) {
   try {
     const foundOrder = yield call(getOrder, orderId);
-    yield put({
-      type: ORDER_SUCCESS,
-      payload: foundOrder,
-    });
+    yield put(orderSuccess(foundOrder));
     return foundOrder;
   } catch (error) {
-    yield put({
-      type: ORDER_ERROR,
-      error,
-    });
+    yield put(orderError(error));
     return error;
   }
 }

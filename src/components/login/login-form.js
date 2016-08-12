@@ -31,33 +31,48 @@ class LoginForm extends Component {
     );
   }
 
-  render() {
-    const { error, reset, submitting, onSubmit } = this.props;
-
+  renderForm() {
     return (
-      <form onSubmit={ onSubmit }>
-
-        { submitting ? <CircularProgress size={ 1 }/> : [] }
-        <Alert isVisible={ !!error } status="error">Invalid employeeId and pin</Alert>
-
-
+      <div>
         <Field name="employeeId" type="text" component={ this.renderField } label="Employee Id"/>
         <Field name="pin" type="password" component={ this.renderField } label="Pin"/>
 
         <div className="right">
           <RaisedButton
             label="Clear"
-            onTouchTap={ reset }
+            onTouchTap={ this.props.reset }
             className="mr2"
-            disabled={ submitting }
+            disabled={ this.props.submitting }
           />
           <RaisedButton
             label="Login"
             primary={ true }
             type="submit"
-            disabled={ submitting }
+            disabled={ this.props.submitting }
           />
         </div>
+      </div>
+    );
+  }
+
+  renderLoader() {
+    return (
+      <div className="center">
+        <CircularProgress size={ 1 }/>
+      </div>
+    );
+  }
+
+  render() {
+    const { error, submitting, onSubmit } = this.props;
+
+    return (
+      <form onSubmit={ onSubmit }>
+
+        <Alert isVisible={ !!error && !submitting } status="error">Invalid employeeId and pin</Alert>
+
+        { submitting ? this.renderLoader() : this.renderForm() }
+
       </form>
     );
   }

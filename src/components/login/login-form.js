@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm, Field } from 'redux-form';
 
+import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 
@@ -10,45 +11,48 @@ class LoginForm extends Component {
 
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
+    loginSubmit: PropTypes.func.isRequired,
+    dataError: PropTypes.string,
     submitting: PropTypes.bool,
-    error: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
   }
 
-  renderField({ input, label, type, meta: { touched, error } }) {
+  renderTextField({ input, label, meta: { error, touched }, ...custom }) {
     return (
-      <div>
-        <label>{label}</label>
-        <div>
-          <input className="input border" {...input} placeholder={label} type={type}/>
-          {touched && error && <span className="red">{error}</span>}
-        </div>
-      </div>
+      <TextField hintText={label}
+        floatingLabelText={label}
+        errorText={error && touched ? error : ''}
+        {...input}
+        {...custom}
+      />
     );
   }
 
   renderForm() {
+    const { reset, submitting } = this.props;
+
     return (
       <div>
-        <Field name="employeeId" type="text" component={ this.renderField } label="Employee Id"/>
-        <Field name="pin" type="password" component={ this.renderField } label="Pin"/>
+        <Field name="employeeId" type="text" component={ this.renderTextField } label="Employee Id"/>
+        <Field name="pin" type="password" component={ this.renderTextField } label="Pin"/>
 
         <div className="right">
           <RaisedButton
             label="Clear"
-            onTouchTap={ this.props.reset }
+            onTouchTap={ reset }
             className="mr2"
-            disabled={ this.props.submitting }
+            disabled={ submitting }
           />
           <RaisedButton
             label="Login"
             primary={ true }
             type="submit"
-            disabled={ this.props.submitting }
+            disabled={ submitting }
           />
         </div>
       </div>
@@ -64,12 +68,12 @@ class LoginForm extends Component {
   }
 
   render() {
-    const { error, submitting, onSubmit } = this.props;
+    const { dataError, submitting, handleSubmit } = this.props;
 
     return (
-      <form onSubmit={ onSubmit }>
+      <form onSubmit={ handleSubmit }>
 
-        <Alert isVisible={ !!error && !submitting } status="error">Invalid employeeId and pin</Alert>
+        <Alert isVisible={ !!dataError && !submitting } status="error">{ dataError }</Alert>
 
         { submitting ? this.renderLoader() : this.renderForm() }
 

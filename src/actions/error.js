@@ -2,7 +2,9 @@ export const ADD_ERROR = 'App/ADD_ERROR';
 export function addError(error) {
   return {
     type: ADD_ERROR,
-    error: error,
+    error: {
+      error: error,
+    },
   };
 }
 

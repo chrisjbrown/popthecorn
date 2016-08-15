@@ -66,7 +66,7 @@ function* handleLoginSubmit() {
     yield put(startSubmit('login'));
 
     // put a login request
-    yield put(loginRequest(payload.values));
+    yield put(loginRequest(payload.user.values));
 
     // wait for a response
     const { error, success } = yield race({
@@ -78,17 +78,17 @@ function* handleLoginSubmit() {
     if (!error) {
       // finalize the form
 
-      payload.resolve();
+      payload.user.resolve();
       yield put(stopSubmit('login', { _error: '' }));
 
       yield put(resetForm('login'));
 
-      yield put(loginSuccess(success.payload));
+      yield put(loginSuccess(success.payload.user));
     } else {
       // finalize the form
-
-      payload.reject(error.payload.message);
-      yield put(stopSubmit('login', { _error: error.payload.message }));
+      console.log(error.payload.error);
+      payload.user.reject(error.payload.error);
+      yield put(stopSubmit('login', { _error: error.payload.error }));
     }
   }
 }
@@ -100,13 +100,13 @@ function* handleLoginRequest() {
       const { payload } = yield take(LOGIN_REQUEST);
 
       // call the api
-      const user = yield call(authAPI, payload);
+      const user = yield call(authAPI, payload.user);
 
       // call the success
       yield put(loginSuccess(user));
-    } catch (e) {
+    } catch (error) {
       // call the error
-      yield put(loginError(e));
+      yield put(loginError(error.message));
     }
   }
 }

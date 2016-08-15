@@ -30,6 +30,11 @@ const devPlugins = [
     files: ['src/**/*.css'],
     failOnError: false,
   }),
+  new webpack.SourceMapDevToolPlugin({
+    filename: '[name].map',
+    include: ['app.js'],
+    exclude: ['vendors.js'],
+  }),
 ];
 
 const prodPlugins = [

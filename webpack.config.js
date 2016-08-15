@@ -24,12 +24,11 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].[hash].js',
     publicPath: '/',
-    sourceMapFilename: '[name].[hash].js.map',
     chunkFilename: '[id].chunk.js',
     libraryTarget: 'umd',
   },
 
-  devtool: !devmode ? 'source-map' : 'cheap-module-source-map',
+  // devtool: !devmode ? 'source-map' : 'cheap-module-source-map',
 
   plugins: plugins,
 

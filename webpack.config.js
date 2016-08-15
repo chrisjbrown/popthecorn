@@ -7,28 +7,20 @@ const endpoints = require('./webpack/endpoints');
 
 const devmode = process.env.NODE_ENV !== 'production';
 
-function getEntrySources(sources) {
-  if (devmode) {
-    sources.push('webpack-hot-middleware/client');
-  }
-
-  return sources;
-}
-
 module.exports = {
-  entry: {
-    app: getEntrySources(['babel-polyfill', './src/index.js']),
-  },
+  entry: [
+    'webpack-dev-server/client?http://0.0.0.0:8080',
+    'webpack/hot/only-dev-server',
+    'babel-polyfill',
+    './src/index.js',
+  ],
 
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].[hash].js',
     publicPath: '/',
     chunkFilename: '[id].chunk.js',
-    libraryTarget: 'umd',
   },
-
-  // devtool: !devmode ? 'source-map' : 'cheap-module-source-map',
 
   plugins: plugins,
 

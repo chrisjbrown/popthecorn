@@ -18,7 +18,7 @@ function orderListReducer(state = INITIAL_STATE, action = {}) {
     case ORDER_LIST_ERROR:
       return state.merge(fromJS({
         isLoading: false,
-        dataError: action.payload.message,
+        dataError: action.payload.error.message,
       }));
     case ORDER_LIST_SUCCESS:
       return state.merge(fromJS({

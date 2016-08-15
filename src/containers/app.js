@@ -25,7 +25,14 @@ import * as SessionActions from 'app/actions/session';
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-const muiTheme = getMuiTheme();
+const dbkTheme = {
+  fontFamily: 'Arial, Helvetica, sans-serif',
+  palette: {
+    primary1Color: '#f6a800',
+  },
+};
+
+const muiTheme = getMuiTheme(dbkTheme);
 
 class App extends Component {
 
@@ -34,7 +41,6 @@ class App extends Component {
     session: PropTypes.object,
     form: PropTypes.object,
     error: PropTypes.object,
-    loginSubmit: PropTypes.func,
     logoutUser: PropTypes.func,
     removeErr: PropTypes.func,
   };
@@ -61,7 +67,6 @@ class App extends Component {
       <MuiThemeProvider muiTheme={ muiTheme }>
         <div>
           <LoginModal
-            onSubmit={ this.handleLoginSubmit.bind(this) }
             open={ !isLoggedIn } />
 
           <AppBar
@@ -120,16 +125,6 @@ class App extends Component {
   closeDrawer() {
     this.setState({
       drawerOpen: false,
-    });
-  }
-
-  handleLoginSubmit(event) {
-    event.preventDefault();
-    return new Promise((resolve, reject) => {
-      const values = this.props.form.login.values;
-      this.props.loginSubmit({values, resolve, reject});
-    }).catch((error) => {
-      console.error(error);
     });
   }
 

@@ -20,38 +20,45 @@ export function togglePush(pushEnabled) {
 
 // Triggered whenever the user clicks the login submit button
 export const LOGIN_SUBMIT = 'App/LOGIN_SUBMIT';
-export function loginSubmit(data) {
+export function loginSubmit(user) {
   return {
     type: LOGIN_SUBMIT,
-    payload: data,
+    payload: {
+      user: user,
+    },
   };
 }
 
 // Triggered whenever a login request is dispatched from whenever point in the code
 export const LOGIN_REQUEST = 'App/LOGIN_REQUEST';
-export function loginRequest(data) {
+export function loginRequest(user) {
   return {
     type: LOGIN_REQUEST,
-    payload: data,
+    payload: {
+      user: user,
+    },
   };
 }
 
 // triggered when the login has succeded
 export const LOGIN_SUCCESS = 'App/LOGIN_SUCCESS';
-export function loginSuccess(data) {
+export function loginSuccess(user) {
   return {
     type: LOGIN_SUCCESS,
-    payload: data,
+    payload: {
+      user: user,
+    },
   };
 }
 
 // triggered when the login failed
 export const LOGIN_ERROR = 'App/LOGIN_ERROR';
-export function loginError(errors) {
+export function loginError(error) {
   return {
     type: LOGIN_ERROR,
-    error: true,
-    payload: errors,
+    payload: {
+      error: error,
+    },
   };
 }
 

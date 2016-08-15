@@ -17,6 +17,8 @@ export const ORDER_LIST_ERROR = 'App/ORDER_LIST_ERROR';
 export function orderListError(error) {
   return {
     type: ORDER_LIST_ERROR,
-    payload: error,
+    payload: {
+      error: error,
+    },
   };
 }

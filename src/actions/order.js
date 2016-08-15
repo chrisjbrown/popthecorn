@@ -22,6 +22,8 @@ export const ORDER_ERROR = 'App/ORDER_ERROR';
 export function orderError(error) {
   return {
     type: ORDER_ERROR,
-    payload: error,
+    payload: {
+      error: error,
+    },
   };
 }

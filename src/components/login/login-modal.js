@@ -1,13 +1,17 @@
 import React, { Component, PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import Dialog from 'material-ui/Dialog';
 import LoginForm from './login-form';
+import * as SessionActions from 'app/actions/session';
 
 class LoginModal extends Component {
 
   static propTypes = {
+    loginSubmit: PropTypes.func.isRequired,
     open: PropTypes.bool,
-    onSubmit: PropTypes.func,
+    dataError: PropTypes.string,
   };
 
   constructor(props) {
@@ -15,7 +19,7 @@ class LoginModal extends Component {
   }
 
   render() {
-    const { open, onSubmit } = this.props;
+    const { open, loginSubmit, dataError } = this.props;
 
     const isModal = true;
 
@@ -23,15 +27,29 @@ class LoginModal extends Component {
       <Dialog
         testid="login-form"
         modal={ isModal }
-        open={ open }
-        >
+        open={ open }>
         <h1 data-testid="login-header" className="mt0">Login</h1>
 
         <LoginForm
-          onSubmit={ onSubmit } />
+          dataError={ dataError }
+          loginSubmit={ loginSubmit }
+          onSubmit={ this.handleLoginSubmit.bind(this) }
+        />
       </Dialog>
     );
   }
+
+  handleLoginSubmit(values) {
+    event.preventDefault();
+    return new Promise((resolve, reject) => {
+      this.props.loginSubmit({values, resolve, reject});
+    });
+  }
 }
 
-export default LoginModal;
+export default connect(
+  state => ({
+    dataError: state.session.get('dataError'),
+  }),
+  dispatch => bindActionCreators(SessionActions, dispatch)
+)(LoginModal);

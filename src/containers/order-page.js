@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import CircularProgress from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
+import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
 
 import Container from 'app/components/container';
 import * as OrderActions from 'app/actions/order';
@@ -44,31 +46,59 @@ class OrderPage extends Component {
     const orderData = this.props.orderData;
 
     if (orderData.size > 0) {
-      const order = orderData.get('order');
+      const detail = orderData.get('order');
       const customer = orderData.get('customer');
       const product = orderData.get('product');
 
       return (
         <div>
-          <h3>
-            <div>Customer: { customer.get('name') }</div>
-            <div>ID: { order.get('id') }</div>
-          </h3>
-
-          <Avatar className="mx-auto" style={ {display: 'block'} } src={ product.get('imageUrl') } size={ 100 } />
-
-          <div>
-            <div className="clearfix mt3">
-              <span className="left">Product Name:</span>
-              <span className="right">{ product.get('name') }</span>
+          <div style={ {backgroundColor: '#f6f6f6', padding: '10px'} }>
+            <div className="clearfix">
+              <span className="col col-4">Status</span>
+              <span className="col col-4">Door</span>
+              <span className="col col-4">Om</span>
             </div>
-            <div className="clearfix mt3">
-              <span className="left">Description:</span>
-              <span className="right">{ product.get('description') }</span>
+            <div className="clearfix">
+              <span className="col col-4">{ detail.get('status') }</span>
+              <span className="col col-4">{ customer.get('name') }</span>
+              <span className="col col-4">{ detail.get('placedAt') }</span>
             </div>
-            <div className="clearfix mt3">
-              <span className="left">Price:</span>
-              <span className="right">{ product.get('price') }</span>
+            <div style={ {textAlign: 'center'} }>
+              <RaisedButton label="Opgehaald" secondary={true}/>
+            </div>
+          </div>
+
+          <div className="mt3">
+            <div>
+              <strong>Aanvraag om: </strong>
+              <span>{ detail.get('placedAt') }</span>
+            </div>
+            <div>
+              <strong>Door: </strong>
+              <span>{ customer.get('name') }</span>
+            </div>
+            <div>
+              <strong>OrderNummer: </strong>
+              <span>{ detail.get('id') }</span>
+            </div>
+          </div>
+
+          <Avatar className="mx-auto mt3" style={ {display: 'block'} } src={ product.get('imageUrl') } size={ 200 } />
+
+          <div className="mt3">
+            <div>
+              <span>{ product.get('description') }</span>
+              <Divider/>
+            </div>
+            <div>
+              <strong>Aantal: </strong>
+              <span>{ orderData.get('quantity') } x</span>
+              <Divider/>
+            </div>
+            <div>
+              <strong>Artikelnummer: </strong>
+              <span>{ product.get('code') }</span>
+              <Divider/>
             </div>
           </div>
         </div>

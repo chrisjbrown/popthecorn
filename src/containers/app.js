@@ -12,6 +12,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import AccessibilityIcon from 'material-ui/svg-icons/action/accessibility';
+import SearchIcon from 'material-ui/svg-icons/action/search';
 import MenuItem from 'material-ui/MenuItem';
 import Drawer from 'material-ui/Drawer';
 import { List, ListItem } from 'material-ui/List';
@@ -105,10 +106,17 @@ class App extends Component {
                 leftIcon={ <MenuIcon /> }
               />
               <ListItem
-              primaryText="Settings"
-              onTouchTap={ this.closeDrawer.bind(this) }
-              containerElement={ <Link to="/settings" />}
-              leftIcon={<AccessibilityIcon />} />
+                primaryText="Search"
+                onTouchTap={ this.closeDrawer.bind(this) }
+                containerElement={ <Link to="/search" />}
+                leftIcon={<SearchIcon />}
+              />
+              <ListItem
+                primaryText="Settings"
+                onTouchTap={ this.closeDrawer.bind(this) }
+                containerElement={ <Link to="/settings" />}
+                leftIcon={<AccessibilityIcon />}
+              />
             </List>
           </Drawer>
           <Content style isVisible={ isLoggedIn }>

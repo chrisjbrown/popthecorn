@@ -1,4 +1,3 @@
-import { get } from 'app/api/server';
 import { patch } from 'app/api/server';
 
 const ITEM_ERR_MSG = 'Error updating order';

@@ -1,6 +1,7 @@
 import { take, put, call } from 'redux-saga/effects';
-import { reserveItem } from 'app/api/item-list/';
-import { itemReserveSuccess, itemReserveError } from 'app/actions/item-list/';
+import { reserveItem } from 'app/api/item/';
+import { itemReserveSuccess, itemReserveError } from 'app/actions/item/';
+import { requestItemList } from 'app/actions/item-list/';
 
 import {
   ITEM_RESERVE_REQUEST,
@@ -17,6 +18,7 @@ export function* itemReserve(itemId) {
   try {
     const status = yield call(reserveItem, itemId);
     yield put(itemReserveSuccess(status));
+    yield put(requestItemList());
     return status;
   } catch (error) {
     yield put(itemReserveError(error));

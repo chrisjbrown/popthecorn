@@ -20,6 +20,7 @@ class ItemListPage extends Component {
 
   static propTypes = {
     items: PropTypes.object,
+    item: PropTypes.object,
     requestItemList: PropTypes.func,
     itemReserveRequest: PropTypes.func,
     isLoading: PropTypes.bool,
@@ -74,9 +75,11 @@ class ItemListPage extends Component {
               secondaryText={
                 <p className="clearfix">
                   { customer.get('name') }
+                  <br/>
+                  { item.get('status') }
                 </p>
               }
-              secondaryTextLines={1}
+              secondaryTextLines={2}
             />
           </Link>
           <Divider />
@@ -92,7 +95,7 @@ class ItemListPage extends Component {
   }
 
   render() {
-    const { isLoading, dataError, items } = this.props;
+    const { isLoading, dataError, items, item } = this.props;
 
     return (
       <Tabs>
@@ -108,9 +111,9 @@ class ItemListPage extends Component {
             </span>
           }>
           <Container size={4} center>
-            { isLoading ? this.renderLoading() : [] }
+            { (isLoading || item.get('isLoading')) ? this.renderLoading() : [] }
             { dataError ? this.renderError() : [] }
-            { !isLoading && !dataError ? this.renderItemList() : [] }
+            { (!isLoading && !item.get('isLoading')) && !dataError ? this.renderItemList() : [] }
           </Container>
         </Tab>
         <Tab
@@ -140,6 +143,7 @@ class ItemListPage extends Component {
 
 export default connect(
   state => ({
+    item: state.item,
     items: state.itemList.get('items'),
     dataError: state.itemList.get('dataError'),
     isLoading: state.itemList.get('isLoading'),

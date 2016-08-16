@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
+// import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import CircularProgress from 'material-ui/CircularProgress';
@@ -35,8 +35,10 @@ class SearchPage extends Component {
   renderSearch() {
     return (
       <TextField
-        hintText="Search "
+        hintText="Search"
         floatingLabelText="Search"
+        fullWidth={ true }
+        onChange={ this.handleChange.bind(this)}
       />
     );
   }
@@ -49,13 +51,19 @@ class SearchPage extends Component {
 
         { isLoading ? this.renderLoading() : [] }
         { dataError ? this.renderError() : [] }
-        { !isLoading && !dataError ? this.renderOrder() : [] }
+        { !isLoading && !dataError ? this.renderSearch() : [] }
 
       </Container>
     );
   }
+
+  handleChange(event) {
+    if (event.currentTarget.value !== '') {
+      console.log(event.currentTarget.value);
+    }
+  }
 }
 
 export default connect(
-  () => { return {} },
+  () => { return {}; },
 )(SearchPage);

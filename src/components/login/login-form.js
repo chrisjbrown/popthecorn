@@ -43,6 +43,7 @@ class LoginForm extends Component {
 
         <div className="right">
           <RaisedButton
+            backgroundColor="white"
             label="Clear"
             onTouchTap={ reset }
             className="mr2"

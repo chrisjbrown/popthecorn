@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import Divider from 'material-ui/Divider';
 import CircularProgress from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
 
@@ -88,11 +87,6 @@ class OrderPage extends Component {
 
     return (
       <Container testid="order" size={4} center>
-        <h2 data-testid="order-heading" className="caps">
-          Order Page
-        </h2>
-
-        <Divider/>
 
         { isLoading ? this.renderLoading() : [] }
         { dataError ? this.renderError() : [] }

@@ -4,7 +4,7 @@ const ORDER_ERR_MSG = 'Error requesting order';
 
 export function getOrder(orderId) {
   return new Promise((resolve, reject) => {
-    return get('/pickingorder/item/list')
+    return get('/items')
       .then((json) => {
         if (json.error) {
           return reject(new Error(json.error.reason));

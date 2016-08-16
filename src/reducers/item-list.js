@@ -1,28 +1,32 @@
-import { ORDER_LIST_SUCCESS, ORDER_LIST_ERROR, ORDER_LIST_REQUEST } from 'app/actions';
+import {
+  ITEM_LIST_REQUEST,
+  ITEM_LIST_SUCCESS,
+  ITEM_LIST_ERROR,
+} from 'app/actions';
 import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({
-  orders: [],
+  items: [],
   dataError: '',
   isLoading: false,
 });
 
-function orderListReducer(state = INITIAL_STATE, action = {}) {
+function itemListReducer(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
-    case ORDER_LIST_REQUEST:
+    case ITEM_LIST_REQUEST:
       return state.merge(fromJS({
-        orders: [],
+        items: [],
         dataError: '',
         isLoading: true,
       }));
-    case ORDER_LIST_ERROR:
+    case ITEM_LIST_ERROR:
       return state.merge(fromJS({
         isLoading: false,
         dataError: action.payload.error.message,
       }));
-    case ORDER_LIST_SUCCESS:
+    case ITEM_LIST_SUCCESS:
       return state.merge(fromJS({
-        orders: action.payload.data.items,
+        items: action.payload.data.items,
         dataError: '',
         isLoading: false,
       }));
@@ -31,4 +35,4 @@ function orderListReducer(state = INITIAL_STATE, action = {}) {
   }
 }
 
-export default orderListReducer;
+export default itemListReducer;

@@ -28,7 +28,9 @@ injectTapEventPlugin();
 const dbkTheme = {
   fontFamily: 'Arial, Helvetica, sans-serif',
   palette: {
-    primary1Color: '#f6a800',
+    accent1Color: '#f6a800',
+    primary1Color: '#f6f6f6',
+    alternateTextColor: '#000',
   },
 };
 
@@ -71,7 +73,7 @@ class App extends Component {
 
           <AppBar
             className="navbar"
-            style={ {position: 'fixed'} }
+            style={ {position: 'fixed', backgroundColor: 'white'} }
             iconElementLeft={
               <IconButton
                 onTouchTap={ this.toggleDrawer.bind(this) }>

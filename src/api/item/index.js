@@ -1,16 +1,17 @@
 import { get } from 'app/api/server';
+import { patch } from 'app/api/server';
 
-const ORDER_LIST_ERR_MSG = 'Error requesting order list';
+const ITEM_ERR_MSG = 'Error updating order';
 
-export function getOrderList() {
+export function reserveItem(itemId) {
   return new Promise((resolve, reject) => {
-    return get('/pickingorder/item/list')
+    return patch('/items/' + itemId, { status: 'RESERVED' })
       .then((json) => {
         if (json.error) {
           return reject(new Error(json.error.reason));
         }
         return resolve(json);
       })
-      .then(null, () => reject(new Error(ORDER_LIST_ERR_MSG)));
+      .then(null, () => reject(new Error(ITEM_ERR_MSG)));
   });
 }

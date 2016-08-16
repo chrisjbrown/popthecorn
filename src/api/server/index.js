@@ -30,3 +30,21 @@ export function get(path, data) {
   })
   .then(response => response.json());
 }
+
+export function patch(path, data) {
+  return fetch(BASE_URL + path, {
+    method: 'PATCH',
+    credentials: 'include',
+    withCredentials: true,
+    headers: {
+      'Access-Control-Request-Headers': 'X-Request-ID',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  .then(response => {
+    console.log(response);
+    return response.json();
+  });
+}

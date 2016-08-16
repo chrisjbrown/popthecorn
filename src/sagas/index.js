@@ -1,6 +1,7 @@
 import { initAuthSagas, watchInit, watchTogglePush } from './session';
 import { watchOrder } from './order';
-import { watchOrderList } from './order-list';
+import { watchItemList } from './item-list';
+import { watchItemReserve } from './item';
 
 // single entry point to start all Sagas at once
 export default function* initSagas() {
@@ -9,6 +10,7 @@ export default function* initSagas() {
     watchInit(),
     watchTogglePush(),
     watchOrder(),
-    watchOrderList(),
+    watchItemList(),
+    watchItemReserve(),
   ];
 }

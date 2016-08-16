@@ -3,13 +3,15 @@ import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import session from './session';
 import order from './order';
-import orderList from './order-list';
+import itemList from './item-list';
+import item from './item';
 import error from './error';
 
 const rootReducer = combineReducers({
   session,
   order,
-  orderList,
+  itemList,
+  item,
   error,
   routing: routerReducer,
   form: formReducer,

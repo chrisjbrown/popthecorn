@@ -7,13 +7,17 @@ const endpoints = require('./webpack/endpoints');
 
 const devmode = process.env.NODE_ENV !== 'production';
 
+function getEntrySources(sources) {
+  if (devmode) {
+    sources.push('webpack-dev-server/client?http://0.0.0.0:8080');
+    sources.push('webpack/hot/only-dev-server');
+  }
+
+  return sources;
+}
+
 module.exports = {
-  entry: [
-    'webpack-dev-server/client?http://0.0.0.0:8080',
-    'webpack/hot/only-dev-server',
-    'babel-polyfill',
-    './src/index.js',
-  ],
+  entry: getEntrySources(['babel-polyfill', './src/index.js']),
 
   output: {
     path: path.join(__dirname, 'dist'),

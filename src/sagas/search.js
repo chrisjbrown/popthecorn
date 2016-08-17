@@ -9,18 +9,14 @@ import {
 
 export function* watchSearchItems() {
   while (true) {
-    takeLatest(SEARCH_ITEM_REQUEST, runSearchItems);
+    yield takeLatest(SEARCH_ITEM_REQUEST, runSearchItems);
   }
 }
 
 function* runSearchItems(action) {
   try {
-    const foundItemList = call(searchItems, action.payload.criteria);
+    const foundItemList = yield call(searchItems, action.payload.criteria);
     yield put(searchItemSuccess(foundItemList));
-
-    // yield take(SEARCH_ITEM_RESET);
-    // yield cancel(foundItemList);
-
     return foundItemList;
   } catch (error) {
     yield put(searchItemError(error));

@@ -27,3 +27,33 @@ export function orderError(error) {
     },
   };
 }
+
+export const ORDER_COMPLETE_REQUEST = 'App/ORDER_COMPLETE_REQUEST';
+export function requestCompleteOrder(orderId) {
+  return {
+    type: ORDER_COMPLETE_REQUEST,
+    payload: {
+      orderId: orderId,
+    },
+  };
+}
+
+export const ORDER_COMPLETE_SUCCESS = 'App/ORDER_COMPLETE_SUCCESS';
+export function orderCompleteSuccess(status) {
+  return {
+    type: ORDER_COMPLETE_SUCCESS,
+    payload: {
+      status: status,
+    },
+  };
+}
+
+export const ORDER_COMPLETE_ERROR = 'App/ORDER_COMPLETE_ERROR';
+export function orderCompleteError(error) {
+  return {
+    type: ORDER_COMPLETE_ERROR,
+    payload: {
+      error: error,
+    },
+  };
+}

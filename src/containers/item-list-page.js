@@ -9,6 +9,7 @@ import Avatar from 'material-ui/Avatar';
 import CircularProgress from 'material-ui/CircularProgress';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconAdd from 'material-ui/svg-icons/content/add';
+import IconCheck from 'material-ui/svg-icons/navigation/check';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Badge from 'material-ui/Badge';
 
@@ -38,7 +39,7 @@ class ItemListPage extends Component {
   renderLoading() {
     return (
       <div className="center">
-        <CircularProgress size={ 1.5 }  />
+        <CircularProgress color="f6a800" size={ 1.5 }  />
       </div>
     );
   }
@@ -68,7 +69,7 @@ class ItemListPage extends Component {
                   className="clearfix"
                   mini={true}
                   style={ {top: 'inherit'} }>
-                  <IconAdd />
+                  { item.get('status') === 'RESERVED' ? <IconCheck /> : <IconAdd /> }
                 </FloatingActionButton>
               }
               primaryText={ product.get('name') }
@@ -87,11 +88,7 @@ class ItemListPage extends Component {
       );
     });
 
-    return (
-      <List>
-        { itemListItems }
-      </List>
-    );
+    return itemListItems;
   }
 
   render() {
@@ -113,7 +110,9 @@ class ItemListPage extends Component {
           <Container size={4} center>
             { (isLoading || item.get('isLoading')) ? this.renderLoading() : [] }
             { dataError ? this.renderError() : [] }
-            { (!isLoading && !item.get('isLoading')) && !dataError ? this.renderItemList() : [] }
+            <List>
+              { (!isLoading && !item.get('isLoading')) && !dataError ? this.renderItemList() : [] }
+            </List>
           </Container>
         </Tab>
         <Tab

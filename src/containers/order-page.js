@@ -13,6 +13,7 @@ import * as OrderActions from 'app/actions/order';
 class OrderPage extends Component {
 
   static propTypes = {
+    requestCompleteOrder: PropTypes.func,
     orderData: PropTypes.object,
     params: PropTypes.object,
     requestOrder: PropTypes.func,
@@ -31,7 +32,7 @@ class OrderPage extends Component {
   renderLoading() {
     return (
       <div className="center">
-        <CircularProgress size={ 1.5 }  />
+        <CircularProgress color="f6a800" size={ 1.5 }  />
       </div>
     );
   }
@@ -43,12 +44,13 @@ class OrderPage extends Component {
   }
 
   renderOrder() {
-    const orderData = this.props.orderData;
+    const { orderData, requestCompleteOrder } = this.props;
 
     if (orderData.size > 0) {
       const detail = orderData.get('order');
       const customer = orderData.get('customer');
       const product = orderData.get('product');
+      const pickingOrder = orderData.get('pickingOrder');
 
       return (
         <div>
@@ -59,12 +61,16 @@ class OrderPage extends Component {
               <span className="col col-4">Om</span>
             </div>
             <div className="clearfix">
-              <span className="col col-4">{ detail.get('status') }</span>
+              <span style={ {textTransform: 'capitalize'} } className="col col-4">{ pickingOrder.get('status').toLowerCase() }</span>
               <span className="col col-4">{ customer.get('name') }</span>
               <span className="col col-4">{ detail.get('placedAt') }</span>
             </div>
             <div style={ {textAlign: 'center'} }>
-              <RaisedButton label="Opgehaald" secondary={true}/>
+              <RaisedButton
+                onTouchTap={ requestCompleteOrder.bind(null, pickingOrder.get('id')) }
+                label={ pickingOrder.get('status') === 'DELIVERED' ? 'Opgehaald' : 'Voltooid' }
+                labelStyle={ {textTransform: 'none'} }
+                secondary={true}/>
             </div>
           </div>
 

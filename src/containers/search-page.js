@@ -21,7 +21,7 @@ class SearchPage extends Component {
   renderLoading() {
     return (
       <div className="center">
-        <CircularProgress size={ 1.5 }  />
+        <CircularProgress color="f6a800" size={ 1.5 }  />
       </div>
     );
   }

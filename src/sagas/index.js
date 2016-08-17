@@ -1,5 +1,5 @@
 import { initAuthSagas, watchInit, watchTogglePush } from './session';
-import { watchOrder } from './order';
+import { watchOrder, watchOrderComplete } from './order';
 import { watchItemList } from './item-list';
 import { watchItemReserve } from './item';
 
@@ -12,5 +12,6 @@ export default function* initSagas() {
     watchOrder(),
     watchItemList(),
     watchItemReserve(),
+    watchOrderComplete(),
   ];
 }

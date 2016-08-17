@@ -37,6 +37,9 @@ main {
   padding-top: 64px;
 }
 
+input,
+input:focus,
+input:hover,
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus
@@ -47,6 +50,6 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  box-shadow: 0 0 0px 1000px #fff inset;
-  transition: background-color 5000s ease-in-out 0s;
+  border: 0;
+  outline: none;
 }

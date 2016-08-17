@@ -6,6 +6,7 @@ import order from './order';
 import itemList from './item-list';
 import item from './item';
 import error from './error';
+import search from './search';
 
 const rootReducer = combineReducers({
   session,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   error,
   routing: routerReducer,
   form: formReducer,
+  search,
 });
 
 export default rootReducer;

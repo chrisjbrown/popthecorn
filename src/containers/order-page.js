@@ -68,7 +68,7 @@ class OrderPage extends Component {
             <div style={ {textAlign: 'center'} }>
               <RaisedButton
                 onTouchTap={ requestCompleteOrder.bind(null, pickingOrder.get('id')) }
-                label={ pickingOrder.get('status') === 'DELIVERED' ? 'Opgehaald' : 'Voltooid' }
+                label={ pickingOrder.get('status') === 'DELIVERED' ? 'Voltooid' : 'Opgehaald' }
                 labelStyle={ {textTransform: 'none'} }
                 secondary={true}/>
             </div>

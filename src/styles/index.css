@@ -54,3 +54,9 @@ select:-webkit-autofill:focus {
   outline: none;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+a,
+a:visited {
+  color: initial;
+  text-decoration: none;
+}

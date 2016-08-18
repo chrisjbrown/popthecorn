@@ -8,12 +8,14 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import CircularProgress from 'material-ui/CircularProgress';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import IconAdd from 'material-ui/svg-icons/content/add';
 import IconCheck from 'material-ui/svg-icons/navigation/check';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Badge from 'material-ui/Badge';
 
 import Container from 'app/components/container';
+import { delay } from 'app/utils/delay';
 import * as ItemListActions from 'app/actions/item-list';
 import * as ItemActions from 'app/actions/item';
 
@@ -30,10 +32,20 @@ class ItemListPage extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      confirmItem: null,
+    };
   }
 
   componentDidMount() {
     this.props.requestItemList();
+  }
+
+  componentWillUnmount() {
+    if (this.confirmableDelay) {
+      this.confirmableDelay.cancel();
+    }
   }
 
   renderLoading() {
@@ -50,6 +62,42 @@ class ItemListPage extends Component {
     );
   }
 
+  renderActionButton(status, itemId) {
+    if (this.state.confirmItem === itemId) {
+      return (
+        <RaisedButton
+          onTouchTap={ this.updateItem.bind(this, itemId) }
+          className="clearfix"
+          style={ {top: 'inherit'} }
+          backgroundColor="#b0b0b0">
+          Confirm
+        </RaisedButton>
+      );
+    }
+
+    switch (status) {
+      case 'RESERVED':
+        return (
+          <FloatingActionButton
+            className="clearfix"
+            mini={true}
+            style={ {top: 'inherit'} }>
+            <IconCheck />
+          </FloatingActionButton>
+        );
+      default:
+        return (
+          <FloatingActionButton
+            onTouchTap={ this.setConfirm.bind(this, itemId) }
+            className="clearfix"
+            mini={true}
+            style={ {top: 'inherit'} }>
+              <IconAdd />
+          </FloatingActionButton>
+        );
+    }
+  }
+
   renderItemList() {
     const items = this.props.items;
 
@@ -64,13 +112,7 @@ class ItemListPage extends Component {
             <ListItem
               leftAvatar={<Avatar src={product.get('imageUrl')} />}
               rightIconButton={
-                <FloatingActionButton
-                  onTouchTap={ this.updateItem.bind(this, item.get('id')) }
-                  className="clearfix"
-                  mini={true}
-                  style={ {top: 'inherit'} }>
-                  { item.get('status') === 'RESERVED' ? <IconCheck /> : <IconAdd /> }
-                </FloatingActionButton>
+                this.renderActionButton(item.get('status'), item.get('id'))
               }
               primaryText={ product.get('name') }
               secondaryText={
@@ -93,6 +135,21 @@ class ItemListPage extends Component {
 
   render() {
     const { isLoading, dataError, items, item } = this.props;
+    const { confirmItem } = this.state;
+
+    if (confirmItem) {
+      if (this.confirmableDelay) {
+        this.confirmableDelay.cancel();
+      }
+
+      this.confirmableDelay = delay(3000);
+
+      this.confirmableDelay.then( () => {
+        this.setState({
+          confirmItem: null,
+        });
+      });
+    }
 
     return (
       <Tabs>
@@ -134,9 +191,20 @@ class ItemListPage extends Component {
     );
   }
 
+  setConfirm(itemId, event) {
+    event.preventDefault();
+
+    this.setState({
+      confirmItem: itemId,
+    });
+  }
+
   updateItem(itemId, event) {
     event.preventDefault();
-    this.props.itemReserveRequest(itemId);
+
+    if (this.state.confirmItem === itemId) {
+      this.props.itemReserveRequest(itemId);
+    }
   }
 }
 

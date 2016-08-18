@@ -204,6 +204,9 @@ class ItemListPage extends Component {
 
     if (this.state.confirmItem === itemId) {
       this.props.itemReserveRequest(itemId);
+      this.setState({
+        confirmItem: null,
+      });
     }
   }
 }

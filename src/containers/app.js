@@ -22,30 +22,50 @@ import Content from 'app/components/content';
 import LoginModal from 'app/components/login/login-modal';
 import * as SessionActions from 'app/actions/session';
 
+import headings from 'app/styles/headings';
+import dbkColors from 'app/styles/colors';
+
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-const dbkTheme = {
-  fontFamily: 'Arial, Helvetica, sans-serif',
-  palette: {
-    accent1Color: '#f6a800',
-    primary1Color: '#f6f6f6',
-    alternateTextColor: '#000',
+const dbkTheme = getMuiTheme({
+  palette: dbkColors,
+  fontFamily: 'Proxima\ Nova',
+  appBar: {
+    color: dbkColors.alternateTextColor,
+    textColor: dbkColors.textColor,
   },
-};
-
-const muiTheme = getMuiTheme(dbkTheme);
+  raisedButton: {
+    color: dbkColors.primary3Color,
+    textColor: dbkColors.alternateTextColor,
+  },
+  floatingActionButton: {
+    color: dbkColors.primary3Color,
+    iconColor: dbkColors.alternateTextColor,
+  },
+  tabs: {
+    textColor: dbkColors.primary2Color,
+    selectedTextColor: dbkColors.textColor,
+  },
+  badge: {
+    primaryColor: dbkColors.primary3Color,
+    color: dbkColors.primary2Color,
+    textColor: dbkColors.alternateTextColor,
+  },
+});
 
 class App extends Component {
 
   static propTypes = {
     children: PropTypes.node,
     session: PropTypes.object,
+    routing: PropTypes.object,
     form: PropTypes.object,
     error: PropTypes.object,
     logoutUser: PropTypes.func,
     removeErr: PropTypes.func,
+    params: PropTypes.object,
   };
 
   constructor(props, context) {
@@ -54,6 +74,19 @@ class App extends Component {
     this.state = {
       drawerOpen: false,
     };
+  }
+
+  getNavTitle() {
+    const pathname = this.props.routing.locationBeforeTransitions.pathname;
+
+    if (pathname === '/') {
+      return <span style={ headings.dbkHeading }> KLANTAANVRAGEN </span>;
+    } else if (pathname.includes('search')) {
+      return <span style={ headings.dbkHeading }> SEARCH </span>;
+    } else if (pathname.includes('settings')) {
+      return <span style={ headings.dbkHeading }> SETTINGS </span>;
+    }
+    return '';
   }
 
   render() {
@@ -67,14 +100,15 @@ class App extends Component {
     const isLoggedIn = (token && token !== null && typeof token !== 'undefined') ? true : false;
 
     return (
-      <MuiThemeProvider muiTheme={ muiTheme }>
+      <MuiThemeProvider muiTheme={ dbkTheme }>
         <div>
           <LoginModal
             open={ !isLoggedIn } />
 
           <AppBar
+            title={ this.getNavTitle() }
             className="navbar"
-            style={ {position: 'fixed', backgroundColor: 'white'} }
+            style={ {position: 'fixed'} }
             iconElementLeft={
               <IconButton
                 onTouchTap={ this.toggleDrawer.bind(this) }>
@@ -148,7 +182,7 @@ class App extends Component {
 export default connect(
   state => ({
     session: state.session,
-    router: state.router,
+    routing: state.routing,
     error: state.error,
     form: state.form,
   }),

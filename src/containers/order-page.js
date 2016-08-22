@@ -10,6 +10,8 @@ import Divider from 'material-ui/Divider';
 import Container from 'app/components/container';
 import * as OrderActions from 'app/actions/order';
 
+import dbkColors from 'app/styles/colors';
+
 class OrderPage extends Component {
 
   static propTypes = {
@@ -32,7 +34,7 @@ class OrderPage extends Component {
   renderLoading() {
     return (
       <div className="center">
-        <CircularProgress color="f6a800" size={ 1.5 }  />
+        <CircularProgress color={ dbkColors.accent1Color } size={ 1.5 }  />
       </div>
     );
   }

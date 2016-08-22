@@ -1,0 +1,16 @@
+export default {
+  primary1Color: '#f6f6f6',
+  primary2Color: '#737373',
+  primary3Color: '#000',
+  accent1Color: '#f6a800',
+  accent2Color: '#f6f6f6',
+  accent3Color: '#f6f6f6',
+  textColor: '#000',
+  alternateTextColor: '#fff',
+  canvasColor: '#fff',
+  borderColor: '#f6f6f6',
+  disabledColor: '#737373',
+  pickerHeaderColor: '#f6f6f6',
+  clockCircleColor: '#000',
+  shadowColor: '#000',
+};

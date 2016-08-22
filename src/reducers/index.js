@@ -4,6 +4,7 @@ import { reducer as formReducer } from 'redux-form';
 import session from './session';
 import order from './order';
 import itemList from './item-list';
+import orderList from './order-list';
 import item from './item';
 import error from './error';
 import search from './search';
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   session,
   order,
   itemList,
+  orderList,
   item,
   error,
   routing: routerReducer,

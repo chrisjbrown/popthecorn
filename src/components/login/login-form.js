@@ -7,6 +7,8 @@ import CircularProgress from 'material-ui/CircularProgress';
 
 import Alert from 'app/components/alert';
 
+import dbkColors from 'app/styles/colors';
+
 class LoginForm extends Component {
 
   static propTypes = {
@@ -63,7 +65,7 @@ class LoginForm extends Component {
   renderLoader() {
     return (
       <div className="center">
-        <CircularProgress color="f6a800" size={ 1 }/>
+        <CircularProgress color={ dbkColors.accent1Color } size={ 1 }/>
       </div>
     );
   }

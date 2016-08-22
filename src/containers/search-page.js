@@ -12,6 +12,8 @@ import IconSearch from 'material-ui/svg-icons/action/search';
 import Container from 'app/components/container';
 import * as SearchActions from 'app/actions/search';
 
+import dbkColors from 'app/styles/colors';
+
 class SearchPage extends Component {
 
   static propTypes = {
@@ -30,7 +32,7 @@ class SearchPage extends Component {
   renderLoading() {
     return (
       <div className="center">
-        <CircularProgress color="f6a800" size={ 1.5 }  />
+        <CircularProgress color={ dbkColors.accent1Color } size={ 1.5 }  />
       </div>
     );
   }

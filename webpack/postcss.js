@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 
 const postcssBasePlugins = [
-  require('postcss-modules-local-by-default'),
+  require('postcss-apply'),
   require('postcss-import')({
     addDependencyTo: webpack,
   }),

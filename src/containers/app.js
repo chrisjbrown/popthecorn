@@ -11,6 +11,7 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
+import ChevronLeftIcon from 'material-ui/svg-icons/navigation/chevron-left';
 import AccessibilityIcon from 'material-ui/svg-icons/action/accessibility';
 import SearchIcon from 'material-ui/svg-icons/action/search';
 import MenuItem from 'material-ui/MenuItem';
@@ -59,14 +60,20 @@ class App extends Component {
 
   static propTypes = {
     children: PropTypes.node,
+    order: PropTypes.object,
     session: PropTypes.object,
     routing: PropTypes.object,
+    router: PropTypes.object,
     form: PropTypes.object,
     error: PropTypes.object,
     logoutUser: PropTypes.func,
     removeErr: PropTypes.func,
     params: PropTypes.object,
   };
+
+  static contextTypes = {
+    router: React.PropTypes.object,
+  }
 
   constructor(props, context) {
     super(props, context);
@@ -78,15 +85,46 @@ class App extends Component {
 
   getNavTitle() {
     const pathname = this.props.routing.locationBeforeTransitions.pathname;
+    const customer = this.props.order.get('customer');
 
     if (pathname === '/') {
-      return <span style={ headings.dbkHeading }> KLANTAANVRAGEN </span>;
+      return <span style={ headings.dbkNHeading }> KLANTAANVRAGEN </span>;
     } else if (pathname.includes('search')) {
       return <span style={ headings.dbkHeading }> SEARCH </span>;
     } else if (pathname.includes('settings')) {
       return <span style={ headings.dbkHeading }> SETTINGS </span>;
+    } else if (pathname.includes('pickingorders')) {
+      return (
+        <span style={ Object.assign({}, headings.dbkHeading, headings.dbkNavHeading) }>
+          <span className="clearfix">
+            { customer ? customer.get('name') : [] }
+          </span>
+          <span className="clearfix">
+            { this.props.params.id }
+          </span>
+        </span>
+      );
     }
     return '';
+  }
+
+  renderNavButton() {
+    const pathname = this.props.routing.locationBeforeTransitions.pathname;
+
+    if (pathname.includes('pickingorders')) {
+      return (
+        <IconButton
+          onTouchTap={ this.context.router.goBack.bind() }>
+          <ChevronLeftIcon />
+        </IconButton>
+      );
+    }
+    return (
+      <IconButton
+        onTouchTap={ this.toggleDrawer.bind(this) }>
+        <MenuIcon />
+      </IconButton>
+    );
   }
 
   render() {
@@ -109,12 +147,7 @@ class App extends Component {
             title={ this.getNavTitle() }
             className="navbar"
             style={ {position: 'fixed'} }
-            iconElementLeft={
-              <IconButton
-                onTouchTap={ this.toggleDrawer.bind(this) }>
-                <MenuIcon />
-              </IconButton>
-            }
+            iconElementLeft={ this.renderNavButton() }
             iconElementRight={
               <IconMenu
                 iconButtonElement={
@@ -181,6 +214,7 @@ class App extends Component {
 
 export default connect(
   state => ({
+    order: state.order.get('orderData'),
     session: state.session,
     routing: state.routing,
     error: state.error,

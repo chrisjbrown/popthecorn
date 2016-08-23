@@ -65,7 +65,7 @@ class OrderListPage extends Component {
 
       return (
         <div key={ i }>
-          <Link to={ '/orders/' + detail.get('id') }>
+          <Link to={ '/pickingorders/' + detail.get('id') + '/items' }>
             <ListItem
               rightIcon={
                 <IconChevronRight style={ orderListStyle.itemArrow }/>

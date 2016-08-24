@@ -9,7 +9,7 @@ import {
 import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({
-  orderData: {},
+  order: {},
   dataError: '',
   isLoading: false,
 });
@@ -18,7 +18,7 @@ function orderReducer(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
     case ORDER_REQUEST:
       return state.merge(fromJS({
-        orderData: {},
+        order: {},
         dataError: '',
         isLoading: true,
       }));
@@ -29,7 +29,7 @@ function orderReducer(state = INITIAL_STATE, action = {}) {
       }));
     case ORDER_SUCCESS:
       return state.merge(fromJS({
-        orderData: action.payload.order,
+        order: action.payload.items,
         dataError: '',
         isLoading: false,
       }));

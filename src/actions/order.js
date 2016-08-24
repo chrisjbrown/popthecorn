@@ -9,11 +9,11 @@ export function requestOrder(orderId) {
 }
 
 export const ORDER_SUCCESS = 'App/ORDER_SUCCESS';
-export function orderSuccess(order) {
+export function orderSuccess(data) {
   return {
     type: ORDER_SUCCESS,
     payload: {
-      order: order,
+      items: data,
     },
   };
 }
@@ -52,6 +52,36 @@ export const ORDER_COMPLETE_ERROR = 'App/ORDER_COMPLETE_ERROR';
 export function orderCompleteError(error) {
   return {
     type: ORDER_COMPLETE_ERROR,
+    payload: {
+      error: error,
+    },
+  };
+}
+
+export const ORDER_ASSIGN_REQUEST = 'App/ORDER_ASSIGN_REQUEST';
+export function requestAssignOrder(orderId) {
+  return {
+    type: ORDER_ASSIGN_REQUEST,
+    payload: {
+      orderId: orderId,
+    },
+  };
+}
+
+export const ORDER_ASSIGN_SUCCESS = 'App/ORDER_ASSIGN_SUCCESS';
+export function orderAssignSuccess(status) {
+  return {
+    type: ORDER_ASSIGN_SUCCESS,
+    payload: {
+      status: status,
+    },
+  };
+}
+
+export const ORDER_ASSIGN_ERROR = 'App/ORDER_ASSIGN_ERROR';
+export function orderAssignError(error) {
+  return {
+    type: ORDER_ASSIGN_ERROR,
     payload: {
       error: error,
     },

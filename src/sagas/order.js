@@ -23,7 +23,7 @@ export function* watchOrder() {
 export function* order(orderId) {
   try {
     const foundOrder = yield call(getOrder, orderId);
-    yield put(orderSuccess(foundOrder));
+    yield put(orderSuccess(foundOrder.data));
     return foundOrder;
   } catch (error) {
     yield put(orderError(error));

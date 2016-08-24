@@ -12,4 +12,10 @@ export default {
     letterSpacing: '0.6px',
     textTransform: 'none',
   },
+
+  dbkNavHeading: {
+    lineHeight: '20px',
+    height: '64px',
+    paddingTop: '13px',
+  },
 };

@@ -40,6 +40,8 @@ const dbkTheme = getMuiTheme({
   raisedButton: {
     color: dbkColors.primary3Color,
     textColor: dbkColors.alternateTextColor,
+    primaryColor: dbkColors.accent1Color,
+    secondaryColor: dbkColors.primary3Color,
   },
   floatingActionButton: {
     color: dbkColors.primary3Color,
@@ -84,8 +86,9 @@ class App extends Component {
   }
 
   getNavTitle() {
+    // TODO find a better way to do this
     const pathname = this.props.routing.locationBeforeTransitions.pathname;
-    const customer = this.props.order.get('customer');
+    const customer = this.props.order && this.props.order.get('customer', false);
 
     if (pathname === '/') {
       return <span style={ headings.dbkNHeading }> KLANTAANVRAGEN </span>;
@@ -109,6 +112,7 @@ class App extends Component {
   }
 
   renderNavButton() {
+    // TODO find a better way to do this
     const pathname = this.props.routing.locationBeforeTransitions.pathname;
 
     if (pathname.includes('pickingorders')) {
@@ -214,7 +218,7 @@ class App extends Component {
 
 export default connect(
   state => ({
-    order: state.order.get('orderData'),
+    order: state.order.get('order'),
     session: state.session,
     routing: state.routing,
     error: state.error,

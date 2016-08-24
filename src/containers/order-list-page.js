@@ -17,7 +17,7 @@ import Container from 'app/components/container';
 import * as OrderListActions from 'app/actions/order-list';
 
 import headings from 'app/styles/headings';
-import orderListStyle from 'app/styles/order-list';
+import orderListStyles from 'app/styles/order-list';
 import dbkColors from 'app/styles/colors';
 import tabStyle from 'app/styles/tabs';
 
@@ -27,10 +27,14 @@ class OrderListPage extends Component {
   static propTypes = {
     assignedOrders: PropTypes.object,
     unassignedOrders: PropTypes.object,
-    orderListRequest: PropTypes.func,
-    isLoading: PropTypes.bool,
-    dataError: PropTypes.string,
+    orderListData: PropTypes.object,
+    orderAssignedListRequest: PropTypes.func,
+    orderUnassignedListRequest: PropTypes.func,
   };
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired,
+  }
 
   constructor(props) {
     super(props);
@@ -41,7 +45,11 @@ class OrderListPage extends Component {
   }
 
   componentDidMount() {
-    this.props.orderListRequest();
+    if (this.state.tabIndex === 0) {
+      this.props.orderUnassignedListRequest();
+    } else {
+      this.props.orderAssignedListRequest();
+    }
   }
 
   renderLoading() {
@@ -59,31 +67,30 @@ class OrderListPage extends Component {
   }
 
   renderOrderList(orders) {
-    const orderListItems = orders.map((item, i) => {
-      const detail = item.get('order');
-      const customer = item.get('customer');
+    const orderListItems = orders.map((order, i) => {
+      const customer = order.get('customer');
 
       return (
         <div key={ i }>
-          <Link to={ '/pickingorders/' + detail.get('id') + '/items' }>
+          <Link to={ '/pickingorders/' + order.get('id') }>
             <ListItem
               rightIcon={
-                <IconChevronRight style={ orderListStyle.itemArrow }/>
+                <IconChevronRight style={ orderListStyles.itemArrow }/>
               }>
               <div>
                 <div className="clearfix">
                   { customer.get('name') }
                 </div>
                 <div className="clearfix mt1">
-                  { detail.get('id') }
+                  { order.get('orderId') }
                 </div>
                 <div className="clearfix mt1">
-                  { item.get('quantity') } artikelen
+                  { order.get('quantity') } artikelen
                 </div>
                 <div className="clearfix mt1">
                   <span>
                     <IconAlarm style={ {height: '17px'} }/>
-                    { detail.get('placedAt') }
+                    { order.get('placedAt') }
                   </span>
                 </div>
               </div>
@@ -98,7 +105,7 @@ class OrderListPage extends Component {
   }
 
   render() {
-    const { isLoading, dataError, assignedOrders, unassignedOrders } = this.props;
+    const { assignedOrders, unassignedOrders, orderListData } = this.props;
 
     return (
       <div>
@@ -112,7 +119,7 @@ class OrderListPage extends Component {
               <span>
                 Openstaand
                 <Badge
-                  badgeContent={ unassignedOrders.size }
+                  badgeContent={ orderListData.get('numberOfUnassigned') }
                   primary={ this.state.tabIndex === 0 ? true : false }
                   style={ tabStyle.tabBadge }
                 />
@@ -126,7 +133,7 @@ class OrderListPage extends Component {
               <span>
                 In Behandeling
                 <Badge
-                  badgeContent={ assignedOrders.size }
+                  badgeContent={ orderListData.get('numberOfAssigned') }
                   primary={ this.state.tabIndex === 1 ? true : false }
                   style={ tabStyle.tabBadge }
                 />
@@ -139,20 +146,20 @@ class OrderListPage extends Component {
           onChangeIndex={this.handleTabChange.bind(this)}>
 
           <Container size={4} center>
-            { isLoading ? this.renderLoading() : [] }
-            { dataError ? this.renderError() : [] }
+            { unassignedOrders.get('isLoading') ? this.renderLoading() : [] }
+            { unassignedOrders.get('dataError') ? this.renderError() : [] }
             <List>
-              { !isLoading && !dataError ? this.renderOrderList(unassignedOrders) : [] }
-              { (!isLoading && !dataError && unassignedOrders.size === 0) ? <div>No orders found</div> : [] }
+              { !unassignedOrders.get('isLoading') && !unassignedOrders.get('dataError') ? this.renderOrderList(unassignedOrders.get('items')) : [] }
+              { (!unassignedOrders.get('isLoading') && !unassignedOrders.get('dataError') && unassignedOrders.get('items').size === 0) ? <div>No orders found</div> : [] }
             </List>
           </Container>
 
           <Container size={4} center>
-            { isLoading ? this.renderLoading() : [] }
-            { dataError ? this.renderError() : [] }
+            { assignedOrders.get('isLoading') ? this.renderLoading() : [] }
+            { assignedOrders.get('dataError') ? this.renderError() : [] }
             <List>
-              { !isLoading && !dataError ? this.renderOrderList(assignedOrders) : [] }
-              { (!isLoading && !dataError && assignedOrders.size === 0) ? <div>No orders found</div> : [] }
+              { !assignedOrders.get('isLoading') && !assignedOrders.get('dataError') ? this.renderOrderList(assignedOrders.get('items')) : [] }
+              { (!assignedOrders.get('isLoading') && !assignedOrders.get('dataError') && assignedOrders.get('items').size === 0) ? <div>No orders found</div> : [] }
             </List>
           </Container>
         </SwipeableViews>
@@ -171,8 +178,7 @@ export default connect(
   state => ({
     assignedOrders: state.orderList.get('assignedOrders'),
     unassignedOrders: state.orderList.get('unassignedOrders'),
-    dataError: state.orderList.get('dataError'),
-    isLoading: state.orderList.get('isLoading'),
+    orderListData: state.orderList,
   }),
   dispatch => bindActionCreators(Object.assign({}, OrderListActions), dispatch)
 )(OrderListPage);

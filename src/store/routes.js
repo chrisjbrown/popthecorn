@@ -12,7 +12,7 @@ import ScanPage from 'app/containers/scan-page';
 export default (
   <Route path="/" component={ App }>
     <IndexRoute name="klantaanvragen" component={ OrderListPage }/>
-    <Route name="order" path="/pickingorders/:id/items" component={ OrderPage } />
+    <Route name="order" path="/pickingorders/:id" component={ OrderPage } />
     <Route path="search" component={ SearchPage }/>
     <Route path="settings" component={ SettingsPage }/>
     // <Route path="scan" component={ ScanPage }/>

@@ -2,9 +2,9 @@ import { get } from 'app/api/server';
 
 const ORDER_LIST_ERR_MSG = 'Error requesting order list';
 
-export function getOrderList() {
+export function getOrderList(assigned) {
   return new Promise((resolve, reject) => {
-    return get('/items')
+    return get('/pickingorders' + (assigned ? '?assigned' : ''))
       .then((json) => {
         if (json.error) {
           return reject(new Error(json.error.reason));

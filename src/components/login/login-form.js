@@ -15,7 +15,6 @@ class LoginForm extends Component {
     onSubmit: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
-    loginSubmit: PropTypes.func.isRequired,
     dataError: PropTypes.string,
     submitting: PropTypes.bool,
   };
@@ -73,7 +72,7 @@ class LoginForm extends Component {
     const { dataError, submitting, handleSubmit } = this.props;
 
     return (
-      <form onSubmit={ handleSubmit }>
+      <form onSubmit={ (event) => {event.preventDefault(); handleSubmit();} }>
 
         <Alert isVisible={ !!dataError && !submitting } status="error">{ dataError }</Alert>
 

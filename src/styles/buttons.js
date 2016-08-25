@@ -5,7 +5,7 @@ export default {
     letterSpacing: '0.5px',
     color: '#fff',
     backgroundColor: '#000',
-    minWidth: '250px',
+    width: '100%',
     height: '48px',
     borderRadius: '2em',
   },

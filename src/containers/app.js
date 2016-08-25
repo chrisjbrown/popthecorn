@@ -21,55 +21,54 @@ import Snackbar from 'material-ui/Snackbar';
 
 import Content from 'app/components/content';
 import LoginModal from 'app/components/login/login-modal';
-import * as SessionActions from 'app/actions/session';
+import { logoutUser } from 'app/actions/session';
 
-import headings from 'app/styles/headings';
-import dbkColors from 'app/styles/colors';
+import Headings from 'app/styles/headings';
+import DbkColors from 'app/styles/colors';
+import Typography from 'app/styles/typography';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
 const dbkTheme = getMuiTheme({
-  palette: dbkColors,
+  palette: DbkColors,
   fontFamily: 'Proxima\ Nova',
   appBar: {
-    color: dbkColors.alternateTextColor,
-    textColor: dbkColors.textColor,
+    color: DbkColors.alternateTextColor,
+    textColor: DbkColors.textColor,
   },
   raisedButton: {
-    color: dbkColors.primary3Color,
-    textColor: dbkColors.alternateTextColor,
-    primaryColor: dbkColors.accent1Color,
-    secondaryColor: dbkColors.primary3Color,
+    color: DbkColors.primary3Color,
+    textColor: DbkColors.alternateTextColor,
+    primaryColor: DbkColors.accent1Color,
+    secondaryColor: DbkColors.primary3Color,
   },
   floatingActionButton: {
-    color: dbkColors.primary3Color,
-    iconColor: dbkColors.alternateTextColor,
+    color: DbkColors.primary3Color,
+    iconColor: DbkColors.alternateTextColor,
   },
   tabs: {
-    textColor: dbkColors.primary2Color,
-    selectedTextColor: dbkColors.textColor,
+    textColor: DbkColors.primary2Color,
+    selectedTextColor: DbkColors.textColor,
   },
   badge: {
-    primaryColor: dbkColors.primary3Color,
-    color: dbkColors.primary2Color,
-    textColor: dbkColors.alternateTextColor,
+    primaryColor: DbkColors.primary3Color,
+    color: DbkColors.primary2Color,
+    textColor: DbkColors.alternateTextColor,
   },
 });
 
 class App extends Component {
 
   static propTypes = {
-    children: PropTypes.node,
-    order: PropTypes.object,
-    session: PropTypes.object,
-    routing: PropTypes.object,
-    router: PropTypes.object,
-    form: PropTypes.object,
-    error: PropTypes.object,
-    logoutUser: PropTypes.func,
-    removeErr: PropTypes.func,
+    children: PropTypes.node.isRequired,
+    order: PropTypes.object.isRequired,
+    session: PropTypes.object.isRequired,
+    routing: PropTypes.object.isRequired,
+    form: PropTypes.object.isRequired,
+    error: PropTypes.object.isRequired,
+    logoutUser: PropTypes.func.isRequired,
     params: PropTypes.object,
   };
 
@@ -91,21 +90,23 @@ class App extends Component {
     const customer = this.props.order && this.props.order.get('customer', false);
 
     if (pathname === '/') {
-      return <span style={ headings.dbkNHeading }> KLANTAANVRAGEN </span>;
+      return <span style={ Headings.dbkNHeading }> KLANTAANVRAGEN </span>;
     } else if (pathname.includes('search')) {
-      return <span style={ headings.dbkHeading }> SEARCH </span>;
+      return <span style={ Headings.dbkHeading }> SEARCH </span>;
     } else if (pathname.includes('settings')) {
-      return <span style={ headings.dbkHeading }> SETTINGS </span>;
+      return <span style={ Headings.dbkHeading }> SETTINGS </span>;
     } else if (pathname.includes('pickingorders')) {
       return (
-        <span style={ Object.assign({}, headings.dbkHeading, headings.dbkNavHeading) }>
-          <span className="clearfix">
-            { customer ? customer.get('name') : [] }
-          </span>
-          <span className="clearfix">
-            { this.props.params.id }
-          </span>
-        </span>
+        <div style={ Object.assign({}, Headings.dbkHeading, Headings.dbkNavHeading) }>
+          <div style={ {height: '17px'} }>
+            <strong>
+              { customer ? customer.get('name') : [] }
+            </strong>
+          </div>
+          <div style={ Typography.secondary }>
+            { this.props.order.get('id') }
+          </div>
+        </div>
       );
     }
     return '';
@@ -132,7 +133,7 @@ class App extends Component {
   }
 
   render() {
-    const { session, error, logoutUser, children } = this.props;
+    const { session, error, children } = this.props;
     const { drawerOpen } = this.state;
 
     const errorMsg = error.get('message', false);
@@ -161,7 +162,7 @@ class App extends Component {
                 }
                 targetOrigin={ {horizontal: 'right', vertical: 'top'} }
                 anchorOrigin={ {horizontal: 'right', vertical: 'top'} }>
-                <MenuItem onTouchTap={ logoutUser } primaryText="Sign out" />
+                <MenuItem onTouchTap={ this.props.logoutUser } primaryText="Sign out" />
               </IconMenu>
             }
           />
@@ -224,5 +225,5 @@ export default connect(
     error: state.error,
     form: state.form,
   }),
-  dispatch => bindActionCreators(SessionActions, dispatch)
+  dispatch => bindActionCreators({ logoutUser }, dispatch)
 )(App);

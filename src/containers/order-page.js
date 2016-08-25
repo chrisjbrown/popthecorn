@@ -12,7 +12,11 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 
 import Container from 'app/components/container';
-import * as OrderActions from 'app/actions/order';
+import {
+  orderReqest,
+  orderAssignRequest,
+  requestCompleteOrder,
+} from 'app/actions/order';
 
 import dbkColors from 'app/styles/colors';
 import ButtonStyles from 'app/styles/buttons';
@@ -22,14 +26,14 @@ import OrderListStyles from 'app/styles/order-list';
 class OrderPage extends Component {
 
   static propTypes = {
-    requestCompleteOrder: PropTypes.func,
     items: PropTypes.object,
     order: PropTypes.object,
     params: PropTypes.object,
-    orderReqest: PropTypes.func,
-    orderAssignRequest: PropTypes.func,
     isLoading: PropTypes.bool,
     dataError: PropTypes.string,
+    orderReqest: PropTypes.func,
+    orderAssignRequest: PropTypes.func,
+    requestCompleteOrder: PropTypes.func,
   };
 
   constructor(props) {
@@ -91,79 +95,33 @@ class OrderPage extends Component {
 </div>
  */
 
-  renderOrder() {
-    const { items } = this.props;
-
-    if (items.size > 0) {
-      // const detail = orderData.get('order');
-      // const customer = orderData.get('customer');
-      // const product = orderData.get('product');
-      // const pickingOrder = orderData.get('pickingOrder');
-
-      return (
-        <div>
-          <div className="flex p2" style={ {backgroundColor: '#f6f6f6'} }>
-            <div className="flex-auto">
-              <div className="table">
-                <div>
-                  <div className="table-cell">
-                    <strong>Status</strong>
-                  </div>
-                </div>
-                <div>
-                  <div className="table-cell">
-                    Open
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <FlatButton
-                style={ ButtonStyles.orderAction }>
-                Behandel
-              </FlatButton>
-            </div>
-          </div>
-
-        </div>
-      );
-    }
-
-    return (
-      <div>
-        no products found
-      </div>
-    );
-  }
-
   renderStatus() {
     const order = this.props.order;
     return (
-      <div>
-        <div className="flex p2" style={ {backgroundColor: '#f6f6f6'} }>
-          <div className="flex-auto">
-            <div className="table">
-              <div>
-                <div className="table-cell">
-                  <strong>Status</strong>
-                </div>
+      <div className="flex p2" style={ {backgroundColor: '#f6f6f6'} }>
+        <div className="col-4">
+          <div className="table">
+            <div>
+              <div className="table-cell">
+                <strong>Status</strong>
               </div>
-              <div>
-                <div className="table-cell">
-                  <span>
-                    { this.mapStatus(order.get('status')) }
-                  </span>
-                </div>
+            </div>
+            <div>
+              <div className="table-cell">
+                <span style={ Object.assign({}, Typography.indicator, Typography.indicatorOpen) }/>
+                <span>
+                  { this.mapStatus(order.get('status')) }
+                </span>
               </div>
             </div>
           </div>
-          <div>
-            <FlatButton
-              onTouchTap={ this.handleAssignOrder.bind(this) }
-              style={ ButtonStyles.orderAction }>
-              Behandel
-            </FlatButton>
-          </div>
+        </div>
+        <div className="col-8">
+          <FlatButton
+            onTouchTap={ this.handleAssignOrder.bind(this) }
+            style={ ButtonStyles.orderAction }>
+            Behandel
+          </FlatButton>
         </div>
       </div>
     );
@@ -191,14 +149,15 @@ class OrderPage extends Component {
 
     const orderItems = items.map((item, i) => {
       const product = item.get('product');
-      const status = item.get('status');
+      // const status = item.get('status');
+      const assigned = item.get('assigned');
 
       return (
         <div key={ i }>
           <ListItem
             innerDivStyle={ OrderListStyles.itemList }>
             <div className="flex">
-              { status === 'NEW' ? [] : this.renderItemAction() }
+              { assigned ? this.renderItemAction() : [] }
               <div className="col-3" style={ OrderListStyles.itemAvatar }>
                 <Avatar src={ product.get('imageUrl') } size={ 60 }/>
               </div>
@@ -240,6 +199,8 @@ class OrderPage extends Component {
     switch (status) {
       case 'NEW':
         return 'Open';
+      case 'COMPLETED':
+        return 'Completed';
       default:
         return 'BLALBAL';
     }
@@ -256,5 +217,5 @@ export default connect(
     dataError: state.order.get('dataError'),
     isLoading: state.order.get('isLoading'),
   }),
-  dispatch => bindActionCreators(OrderActions, dispatch)
+  dispatch => bindActionCreators({ orderReqest, orderAssignRequest, requestCompleteOrder }, dispatch)
 )(OrderPage);

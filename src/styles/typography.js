@@ -12,6 +12,23 @@ export default {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
+  indicator: {
+    borderRadius: '50%',
+    width: '8px',
+    height: '8px',
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    marginRight: '5px',
+  },
+  indicatorOpen: {
+    backgroundColor: DbkColors.openColor,
+  },
+  indicatorAssigned: {
+    backgroundColor: DbkColors.assignedColor,
+  },
+  indicatorReady: {
+    backgroundColor: DbkColors.readyColor,
+  },
   secondary: {
     color: DbkColors.primary2Color,
   },

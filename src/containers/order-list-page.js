@@ -14,7 +14,10 @@ import SwipeableViews from 'react-swipeable-views';
 import Badge from 'material-ui/Badge';
 
 import Container from 'app/components/container';
-import * as OrderListActions from 'app/actions/order-list';
+import {
+  orderAssignedListRequest,
+  orderUnassignedListRequest,
+} from 'app/actions/order-list';
 
 import Headings from 'app/styles/headings';
 import OrderListStyles from 'app/styles/order-list';
@@ -86,7 +89,7 @@ class OrderListPage extends Component {
                   <span style={ Typography.secondary }>{ order.get('orderId') }</span>
                 </div>
                 <div className="clearfix mt1">
-                  { order.get('quantity') } artikelen
+                  { order.get('numberOfItems') } artikelen
                 </div>
                 <div className="clearfix mt1">
                   <span style={ Typography.time }>
@@ -181,5 +184,5 @@ export default connect(
     unassignedOrders: state.orderList.get('unassignedOrders'),
     orderListData: state.orderList,
   }),
-  dispatch => bindActionCreators(Object.assign({}, OrderListActions), dispatch)
+  dispatch => bindActionCreators({ orderAssignedListRequest, orderUnassignedListRequest }, dispatch)
 )(OrderListPage);

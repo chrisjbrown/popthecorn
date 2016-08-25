@@ -1,18 +1,29 @@
+
+const dbkColor = '#f6a800';
+const lightGrey = '#f6f6f6';
+const darkGrey = '#737373';
+const black = '#000';
+const scarlet = '#d0021b';
+const white = '#fff';
+
 export default {
-  primary1Color: '#f6f6f6',
+  primary1Color: lightGrey,
   primary2Color: '#737373',
   primary3Color: '#000',
-  accent1Color: '#f6a800',
-  accent2Color: '#f6f6f6',
-  accent3Color: '#f6f6f6',
-  textColor: '#000',
-  timeColor: '#d0021b',
-  alertColor: '#d0021b',
-  alternateTextColor: '#fff',
-  canvasColor: '#fff',
-  borderColor: '#f6f6f6',
-  disabledColor: '#737373',
-  pickerHeaderColor: '#f6f6f6',
-  clockCircleColor: '#000',
-  shadowColor: '#000',
+  accent1Color: dbkColor,
+  accent2Color: lightGrey,
+  accent3Color: lightGrey,
+  textColor: black,
+  timeColor: scarlet,
+  alertColor: scarlet,
+  openColor: scarlet,
+  assignedColor: black,
+  readyColor: dbkColor,
+  alternateTextColor: white,
+  canvasColor: white,
+  borderColor: lightGrey,
+  disabledColor: darkGrey,
+  pickerHeaderColor: lightGrey,
+  clockCircleColor: black,
+  shadowColor: black,
 };

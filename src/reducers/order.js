@@ -2,6 +2,9 @@ import {
   ORDER_SUCCESS,
   ORDER_ERROR,
   ORDER_REQUEST,
+  ORDER_ASSIGN_REQUEST,
+  ORDER_ASSIGN_SUCCESS,
+  ORDER_ASSIGN_ERROR,
   ORDER_COMPLETE_REQUEST,
   ORDER_COMPLETE_SUCCESS,
   ORDER_COMPLETE_ERROR,
@@ -30,6 +33,22 @@ function orderReducer(state = INITIAL_STATE, action = {}) {
     case ORDER_SUCCESS:
       return state.merge(fromJS({
         order: action.payload.items,
+        dataError: '',
+        isLoading: false,
+      }));
+    case ORDER_ASSIGN_REQUEST:
+      return state.merge(fromJS({
+        dataError: '',
+        isLoading: true,
+      }));
+    case ORDER_ASSIGN_ERROR:
+      return state.merge(fromJS({
+        isLoading: false,
+        dataError: action.payload.error.message,
+      }));
+    case ORDER_ASSIGN_SUCCESS:
+      return state.merge(fromJS({
+        order: action.payload.order,
         dataError: '',
         isLoading: false,
       }));

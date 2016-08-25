@@ -56,6 +56,16 @@ class OrderListPage extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.tabIndex !== this.state.tabIndex) {
+      if (this.state.tabIndex === 0) {
+        this.props.orderUnassignedListRequest();
+      } else {
+        this.props.orderAssignedListRequest();
+      }
+    }
+  }
+
   renderLoading() {
     return (
       <div className="center">

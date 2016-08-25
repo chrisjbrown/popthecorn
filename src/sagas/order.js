@@ -36,18 +36,18 @@ function* order(orderId) {
 
 export function* watchOrderAssign() {
   while (true) {
-    yield take(ORDER_ASSIGN_REQUEST);
-    yield call(orderAssign);
+    const requestAction = yield take(ORDER_ASSIGN_REQUEST);
+    yield call(orderAssign, requestAction.payload.orderId);
   }
 }
 
-function* orderAssign() {
+function* orderAssign(orderId) {
   try {
-    const assignOrderAction = yield call(assignOrder);
-    yield put(orderAssignSuccess);
-    return assignOrderAction;
+    const updatedOrder = yield call(assignOrder, orderId);
+    yield put(orderAssignSuccess(updatedOrder.data));
+    return updatedOrder;
   } catch (error) {
-    yield put(orderAssignError);
+    yield put(orderAssignError(error));
     return error;
   }
 }

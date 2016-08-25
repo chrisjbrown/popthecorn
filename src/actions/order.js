@@ -69,11 +69,11 @@ export function orderAssignRequest(orderId) {
 }
 
 export const ORDER_ASSIGN_SUCCESS = 'App/ORDER_ASSIGN_SUCCESS';
-export function orderAssignSuccess(status) {
+export function orderAssignSuccess(order) {
   return {
     type: ORDER_ASSIGN_SUCCESS,
     payload: {
-      status: status,
+      order: order,
     },
   };
 }

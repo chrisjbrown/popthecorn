@@ -16,7 +16,7 @@ export function getOrder(orderId) {
   });
 }
 
-export function assignOrder() {
+export function assignOrder(orderId) {
   return new Promise((resolve, reject) => {
     return patch('/pickingorders/' + orderId, { assigned: true })
       .then((json) => {

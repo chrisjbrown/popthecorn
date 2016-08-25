@@ -7,7 +7,7 @@ import { List, ListItem } from 'material-ui/List';
 import IconChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 import IconDone from 'material-ui/svg-icons/action/done';
 // import Avatar from 'material-ui/Avatar';
-// import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 
@@ -26,7 +26,7 @@ class OrderPage extends Component {
     items: PropTypes.object,
     order: PropTypes.object,
     params: PropTypes.object,
-    requestOrder: PropTypes.func,
+    orderReqest: PropTypes.func,
     orderAssignRequest: PropTypes.func,
     isLoading: PropTypes.bool,
     dataError: PropTypes.string,
@@ -37,7 +37,7 @@ class OrderPage extends Component {
   }
 
   componentDidMount() {
-    this.props.requestOrder(this.props.params.id);
+    this.props.orderReqest(this.props.params.id);
   }
 
   renderLoading() {
@@ -118,10 +118,10 @@ class OrderPage extends Component {
               </div>
             </div>
             <div>
-              <button
+              <FlatButton
                 style={ ButtonStyles.orderAction }>
                 Behandel
-              </button>
+              </FlatButton>
             </div>
           </div>
 
@@ -158,11 +158,11 @@ class OrderPage extends Component {
             </div>
           </div>
           <div>
-            <button
+            <FlatButton
               onTouchTap={ this.handleAssignOrder.bind(this) }
               style={ ButtonStyles.orderAction }>
               Behandel
-            </button>
+            </FlatButton>
           </div>
         </div>
       </div>
@@ -204,7 +204,7 @@ class OrderPage extends Component {
               </div>
               <div>
                 <p style={ OrderListStyles.itemPrimaryText }>{ product.get('name') }</p>
-                <p style={ Typography.blockWithText }>{ product.get('description') }</p>
+                <p style={ Typography.multiEllipsis }>{ product.get('description') }</p>
               </div>
               <div className="col-1">
                 <IconChevronRight style={ {position: 'relative', top: '20px'} } />

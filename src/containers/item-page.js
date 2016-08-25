@@ -18,7 +18,7 @@ class ItemPage extends Component {
     requestCompleteOrder: PropTypes.func,
     orderData: PropTypes.object,
     params: PropTypes.object,
-    requestOrder: PropTypes.func,
+    orderReqest: PropTypes.func,
     isLoading: PropTypes.bool,
     dataError: PropTypes.string,
   };
@@ -28,7 +28,7 @@ class ItemPage extends Component {
   }
 
   componentDidMount() {
-    this.props.requestOrder(this.props.params.id);
+    this.props.orderReqest(this.props.params.id);
   }
 
   renderLoading() {

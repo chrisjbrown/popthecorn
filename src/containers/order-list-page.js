@@ -16,10 +16,11 @@ import Badge from 'material-ui/Badge';
 import Container from 'app/components/container';
 import * as OrderListActions from 'app/actions/order-list';
 
-import headings from 'app/styles/headings';
-import orderListStyles from 'app/styles/order-list';
-import dbkColors from 'app/styles/colors';
-import tabStyle from 'app/styles/tabs';
+import Headings from 'app/styles/headings';
+import OrderListStyles from 'app/styles/order-list';
+import DbkColors from 'app/styles/colors';
+import TabStyle from 'app/styles/tabs';
+import Typography from 'app/styles/typography';
 
 @Radium
 class OrderListPage extends Component {
@@ -55,7 +56,7 @@ class OrderListPage extends Component {
   renderLoading() {
     return (
       <div className="center">
-        <CircularProgress color={ dbkColors.accent1Color } size={ 1.5 }  />
+        <CircularProgress color={ DbkColors.accent1Color } size={ 1.5 }  />
       </div>
     );
   }
@@ -75,22 +76,22 @@ class OrderListPage extends Component {
           <Link to={ '/pickingorders/' + order.get('id') }>
             <ListItem
               rightIcon={
-                <IconChevronRight style={ orderListStyles.itemArrow }/>
+                <IconChevronRight style={ OrderListStyles.itemArrow }/>
               }>
               <div>
                 <div className="clearfix">
-                  { customer.get('name') }
+                  <strong>{ customer.get('name') }</strong>
                 </div>
                 <div className="clearfix mt1">
-                  { order.get('orderId') }
+                  <span style={ Typography.secondary }>{ order.get('orderId') }</span>
                 </div>
                 <div className="clearfix mt1">
                   { order.get('quantity') } artikelen
                 </div>
                 <div className="clearfix mt1">
-                  <span>
-                    <IconAlarm style={ {height: '17px'} }/>
-                    { order.get('placedAt') }
+                  <span style={ Typography.time }>
+                    <IconAlarm color={ DbkColors.timeColor } style={ {height: '17px'} }/>
+                    <span> { order.get('placedAt') }</span>
                   </span>
                 </div>
               </div>
@@ -114,28 +115,28 @@ class OrderListPage extends Component {
           onChange={this.handleTabChange.bind(this)}>
           <Tab
             value={0}
-            style={ Object.assign({}, headings.dbkHeading, headings.dbkHeadingH2) }
+            style={ Object.assign({}, Headings.dbkHeading, Headings.dbkHeadingH2) }
             label={
               <span>
                 Openstaand
                 <Badge
                   badgeContent={ orderListData.get('numberOfUnassigned') }
                   primary={ this.state.tabIndex === 0 ? true : false }
-                  style={ tabStyle.tabBadge }
+                  style={ TabStyle.tabBadge }
                 />
               </span>
             }
           />
           <Tab
             value={1}
-            style={ Object.assign({}, headings.dbkHeading, headings.dbkHeadingH2) }
+            style={ Object.assign({}, Headings.dbkHeading, Headings.dbkHeadingH2) }
             label={
               <span>
                 In Behandeling
                 <Badge
                   badgeContent={ orderListData.get('numberOfAssigned') }
                   primary={ this.state.tabIndex === 1 ? true : false }
-                  style={ tabStyle.tabBadge }
+                  style={ TabStyle.tabBadge }
                 />
               </span>
             }

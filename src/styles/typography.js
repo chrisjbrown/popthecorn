@@ -1,5 +1,7 @@
+import DbkColors from './colors';
+
 export default {
-  blockWithText: {
+  multiEllipsis: {
     display: '-webkit-box',
     maxWidth: '400px',
     margin: '0 auto',
@@ -9,5 +11,11 @@ export default {
     WebkitLineClamp: 2,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+  },
+  secondary: {
+    color: DbkColors.primary2Color,
+  },
+  time: {
+    color: DbkColors.timeColor,
   },
 };

@@ -6,6 +6,8 @@ export default {
   accent2Color: '#f6f6f6',
   accent3Color: '#f6f6f6',
   textColor: '#000',
+  timeColor: '#d0021b',
+  alertColor: '#d0021b',
   alternateTextColor: '#fff',
   canvasColor: '#fff',
   borderColor: '#f6f6f6',

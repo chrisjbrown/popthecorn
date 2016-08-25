@@ -1,5 +1,5 @@
 export const ORDER_REQUEST = 'App/ORDER_REQUEST';
-export function requestOrder(orderId) {
+export function orderReqest(orderId) {
   return {
     type: ORDER_REQUEST,
     payload: {
@@ -59,7 +59,7 @@ export function orderCompleteError(error) {
 }
 
 export const ORDER_ASSIGN_REQUEST = 'App/ORDER_ASSIGN_REQUEST';
-export function requestAssignOrder(orderId) {
+export function orderAssignRequest(orderId) {
   return {
     type: ORDER_ASSIGN_REQUEST,
     payload: {

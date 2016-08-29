@@ -95,6 +95,7 @@
     "immutable": "^3.7.5",
     "json-loader": "^0.5.4",
     "material-ui": "^0.15.2",
+    "moment": "^2.14.1",
     "postcss-apply": "^0.3.0",
     "postcss-cssnext": "^2.7.0",
     "postcss-import": "^8.1.2",

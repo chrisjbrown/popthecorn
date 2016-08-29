@@ -29,7 +29,7 @@ function sessionReducer(state = INITIAL_STATE, action = {}) {
     case LOGIN_SUCCESS:
       return state.merge(fromJS({
         token: '123',
-        user: action.payload.user.id,
+        user: action.payload.user,
         dataError: '',
         isLoading: false,
       }));

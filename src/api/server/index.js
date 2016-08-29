@@ -44,7 +44,6 @@ export function patch(path, data) {
     body: JSON.stringify(data),
   })
   .then(response => {
-    console.log(response);
     return response.json();
   });
 }

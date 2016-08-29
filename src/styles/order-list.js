@@ -1,5 +1,17 @@
+import DbkColors from './colors';
+
 export default {
   orderList: {
+  },
+  orderItem: {
+  },
+  orderItemAssignedStatus: {
+    height: '30px',
+    color: DbkColors.alternateTextColor,
+    backgroundColor: DbkColors.disabledColor,
+  },
+  statusAssignedToYou: {
+    backgroundColor: DbkColors.accent2Color,
   },
   itemList: {
     paddingRight: '5px',
@@ -18,10 +30,13 @@ export default {
     width: '36px',
     height: '36px',
     backgroundColor: '#fff',
-    border: '1px solid black',
+    border: '3px solid ' + DbkColors.accent1Color,
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  itemActionActive: {
+    backgroundColor: DbkColors.accent1Color,
   },
   itemAvatar: {
     margin: '0 5px',

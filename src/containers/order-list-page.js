@@ -29,6 +29,7 @@ import Typography from 'app/styles/typography';
 class OrderListPage extends Component {
 
   static propTypes = {
+    session: PropTypes.object,
     assignedOrders: PropTypes.object,
     unassignedOrders: PropTypes.object,
     orderListData: PropTypes.object,
@@ -66,17 +67,17 @@ class OrderListPage extends Component {
     }
   }
 
+  renderError() {
+    return (
+      <strong> Error requesting item list </strong>
+    );
+  }
+
   renderLoading() {
     return (
       <div className="center">
         <CircularProgress color={ DbkColors.accent1Color } size={ 1.5 }  />
       </div>
-    );
-  }
-
-  renderError() {
-    return (
-      <strong> Error requesting item list </strong>
     );
   }
 
@@ -110,12 +111,28 @@ class OrderListPage extends Component {
               </div>
             </ListItem>
           </Link>
-          <Divider />
+          { order.get('assigned') ? this.renderStatusBar(order.get('assignee'), order.get('placedAt')) : <Divider /> }
         </div>
       );
     });
 
     return orderListItems;
+  }
+
+  renderStatusBar(assignee, placedAt) {
+    const assignedToYou = assignee.get('id') === this.props.session.getIn(['user', 'number']);
+
+    console.log(placedAt);
+    return (
+      <div
+        className="block"
+        style={ Object.assign({}, OrderListStyles.orderItemAssignedStatus, OrderListStyles.statusAssignedToYou) }>
+        <span className="h6 col-10 align-middle inline">
+          { 'In behandeling door ' }
+          <strong>{ assignedToYou ? 'Jou' : assignee.get('name', '') }</strong>
+        </span>
+      </div>
+    );
   }
 
   render() {
@@ -190,6 +207,7 @@ class OrderListPage extends Component {
 
 export default connect(
   state => ({
+    session: state.session,
     assignedOrders: state.orderList.get('assignedOrders'),
     unassignedOrders: state.orderList.get('unassignedOrders'),
     orderListData: state.orderList,

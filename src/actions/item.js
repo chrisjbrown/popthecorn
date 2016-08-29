@@ -9,11 +9,11 @@ export function itemReserveRequest(itemId) {
 }
 
 export const ITEM_RESERVE_SUCCESS = 'App/ITEM_RESERVE_SUCCESS';
-export function itemReserveSuccess(status) {
+export function itemReserveSuccess(itemId) {
   return {
     type: ITEM_RESERVE_SUCCESS,
     payload: {
-      status: status,
+      itemId: itemId,
     },
   };
 }

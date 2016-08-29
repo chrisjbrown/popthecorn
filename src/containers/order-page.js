@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Moment from 'moment';
 
 import CircularProgress from 'material-ui/CircularProgress';
 import { List, ListItem } from 'material-ui/List';
@@ -16,9 +17,9 @@ import {
   orderReqest,
   orderAssignRequest,
   requestCompleteOrder,
-} from 'app/actions/order';
-
-import dbkColors from 'app/styles/colors';
+  itemReserveRequest,
+} from 'app/actions/';
+import DbkColors from 'app/styles/colors';
 import ButtonStyles from 'app/styles/buttons';
 import Typography from 'app/styles/typography';
 import OrderListStyles from 'app/styles/order-list';
@@ -26,14 +27,15 @@ import OrderListStyles from 'app/styles/order-list';
 class OrderPage extends Component {
 
   static propTypes = {
-    items: PropTypes.object,
-    order: PropTypes.object,
+    session: PropTypes.object,
+    orderData: PropTypes.object,
     params: PropTypes.object,
     isLoading: PropTypes.bool,
     dataError: PropTypes.string,
     orderReqest: PropTypes.func,
     orderAssignRequest: PropTypes.func,
     requestCompleteOrder: PropTypes.func,
+    itemReserveRequest: PropTypes.func,
   };
 
   constructor(props) {
@@ -46,102 +48,114 @@ class OrderPage extends Component {
 
   renderLoading() {
     return (
-      <div className="center">
-        <CircularProgress color={ dbkColors.accent1Color } size={ 1.5 }  />
-      </div>
+      <Container center>
+        <div className="center">
+          <CircularProgress color={ DbkColors.accent1Color } size={ 1.5 }  />
+        </div>
+      </Container>
     );
   }
 
   renderError() {
     return (
-      <strong> { this.props.dataError } </strong>
+      <Container center>
+        <strong> { this.props.dataError } </strong>
+      </Container>
     );
   }
 
-/*
+  renderAssignedStatus() {
+    const orderData = this.props.orderData;
+    const assignee = orderData.getIn(['order', 'assignee'], '');
+    const assignedToYou = assignee.get('id') === this.props.session.getIn(['user', 'number']);
+    const time = Moment(orderData.getIn(['order', 'placedAt'], '')).format('HH:mm');
+    const day = Moment(orderData.getIn(['order', 'placedAt'], '')).format('(DD-MM-YYYY)');
 
-
-<div className="mt3">
-  <div>
-    <strong>Aanvraag om: </strong>
-    <span>{ detail.get('placedAt') }</span>
-  </div>
-  <div>
-    <strong>Door: </strong>
-    <span>{ customer.get('name') }</span>
-  </div>
-  <div>
-    <strong>OrderNummer: </strong>
-    <span>{ detail.get('id') }</span>
-  </div>
-</div>
-<Avatar className="mx-auto mt3" style={ {display: 'block'} } src={ product.get('imageUrl') } size={ 200 } />
-
-<div className="mt3">
-  <div>
-    <span>{ product.get('description') }</span>
-    <Divider/>
-  </div>
-  <div>
-    <strong>Aantal: </strong>
-    <span>{ orderData.get('quantity') } x</span>
-    <Divider/>
-  </div>
-  <div>
-    <strong>Artikelnummer: </strong>
-    <span>{ product.get('code') }</span>
-    <Divider/>
-  </div>
-</div>
- */
-
-  renderStatus() {
-    const order = this.props.order;
     return (
-      <div className="flex p2" style={ {backgroundColor: '#f6f6f6'} }>
-        <div className="col-4">
-          <div className="table">
-            <div>
-              <div className="table-cell">
-                <strong>Status</strong>
-              </div>
-            </div>
-            <div>
-              <div className="table-cell">
-                <span style={ Object.assign({}, Typography.indicator, Typography.indicatorOpen) }/>
-                <span>
-                  { this.mapStatus(order.get('status')) }
-                </span>
-              </div>
-            </div>
+      <div className="p2 h5" style={ {backgroundColor: '#f6f6f6'} }>
+        <div className="flex">
+          <div className="col-4">
+            <strong>Status</strong>
+          </div>
+          <div className="col-4">
+            <strong>Door</strong>
+          </div>
+          <div className="col-4">
+            <strong>Om</strong>
           </div>
         </div>
-        <div className="col-8">
-          <FlatButton
-            onTouchTap={ this.handleAssignOrder.bind(this) }
-            style={ ButtonStyles.orderAction }>
-            Behandel
-          </FlatButton>
+        <div className="flex">
+          <div className="col-4">
+            <span style={ Object.assign({}, Typography.indicator, Typography.indicatorOpen) }/>
+            <span>
+              { this.mapStatus(orderData.getIn(['order', 'status'], '')) }
+            </span>
+          </div>
+          <div className="col-4">
+            <span>
+              { assignedToYou ? 'Jou' : assignee.get('name', '') }
+            </span>
+          </div>
+          <div className="col-4">
+            <span style={ {whiteSpace: 'nowrap'} }>
+              { time }
+            </span>
+            <span
+              className="h6"
+              style={ Object.assign({}, {whiteSpace: 'nowrap', marginLeft: '2px'}, Typography.secondary) }>
+              { day }
+            </span>
+          </div>
         </div>
       </div>
     );
   }
 
-  renderItemAction() {
+  renderUnassignedStatus() {
+    const orderData = this.props.orderData;
+    return (
+      <div className="flex p2 h5" style={ {backgroundColor: '#f6f6f6'} }>
+        <div className="col-4">
+          <div>
+            <strong>Status</strong>
+          </div>
+          <div>
+            <span style={ Object.assign({}, Typography.indicator, Typography.indicatorOpen) }/>
+            <span>
+              { this.mapStatus(orderData.getIn(['order', 'status'])) }
+            </span>
+          </div>
+        </div>
+        <div className="col-8">
+            <FlatButton
+              onTouchTap={ this.handleAssignOrder.bind(this) }
+              style={ ButtonStyles.orderAction }>
+              Behandel
+            </FlatButton>
+        </div>
+      </div>
+    );
+  }
+
+  renderItemAction(status, itemId) {
+    const reserved = status === 'RESERVED';
     return (
       <div
+        onClick={ (e) => {e.stopPropagation();} }
+        onTouchTap={ reserved ? () => {} : this.handleReserveItem.bind(this, itemId, event) }
         className="col-2"
         style={ OrderListStyles.itemActionContainer }>
         <div
-          style={ OrderListStyles.itemAction }>
-          <IconDone />
+          style={ Object.assign({}, OrderListStyles.itemAction, reserved ? OrderListStyles.itemActionActive : {}) }>
+          { reserved ? <IconDone color="white" /> : [] }
         </div>
       </div>
     );
   }
 
   renderItemList() {
-    const items = this.props.order.get('items', false);
+    const items = this.props.orderData.getIn(['order', 'items'], false);
+    const assigned = this.props.orderData.getIn(['order', 'assigned']);
 
     if (!items) {
       return [];
@@ -149,15 +163,14 @@ class OrderPage extends Component {
 
     const orderItems = items.map((item, i) => {
       const product = item.get('product');
-      // const status = item.get('status');
-      const assigned = item.get('assigned');
+      const status = item.get('status');
 
       return (
         <div key={ i }>
           <ListItem
             innerDivStyle={ OrderListStyles.itemList }>
             <div className="flex">
-              { assigned ? this.renderItemAction() : [] }
+              { assigned ? this.renderItemAction(status, item.get('id')) : [] }
               <div className="col-3" style={ OrderListStyles.itemAvatar }>
                 <Avatar src={ product.get('imageUrl') } size={ 60 }/>
               </div>
@@ -179,17 +192,46 @@ class OrderPage extends Component {
   }
 
   render() {
-    const { isLoading, dataError } = this.props;
+    const { orderData } = this.props;
+    const isLoading = orderData.get('isLoading');
+    const dataError = orderData.get('dataError');
+    const placedAt = orderData.getIn(['order', 'customer', 'placedAt'], '');
+    const email = orderData.getIn(['order', 'customer', 'email'], '');
+    const phoneNumber = orderData.getIn(['order', 'customer', 'phoneNumber'], '');
+
+    if (isLoading) {
+      return ( this.renderLoading() );
+    } else if (dataError) {
+      return ( this.renderError() );
+    } else if (!orderData.get('order', false) || orderData.get('order').size === 0) {
+      return (
+        <Container center>
+          <span> Order not found </span>
+        </Container>
+      );
+    }
 
     return (
       <Container center>
+        <div className="p2 h5">
+          <div>
+            <strong>Aangevraagd om: </strong>
+            <span style={ Typography.secondary }>{ placedAt }</span>
+          </div>
+          <div>
+            <strong>Email: </strong>
+            <span style={ Typography.secondary }>{ email }</span>
+          </div>
+          <div>
+            <strong>Telefoon: </strong>
+            <span style={ Typography.secondary }>{ phoneNumber }</span>
+          </div>
+        </div>
 
-        { isLoading ? this.renderLoading() : [] }
-        { dataError ? this.renderError() : [] }
-        { !isLoading && !dataError ? this.renderStatus() : [] }
+        { orderData.getIn(['order', 'assigned']) ? this.renderAssignedStatus() : this.renderUnassignedStatus() }
 
         <List>
-          { !isLoading && !dataError ? this.renderItemList() : [] }
+          { this.renderItemList() }
         </List>
       </Container>
     );
@@ -201,21 +243,26 @@ class OrderPage extends Component {
         return 'Open';
       case 'COMPLETED':
         return 'Completed';
+      case 'INPROGRESS':
+        return 'In Progress';
       default:
         return 'BLALBAL';
     }
   }
 
+  handleReserveItem(itemId) {
+    this.props.itemReserveRequest(itemId);
+  }
+
   handleAssignOrder() {
-    this.props.orderAssignRequest(this.props.order.get('id'));
+    this.props.orderAssignRequest(this.props.orderData.getIn(['order', 'id']));
   }
 }
 
 export default connect(
   state => ({
-    order: state.order.get('order'),
-    dataError: state.order.get('dataError'),
-    isLoading: state.order.get('isLoading'),
+    session: state.session,
+    orderData: state.order,
   }),
-  dispatch => bindActionCreators({ orderReqest, orderAssignRequest, requestCompleteOrder }, dispatch)
+  dispatch => bindActionCreators({ orderReqest, orderAssignRequest, requestCompleteOrder, itemReserveRequest }, dispatch)
 )(OrderPage);

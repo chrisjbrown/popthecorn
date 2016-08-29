@@ -63,7 +63,7 @@ class App extends Component {
 
   static propTypes = {
     children: PropTypes.node.isRequired,
-    order: PropTypes.object.isRequired,
+    orderData: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     routing: PropTypes.object.isRequired,
     form: PropTypes.object.isRequired,
@@ -87,7 +87,7 @@ class App extends Component {
   getNavTitle() {
     // TODO find a better way to do this
     const pathname = this.props.routing.locationBeforeTransitions.pathname;
-    const customer = this.props.order && this.props.order.get('customer', false);
+    const customer = this.props.orderData.getIn(['order', 'customer'], false);
 
     if (pathname === '/') {
       return <span style={ Headings.dbkNHeading }> KLANTAANVRAGEN </span>;
@@ -104,7 +104,7 @@ class App extends Component {
             </strong>
           </div>
           <div style={ Typography.secondary }>
-            { this.props.order.get('id') }
+            { this.props.orderData.getIn(['order', 'id']) }
           </div>
         </div>
       );
@@ -219,7 +219,7 @@ class App extends Component {
 
 export default connect(
   state => ({
-    order: state.order.get('order'),
+    orderData: state.order,
     session: state.session,
     routing: state.routing,
     error: state.error,

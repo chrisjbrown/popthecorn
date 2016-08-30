@@ -7,6 +7,7 @@ export default {
   },
   orderItemAssignedStatus: {
     height: '30px',
+    paddingLeft: '10px',
     color: DbkColors.alternateTextColor,
     backgroundColor: DbkColors.disabledColor,
   },

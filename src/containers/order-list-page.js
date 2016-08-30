@@ -119,18 +119,20 @@ class OrderListPage extends Component {
     return orderListItems;
   }
 
-  renderStatusBar(assignee, placedAt) {
+  renderStatusBar(assignee) {
     const assignedToYou = assignee.get('id') === this.props.session.getIn(['user', 'number']);
 
-    console.log(placedAt);
     return (
-      <div
-        className="block"
-        style={ Object.assign({}, OrderListStyles.orderItemAssignedStatus, OrderListStyles.statusAssignedToYou) }>
-        <span className="h6 col-10 align-middle inline">
-          { 'In behandeling door ' }
-          <strong>{ assignedToYou ? 'Jou' : assignee.get('name', '') }</strong>
-        </span>
+      <div>
+        <div className="mx-auto" style={ Typography.arrowUp }/>
+        <div
+          className="block"
+          style={ Object.assign({}, OrderListStyles.orderItemAssignedStatus, OrderListStyles.statusAssignedToYou) }>
+          <span className="h6 col-10 align-middle inline">
+            { 'In behandeling door ' }
+            <strong>{ assignedToYou ? 'Jou' : assignee.get('name', '') }</strong>
+          </span>
+        </div>
       </div>
     );
   }

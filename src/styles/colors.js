@@ -6,6 +6,8 @@ const purple = '#1c0b6d';
 const black = '#000';
 const scarlet = '#d0021b';
 const white = '#fff';
+const blue = '#4a90e2';
+const green = '#59aa00';
 
 export default {
   primary1Color: lightGrey,
@@ -17,9 +19,6 @@ export default {
   textColor: black,
   timeColor: scarlet,
   alertColor: scarlet,
-  openColor: scarlet,
-  assignedColor: black,
-  readyColor: dbkColor,
   alternateTextColor: white,
   canvasColor: white,
   borderColor: lightGrey,
@@ -27,4 +26,10 @@ export default {
   pickerHeaderColor: lightGrey,
   clockCircleColor: black,
   shadowColor: black,
+  openColor: blue,
+  inProgressColor: black,
+  readyColor: dbkColor,
+  pickedUpColor: green,
+  notPickedUp: scarlet,
+  printColor: darkGrey,
 };

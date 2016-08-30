@@ -1,5 +1,5 @@
 export const ORDER_REQUEST = 'App/ORDER_REQUEST';
-export function orderReqest(orderId) {
+export function orderRequest(orderId) {
   return {
     type: ORDER_REQUEST,
     payload: {

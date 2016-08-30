@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import Moment from 'moment';
 
 import CircularProgress from 'material-ui/CircularProgress';
@@ -14,7 +15,7 @@ import Avatar from 'material-ui/Avatar';
 
 import Container from 'app/components/container';
 import {
-  orderReqest,
+  orderRequest,
   orderAssignRequest,
   requestCompleteOrder,
   itemReserveRequest,
@@ -32,7 +33,7 @@ class OrderPage extends Component {
     params: PropTypes.object,
     isLoading: PropTypes.bool,
     dataError: PropTypes.string,
-    orderReqest: PropTypes.func,
+    orderRequest: PropTypes.func,
     orderAssignRequest: PropTypes.func,
     requestCompleteOrder: PropTypes.func,
     itemReserveRequest: PropTypes.func,
@@ -43,25 +44,18 @@ class OrderPage extends Component {
   }
 
   componentDidMount() {
-    this.props.orderReqest(this.props.params.id);
+    this.props.orderRequest(this.props.params.orderId);
   }
 
-  renderLoading() {
-    return (
-      <Container center>
-        <div className="center">
-          <CircularProgress color={ DbkColors.accent1Color } size={ 1.5 }  />
-        </div>
-      </Container>
-    );
-  }
-
-  renderError() {
-    return (
-      <Container center>
-        <strong> { this.props.dataError } </strong>
-      </Container>
-    );
+  getIndicatorClass(status) {
+    switch (status) {
+      case 'INPROGRESS':
+        return Typography.indicatorInProgress;
+      case 'COMPLETED':
+        return Typography.indicatorReady;
+      default:
+        return Typography.indicatorOpen;
+    }
   }
 
   renderAssignedStatus() {
@@ -86,7 +80,7 @@ class OrderPage extends Component {
         </div>
         <div className="flex">
           <div className="col-4">
-            <span style={ Object.assign({}, Typography.indicator, Typography.indicatorOpen) }/>
+            <span style={ Object.assign({}, Typography.indicator, this.getIndicatorClass(orderData.getIn(['order', 'status'], ''))) }/>
             <span>
               { this.mapStatus(orderData.getIn(['order', 'status'], '')) }
             </span>
@@ -106,6 +100,22 @@ class OrderPage extends Component {
               { day }
             </span>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderItemAction(status, orderId, itemId) {
+    const reserved = status === 'RESERVED';
+    return (
+      <div
+        onClick={ (e) => {e.stopPropagation();} }
+        onTouchTap={ reserved ? () => {} : this.handleReserveItem.bind(this, orderId, itemId) }
+        className="col-2"
+        style={ OrderListStyles.itemActionContainer }>
+        <div
+          style={ Object.assign({}, OrderListStyles.itemAction, reserved ? OrderListStyles.itemActionActive : {}) }>
+          { reserved ? <IconDone color="white" /> : [] }
         </div>
       </div>
     );
@@ -137,25 +147,28 @@ class OrderPage extends Component {
     );
   }
 
-  renderItemAction(status, itemId) {
-    const reserved = status === 'RESERVED';
+  renderError() {
     return (
-      <div
-        onClick={ (e) => {e.stopPropagation();} }
-        onTouchTap={ reserved ? () => {} : this.handleReserveItem.bind(this, itemId, event) }
-        className="col-2"
-        style={ OrderListStyles.itemActionContainer }>
-        <div
-          style={ Object.assign({}, OrderListStyles.itemAction, reserved ? OrderListStyles.itemActionActive : {}) }>
-          { reserved ? <IconDone color="white" /> : [] }
+      <Container center>
+        <strong> { this.props.dataError } </strong>
+      </Container>
+    );
+  }
+
+  renderLoading() {
+    return (
+      <Container center>
+        <div className="center">
+          <CircularProgress color={ DbkColors.accent1Color } size={ 1.5 }  />
         </div>
-      </div>
+      </Container>
     );
   }
 
   renderItemList() {
     const items = this.props.orderData.getIn(['order', 'items'], false);
     const assigned = this.props.orderData.getIn(['order', 'assigned']);
+    const orderId = this.props.orderData.getIn(['order', 'id']);
 
     if (!items) {
       return [];
@@ -167,22 +180,24 @@ class OrderPage extends Component {
 
       return (
         <div key={ i }>
-          <ListItem
-            innerDivStyle={ OrderListStyles.itemList }>
-            <div className="flex">
-              { assigned ? this.renderItemAction(status, item.get('id')) : [] }
-              <div className="col-3" style={ OrderListStyles.itemAvatar }>
-                <Avatar src={ product.get('imageUrl') } size={ 60 }/>
+          <Link to={ '/pickingorders/' + orderId + '/items/' + item.get('id') }>
+            <ListItem
+              innerDivStyle={ OrderListStyles.itemList }>
+              <div className="flex">
+                { assigned ? this.renderItemAction(status, orderId, item.get('id')) : [] }
+                <div className="col-3" style={ OrderListStyles.itemAvatar }>
+                  <Avatar src={ product.get('imageUrl') } size={ 60 }/>
+                </div>
+                <div>
+                  <p style={ OrderListStyles.itemPrimaryText }>{ product.get('name') }</p>
+                  <p style={ Typography.multiEllipsis }>{ product.get('description') }</p>
+                </div>
+                <div className="col-1">
+                  <IconChevronRight style={ {position: 'relative', top: '20px'} } />
+                </div>
               </div>
-              <div>
-                <p style={ OrderListStyles.itemPrimaryText }>{ product.get('name') }</p>
-                <p style={ Typography.multiEllipsis }>{ product.get('description') }</p>
-              </div>
-              <div className="col-1">
-                <IconChevronRight style={ {position: 'relative', top: '20px'} } />
-              </div>
-            </div>
-          </ListItem>
+            </ListItem>
+          </Link>
           <Divider />
         </div>
       );
@@ -195,9 +210,10 @@ class OrderPage extends Component {
     const { orderData } = this.props;
     const isLoading = orderData.get('isLoading');
     const dataError = orderData.get('dataError');
-    const placedAt = orderData.getIn(['order', 'customer', 'placedAt'], '');
     const email = orderData.getIn(['order', 'customer', 'email'], '');
     const phoneNumber = orderData.getIn(['order', 'customer', 'phoneNumber'], '');
+    const time = Moment(orderData.getIn(['order', 'placedAt'], '')).format('HH:mm');
+    const day = Moment(orderData.getIn(['order', 'placedAt'], '')).format('(DD-MM-YYYY)');
 
     if (isLoading) {
       return ( this.renderLoading() );
@@ -216,7 +232,7 @@ class OrderPage extends Component {
         <div className="p2 h5">
           <div>
             <strong>Aangevraagd om: </strong>
-            <span style={ Typography.secondary }>{ placedAt }</span>
+            <span style={ Typography.secondary }>{ time + ' ' + day }</span>
           </div>
           <div>
             <strong>Email: </strong>
@@ -241,17 +257,17 @@ class OrderPage extends Component {
     switch (status) {
       case 'NEW':
         return 'Open';
-      case 'COMPLETED':
-        return 'Completed';
       case 'INPROGRESS':
         return 'In Progress';
+      case 'COMPLETED':
+        return 'Ready';
       default:
         return 'BLALBAL';
     }
   }
 
-  handleReserveItem(itemId) {
-    this.props.itemReserveRequest(itemId);
+  handleReserveItem(orderId, itemId) {
+    this.props.itemReserveRequest(orderId, itemId);
   }
 
   handleAssignOrder() {
@@ -264,5 +280,5 @@ export default connect(
     session: state.session,
     orderData: state.order,
   }),
-  dispatch => bindActionCreators({ orderReqest, orderAssignRequest, requestCompleteOrder, itemReserveRequest }, dispatch)
+  dispatch => bindActionCreators({ orderRequest, orderAssignRequest, requestCompleteOrder, itemReserveRequest }, dispatch)
 )(OrderPage);

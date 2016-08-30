@@ -4,7 +4,7 @@ const SEARCH_ITEM_ERR_MSG = 'Error searching for items';
 
 export function searchItems(criteria) {
   return new Promise((resolve, reject) => {
-    return get('/items?customer=' + (criteria.customer || ''))
+    return get('/pickingorders?search=' + (criteria.customer || ''))
       .then((json) => {
         if (json.error) {
           return reject(new Error(json.error.reason));

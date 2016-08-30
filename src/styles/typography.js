@@ -1,6 +1,13 @@
 import DbkColors from './colors';
 
 export default {
+  arrowUp: {
+    width: 0,
+    height: 0,
+    borderLeft: '10px solid transparent',
+    borderRight: '10px solid transparent',
+    borderBottom: '10px solid' + DbkColors.accent2Color,
+  },
   indicator: {
     borderRadius: '50%',
     width: '8px',
@@ -9,14 +16,14 @@ export default {
     verticalAlign: 'middle',
     marginRight: '5px',
   },
+  indicatorReady: {
+    backgroundColor: DbkColors.readyColor,
+  },
   indicatorOpen: {
     backgroundColor: DbkColors.openColor,
   },
-  indicatorAssigned: {
-    backgroundColor: DbkColors.assignedColor,
-  },
-  indicatorReady: {
-    backgroundColor: DbkColors.readyColor,
+  indicatorInProgress: {
+    backgroundColor: DbkColors.inProgressColor,
   },
   multiEllipsis: {
     display: '-webkit-box',

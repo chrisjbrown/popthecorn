@@ -10,6 +10,7 @@ import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import PrintIcon from 'material-ui/svg-icons/action/print';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import ChevronLeftIcon from 'material-ui/svg-icons/navigation/chevron-left';
 import AccessibilityIcon from 'material-ui/svg-icons/action/accessibility';
@@ -64,6 +65,7 @@ class App extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     orderData: PropTypes.object.isRequired,
+    itemData: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
     routing: PropTypes.object.isRequired,
     form: PropTypes.object.isRequired,
@@ -95,6 +97,8 @@ class App extends Component {
       return <span style={ Headings.dbkHeading }> SEARCH </span>;
     } else if (pathname.includes('settings')) {
       return <span style={ Headings.dbkHeading }> SETTINGS </span>;
+    } else if (pathname.includes('items') ) {
+      return <span style={ Headings.dbkHeading }> { this.props.itemData.getIn(['item', 'product', 'name']) } </span>;
     } else if (pathname.includes('pickingorders')) {
       return (
         <div style={ Object.assign({}, Headings.dbkHeading, Headings.dbkNavHeading) }>
@@ -104,7 +108,7 @@ class App extends Component {
             </strong>
           </div>
           <div style={ Typography.secondary }>
-            { this.props.orderData.getIn(['order', 'id']) }
+            { this.props.orderData.getIn(['order', 'orderId']) }
           </div>
         </div>
       );
@@ -132,6 +136,29 @@ class App extends Component {
     );
   }
 
+  renderPrintButton() {
+    return (
+      <IconButton style={ {backgroundColor: DbkColors.printColor} }>
+        <PrintIcon color={ 'white' } onTouchTap={ this.handlePrint }/>
+      </IconButton>
+    );
+  }
+
+  renderNavMenu() {
+    return (
+      <IconMenu
+        iconButtonElement={
+          <IconButton>
+            <MoreVertIcon />
+          </IconButton>
+        }
+        targetOrigin={ {horizontal: 'right', vertical: 'top'} }
+        anchorOrigin={ {horizontal: 'right', vertical: 'top'} }>
+        <MenuItem onTouchTap={ this.props.logoutUser } primaryText="Sign out" />
+      </IconMenu>
+    );
+  }
+
   render() {
     const { session, error, children } = this.props;
     const { drawerOpen } = this.state;
@@ -154,16 +181,8 @@ class App extends Component {
             style={ {position: 'fixed'} }
             iconElementLeft={ this.renderNavButton() }
             iconElementRight={
-              <IconMenu
-                iconButtonElement={
-                  <IconButton>
-                    <MoreVertIcon />
-                  </IconButton>
-                }
-                targetOrigin={ {horizontal: 'right', vertical: 'top'} }
-                anchorOrigin={ {horizontal: 'right', vertical: 'top'} }>
-                <MenuItem onTouchTap={ this.props.logoutUser } primaryText="Sign out" />
-              </IconMenu>
+              this.props.routing.locationBeforeTransitions.pathname.includes('pickingorders') ?
+                this.renderPrintButton() : this.renderNavButton()
             }
           />
           <Drawer
@@ -210,6 +229,10 @@ class App extends Component {
     });
   }
 
+  handlePrint() {
+    console.log('print print');
+  }
+
   toggleDrawer() {
     this.setState({
       drawerOpen: !this.state.drawerOpen,
@@ -219,6 +242,7 @@ class App extends Component {
 
 export default connect(
   state => ({
+    itemData: state.item,
     orderData: state.order,
     session: state.session,
     routing: state.routing,

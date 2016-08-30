@@ -3,24 +3,26 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import CircularProgress from 'material-ui/CircularProgress';
-import Avatar from 'material-ui/Avatar';
-import RaisedButton from 'material-ui/RaisedButton';
-import Divider from 'material-ui/Divider';
+// import Avatar from 'material-ui/Avatar';
+// import RaisedButton from 'material-ui/RaisedButton';
+// import Divider from 'material-ui/Divider';
 
 import Container from 'app/components/container';
-import * as OrderActions from 'app/actions/order';
 
 import dbkColors from 'app/styles/colors';
+
+import {
+  itemRequest,
+} from 'app/actions/';
 
 class ItemPage extends Component {
 
   static propTypes = {
-    requestCompleteOrder: PropTypes.func,
-    orderData: PropTypes.object,
+    itemData: PropTypes.object,
     params: PropTypes.object,
-    orderReqest: PropTypes.func,
     isLoading: PropTypes.bool,
     dataError: PropTypes.string,
+    itemRequest: PropTypes.func,
   };
 
   constructor(props) {
@@ -28,7 +30,11 @@ class ItemPage extends Component {
   }
 
   componentDidMount() {
-    this.props.orderReqest(this.props.params.id);
+    const item = this.props.itemData.get('item');
+
+    if (!item || this.props.params.itemId !== item.get('id')) {
+      this.props.itemRequest(this.props.params.orderId, this.props.params.itemId);
+    }
   }
 
   renderLoading() {
@@ -45,77 +51,23 @@ class ItemPage extends Component {
     );
   }
 
-  renderOrder() {
-    const { orderData, requestCompleteOrder } = this.props;
+  renderItem() {
+    const { itemData } = this.props;
+    const item = itemData.get('item');
 
-    if (orderData.size > 0) {
-      const detail = orderData.get('order');
-      const customer = orderData.get('customer');
-      const product = orderData.get('product');
-      const pickingOrder = orderData.get('pickingOrder');
-
+    if (!item) {
       return (
         <div>
-          <div style={ {backgroundColor: '#f6f6f6', padding: '10px'} }>
-            <div className="clearfix">
-              <span className="col col-4">Status</span>
-              <span className="col col-4">Door</span>
-              <span className="col col-4">Om</span>
-            </div>
-            <div className="clearfix">
-              <span style={ {textTransform: 'capitalize'} } className="col col-4">{ pickingOrder.get('status').toLowerCase() }</span>
-              <span className="col col-4">{ customer.get('name') }</span>
-              <span className="col col-4">{ detail.get('placedAt') }</span>
-            </div>
-            <div style={ {textAlign: 'center'} }>
-              <RaisedButton
-                onTouchTap={ requestCompleteOrder.bind(null, pickingOrder.get('id')) }
-                label={ pickingOrder.get('status') === 'DELIVERED' ? 'Voltooid' : 'Opgehaald' }
-                labelStyle={ {textTransform: 'none'} }
-                secondary={true}/>
-            </div>
-          </div>
-
-          <div className="mt3">
-            <div>
-              <strong>Aanvraag om: </strong>
-              <span>{ detail.get('placedAt') }</span>
-            </div>
-            <div>
-              <strong>Door: </strong>
-              <span>{ customer.get('name') }</span>
-            </div>
-            <div>
-              <strong>OrderNummer: </strong>
-              <span>{ detail.get('id') }</span>
-            </div>
-          </div>
-
-          <Avatar className="mx-auto mt3" style={ {display: 'block'} } src={ product.get('imageUrl') } size={ 200 } />
-
-          <div className="mt3">
-            <div>
-              <span>{ product.get('description') }</span>
-              <Divider/>
-            </div>
-            <div>
-              <strong>Aantal: </strong>
-              <span>{ orderData.get('quantity') } x</span>
-              <Divider/>
-            </div>
-            <div>
-              <strong>Artikelnummer: </strong>
-              <span>{ product.get('code') }</span>
-              <Divider/>
-            </div>
-          </div>
+          Item not found
         </div>
       );
     }
 
     return (
       <div>
-        no products found
+        <div style={ {backgroundColor: '#f6f6f6', padding: '10px'} }>
+          bla
+        </div>
       </div>
     );
   }
@@ -128,7 +80,7 @@ class ItemPage extends Component {
 
         { isLoading ? this.renderLoading() : [] }
         { dataError ? this.renderError() : [] }
-        { !isLoading && !dataError ? this.renderOrder() : [] }
+        { !isLoading && !dataError ? this.renderItem() : [] }
 
       </Container>
     );
@@ -137,9 +89,9 @@ class ItemPage extends Component {
 
 export default connect(
   state => ({
-    orderData: state.order.get('orderData'),
-    dataError: state.order.get('dataError'),
-    isLoading: state.order.get('isLoading'),
+    itemData: state.item,
+    dataError: state.item.get('dataError'),
+    isLoading: state.item.get('isLoading'),
   }),
-  dispatch => bindActionCreators(OrderActions, dispatch)
+  dispatch => bindActionCreators({ itemRequest }, dispatch)
 )(ItemPage);

@@ -1,8 +1,40 @@
+export const ITEM_REQUEST = 'App/ITEM_REQUEST';
+export function itemRequest(orderId, itemId) {
+  return {
+    type: ITEM_REQUEST,
+    payload: {
+      orderId: orderId,
+      itemId: itemId,
+    },
+  };
+}
+
+export const ITEM_SUCCESS = 'App/ITEM_SUCCESS';
+export function itemSuccess(itemId) {
+  return {
+    type: ITEM_SUCCESS,
+    payload: {
+      itemId: itemId,
+    },
+  };
+}
+
+export const ITEM_ERROR = 'App/ITEM_ERROR';
+export function itemError(error) {
+  return {
+    type: ITEM_ERROR,
+    payload: {
+      error: error,
+    },
+  };
+}
+
 export const ITEM_RESERVE_REQUEST = 'App/ITEM_RESERVE_REQUEST';
-export function itemReserveRequest(itemId) {
+export function itemReserveRequest(orderId, itemId) {
   return {
     type: ITEM_RESERVE_REQUEST,
     payload: {
+      orderId: orderId,
       itemId: itemId,
     },
   };

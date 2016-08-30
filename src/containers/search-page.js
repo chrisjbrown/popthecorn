@@ -6,13 +6,16 @@ import { Link } from 'react-router';
 import CircularProgress from 'material-ui/CircularProgress';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import Avatar from 'material-ui/Avatar';
 import IconSearch from 'material-ui/svg-icons/action/search';
+import IconChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
+import IconAlarm from 'material-ui/svg-icons/action/alarm';
 
 import Container from 'app/components/container';
 import * as SearchActions from 'app/actions/search';
 
-import dbkColors from 'app/styles/colors';
+import DbkColors from 'app/styles/colors';
+import OrderListStyles from 'app/styles/order-list';
+import Typography from 'app/styles/typography';
 
 class SearchPage extends Component {
 
@@ -32,7 +35,7 @@ class SearchPage extends Component {
   renderLoading() {
     return (
       <div className="center">
-        <CircularProgress color={ dbkColors.accent1Color } size={ 1.5 }  />
+        <CircularProgress color={ DbkColors.accent1Color } size={ 1.5 }  />
       </div>
     );
   }
@@ -57,25 +60,33 @@ class SearchPage extends Component {
     const { foundItems } = this.props;
 
     const searchResults = foundItems.map((item, i) => {
-      const detail = item.get('order');
       const customer = item.get('customer');
-      const product = item.get('product');
 
       return (
         <div key={ i }>
-          <Link to={ '/orders/' + detail.get('id') }>
+          <Link to={ '/pickingorders/' + item.get('id') }>
             <ListItem
-              leftAvatar={<Avatar src={product.get('imageUrl')} />}
-              primaryText={ product.get('name') }
-              secondaryText={
-                <p className="clearfix">
-                  { customer.get('name') }
-                  <br/>
-                  { item.get('status') }
-                </p>
-              }
-              secondaryTextLines={2}
-            />
+              rightIcon={
+                <IconChevronRight style={ OrderListStyles.itemArrow }/>
+              }>
+              <div>
+                <div className="clearfix">
+                  <strong>{ customer.get('name') }</strong>
+                </div>
+                <div className="clearfix mt1">
+                  <span style={ Typography.secondary }>{ item.get('orderId') }</span>
+                </div>
+                <div className="clearfix mt1">
+                  { item.get('numberOfItems') } artikelen
+                </div>
+                <div className="clearfix mt1">
+                  <span style={ Typography.time }>
+                    <IconAlarm color={ DbkColors.timeColor } style={ {height: '17px'} }/>
+                    <span> { item.get('placedAt') }</span>
+                  </span>
+                </div>
+              </div>
+            </ListItem>
           </Link>
           <Divider />
         </div>

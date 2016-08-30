@@ -21,12 +21,14 @@ const INITIAL_STATE = fromJS({
   },
   numberOfAssigned: 0,
   numberOfUnassigned: 0,
+  listType: 0,
 });
 
 function orderListReducer(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
     case ORDER_ASSIGNED_LIST_REQUEST:
       return state.mergeDeep(fromJS({
+        listType: 1,
         assignedOrders: {
           items: [],
           dataError: '',
@@ -35,6 +37,7 @@ function orderListReducer(state = INITIAL_STATE, action = {}) {
       }));
     case ORDER_UNASSIGNED_LIST_REQUEST:
       return state.mergeDeep(fromJS({
+        listType: 0,
         unassignedOrders: {
           items: [],
           dataError: '',

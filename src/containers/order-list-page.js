@@ -45,7 +45,7 @@ class OrderListPage extends Component {
     super(props);
 
     this.state = {
-      tabIndex: 0,
+      tabIndex: props.orderListData.get('listType'),
     };
   }
 
@@ -54,16 +54,6 @@ class OrderListPage extends Component {
       this.props.orderUnassignedListRequest();
     } else {
       this.props.orderAssignedListRequest();
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.tabIndex !== this.state.tabIndex) {
-      if (this.state.tabIndex === 0) {
-        this.props.orderUnassignedListRequest();
-      } else {
-        this.props.orderAssignedListRequest();
-      }
     }
   }
 
@@ -139,11 +129,12 @@ class OrderListPage extends Component {
 
   render() {
     const { assignedOrders, unassignedOrders, orderListData } = this.props;
+    const tabIndex = this.state.tabIndex;
 
     return (
       <div>
         <Tabs
-          value={this.state.tabIndex}
+          value={ tabIndex }
           onChange={this.handleTabChange.bind(this)}>
           <Tab
             value={0}
@@ -153,7 +144,7 @@ class OrderListPage extends Component {
                 Openstaand
                 <Badge
                   badgeContent={ orderListData.get('numberOfUnassigned') }
-                  primary={ this.state.tabIndex === 0 ? true : false }
+                  primary={ tabIndex === 0 }
                   style={ TabStyle.tabBadge }
                 />
               </span>
@@ -167,7 +158,7 @@ class OrderListPage extends Component {
                 In Behandeling
                 <Badge
                   badgeContent={ orderListData.get('numberOfAssigned') }
-                  primary={ this.state.tabIndex === 1 ? true : false }
+                  primary={ tabIndex === 1 }
                   style={ TabStyle.tabBadge }
                 />
               </span>
@@ -175,7 +166,7 @@ class OrderListPage extends Component {
           />
         </Tabs>
         <SwipeableViews
-          index={this.state.tabIndex}
+          index={ tabIndex }
           onChangeIndex={this.handleTabChange.bind(this)}>
 
           <Container size={4} center>
@@ -201,6 +192,14 @@ class OrderListPage extends Component {
   }
 
   handleTabChange(value) {
+    if (value !== this.state.tabIndex) {
+      if (value === 0) {
+        this.props.orderUnassignedListRequest();
+      } else {
+        this.props.orderAssignedListRequest();
+      }
+    }
+
     this.setState({
       tabIndex: value,
     });

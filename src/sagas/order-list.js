@@ -5,7 +5,6 @@ import {
   orderAssignedListError,
   orderUnassignedListSuccess,
   orderUnassignedListError,
-
 } from 'app/actions/order-list/';
 
 import {

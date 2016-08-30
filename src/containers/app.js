@@ -182,7 +182,7 @@ class App extends Component {
             iconElementLeft={ this.renderNavButton() }
             iconElementRight={
               this.props.routing.locationBeforeTransitions.pathname.includes('pickingorders') ?
-                this.renderPrintButton() : this.renderNavButton()
+                this.renderPrintButton() : <span></span>
             }
           />
           <Drawer

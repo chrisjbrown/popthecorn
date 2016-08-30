@@ -1,18 +1,18 @@
 import { take, put, call } from 'redux-saga/effects';
-import { getOrder, completeOrder, assignOrder } from 'app/api/order/';
+import { getOrder, updateOrder, assignOrder } from 'app/api/order/';
 
 import {
   orderError,
   orderSuccess,
   orderAssignError,
   orderAssignSuccess,
-  orderCompleteSuccess,
-  orderCompleteError,
+  orderUpdateSuccess,
+  orderUpdateError,
 } from 'app/actions/order';
 
 import {
+  ORDER_UPDATE_REQUEST,
   ORDER_REQUEST,
-  ORDER_COMPLETE_REQUEST,
   ORDER_ASSIGN_REQUEST,
 } from 'app/actions';
 
@@ -43,29 +43,29 @@ export function* watchOrderAssign() {
 
 function* orderAssign(orderId) {
   try {
-    const updatedOrder = yield call(assignOrder, orderId);
-    yield put(orderAssignSuccess(updatedOrder.data));
-    return updatedOrder;
+    const assignResponse = yield call(assignOrder, orderId);
+    yield put(orderAssignSuccess(assignResponse.data));
+    return assignResponse;
   } catch (error) {
     yield put(orderAssignError(error));
     return error;
   }
 }
 
-export function* watchOrderComplete() {
+export function* watchOrderUpdate() {
   while (true) {
-    const requestAction = yield take(ORDER_COMPLETE_REQUEST);
-    yield call(orderComplete, requestAction.payload.orderId);
+    const requestAction = yield take(ORDER_UPDATE_REQUEST);
+    yield call(orderUpdate, requestAction.payload.orderId, requestAction.payload.status);
   }
 }
 
-function* orderComplete(orderId) {
+function* orderUpdate(orderId, status) {
   try {
-    const status = yield call(completeOrder, orderId);
-    yield put(orderCompleteSuccess(status));
-    return status;
+    const response = yield call(updateOrder, orderId, status);
+    yield put(orderUpdateSuccess(response));
+    return response;
   } catch (error) {
-    yield put(orderCompleteError(error));
+    yield put(orderUpdateError(error));
     return error;
   }
 }

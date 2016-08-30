@@ -28,30 +28,31 @@ export function orderError(error) {
   };
 }
 
-export const ORDER_COMPLETE_REQUEST = 'App/ORDER_COMPLETE_REQUEST';
-export function requestCompleteOrder(orderId) {
+export const ORDER_UPDATE_REQUEST = 'App/ORDER_UPDATE_REQUEST';
+export function orderUpdateRequest(orderId, status) {
   return {
-    type: ORDER_COMPLETE_REQUEST,
+    type: ORDER_UPDATE_REQUEST,
     payload: {
       orderId: orderId,
+      status: status,
     },
   };
 }
 
-export const ORDER_COMPLETE_SUCCESS = 'App/ORDER_COMPLETE_SUCCESS';
-export function orderCompleteSuccess(status) {
+export const ORDER_UPDATE_SUCCESS = 'App/ORDER_UPDATE_SUCCESS';
+export function orderUpdateSuccess(status) {
   return {
-    type: ORDER_COMPLETE_SUCCESS,
+    type: ORDER_UPDATE_SUCCESS,
     payload: {
       status: status,
     },
   };
 }
 
-export const ORDER_COMPLETE_ERROR = 'App/ORDER_COMPLETE_ERROR';
-export function orderCompleteError(error) {
+export const ORDER_UPDATE_ERROR = 'App/ORDER_UPDATE_ERROR';
+export function orderUpdateError(error) {
   return {
-    type: ORDER_COMPLETE_ERROR,
+    type: ORDER_UPDATE_ERROR,
     payload: {
       error: error,
     },

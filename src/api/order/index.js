@@ -29,9 +29,9 @@ export function assignOrder(orderId) {
   });
 }
 
-export function completeOrder(orderId) {
+export function updateOrder(orderId, status) {
   return new Promise((resolve, reject) => {
-    return patch('/pickingorders/' + orderId, { status: 'DELIVERED' })
+    return patch('/pickingorders/' + orderId, { status: status })
       .then((json) => {
         if (json.error) {
           return reject(new Error(json.error.reason));

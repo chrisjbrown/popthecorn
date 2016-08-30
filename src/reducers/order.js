@@ -5,9 +5,9 @@ import {
   ORDER_ASSIGN_REQUEST,
   ORDER_ASSIGN_SUCCESS,
   ORDER_ASSIGN_ERROR,
-  ORDER_COMPLETE_REQUEST,
-  ORDER_COMPLETE_SUCCESS,
-  ORDER_COMPLETE_ERROR,
+  ORDER_UPDATE_REQUEST,
+  ORDER_UPDATE_SUCCESS,
+  ORDER_UPDATE_ERROR,
   ITEM_RESERVE_REQUEST,
   ITEM_RESERVE_SUCCESS,
   ITEM_RESERVE_ERROR,
@@ -76,17 +76,17 @@ function orderReducer(state = INITIAL_STATE, action = {}) {
           dataError: '',
           isLoading: false,
         }));
-    case ORDER_COMPLETE_REQUEST:
+    case ORDER_UPDATE_REQUEST:
       return state.merge(fromJS({
         dataError: '',
         isLoading: true,
       }));
-    case ORDER_COMPLETE_ERROR:
+    case ORDER_UPDATE_ERROR:
       return state.merge(fromJS({
         isLoading: false,
         dataError: action.payload.error.message,
       }));
-    case ORDER_COMPLETE_SUCCESS:
+    case ORDER_UPDATE_SUCCESS:
       return state.merge(fromJS({
         dataError: '',
         isLoading: false,

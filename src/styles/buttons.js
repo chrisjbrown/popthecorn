@@ -1,3 +1,5 @@
+import DbkColors from './colors';
+
 export default {
   orderAction: {
     fontSize: '12px',
@@ -5,8 +7,13 @@ export default {
     letterSpacing: '0.5px',
     color: '#fff',
     backgroundColor: '#000',
-    width: '100%',
-    height: '48px',
+    height: '38px',
     borderRadius: '2em',
+  },
+  orderActionSuccess: {
+    backgroundColor: DbkColors.pickedUpColor,
+  },
+  orderActionFail: {
+    backgroundColor: DbkColors.notPickedUp,
   },
 };

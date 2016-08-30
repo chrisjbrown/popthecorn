@@ -8,7 +8,6 @@ import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import IconSearch from 'material-ui/svg-icons/action/search';
 import IconChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
-import IconAlarm from 'material-ui/svg-icons/action/alarm';
 
 import Container from 'app/components/container';
 import * as SearchActions from 'app/actions/search';
@@ -30,6 +29,17 @@ class SearchPage extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  getIndicatorClass(status) {
+    switch (status) {
+      case 'INPROGRESS':
+        return Typography.indicatorInProgress;
+      case 'COMPLETED':
+        return Typography.indicatorReady;
+      default:
+        return Typography.indicatorOpen;
+    }
   }
 
   renderLoading() {
@@ -75,15 +85,12 @@ class SearchPage extends Component {
                 </div>
                 <div className="clearfix mt1">
                   <span style={ Typography.secondary }>{ item.get('orderId') }</span>
+                  <span
+                    className="ml1"
+                    style={ Object.assign({}, Typography.indicator, this.getIndicatorClass(item.get('status', ''))) }/>
                 </div>
                 <div className="clearfix mt1">
                   { item.get('numberOfItems') } artikelen
-                </div>
-                <div className="clearfix mt1">
-                  <span style={ Typography.time }>
-                    <IconAlarm color={ DbkColors.timeColor } style={ {height: '17px'} }/>
-                    <span> { item.get('placedAt') }</span>
-                  </span>
                 </div>
               </div>
             </ListItem>

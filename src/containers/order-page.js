@@ -17,7 +17,7 @@ import Container from 'app/components/container';
 import {
   orderRequest,
   orderAssignRequest,
-  requestCompleteOrder,
+  orderUpdateRequest,
   itemReserveRequest,
 } from 'app/actions/';
 import DbkColors from 'app/styles/colors';
@@ -35,7 +35,7 @@ class OrderPage extends Component {
     dataError: PropTypes.string,
     orderRequest: PropTypes.func,
     orderAssignRequest: PropTypes.func,
-    requestCompleteOrder: PropTypes.func,
+    orderUpdateRequest: PropTypes.func,
     itemReserveRequest: PropTypes.func,
   };
 
@@ -64,6 +64,34 @@ class OrderPage extends Component {
     const assignedToYou = assignee.get('id') === this.props.session.getIn(['user', 'number']);
     const time = Moment(orderData.getIn(['order', 'placedAt'], '')).format('HH:mm');
     const day = Moment(orderData.getIn(['order', 'placedAt'], '')).format('(DD-MM-YYYY)');
+
+    const completedButtons = (() => {
+      switch (orderData.getIn(['order', 'status'])) {
+        case 'COMPLETED':
+          return (
+            <div className="center">
+              <div className="mt1">
+                <FlatButton
+                  onTouchTap={ this.handleUpdateOrder.bind(this, 'DELIVERED') }
+                  style={ Object.assign({}, ButtonStyles.orderAction, ButtonStyles.orderActionSuccess) }
+                  className="col-10">
+                  Opgehaald
+                </FlatButton>
+              </div>
+              <div className="mt1">
+                <FlatButton
+                  onTouchTap={ this.handleUpdateOrder.bind(this, 'EXPIRED') }
+                  style={ Object.assign({}, ButtonStyles.orderAction, ButtonStyles.orderActionFail) }
+                  className="col-10">
+                  Niet Opgehaald
+                </FlatButton>
+              </div>
+            </div>
+          );
+        default:
+          return [];
+      }
+    })();
 
     return (
       <div className="p2 h5" style={ {backgroundColor: '#f6f6f6'} }>
@@ -101,6 +129,7 @@ class OrderPage extends Component {
             </span>
           </div>
         </div>
+        { completedButtons }
       </div>
     );
   }
@@ -136,13 +165,12 @@ class OrderPage extends Component {
             </span>
           </div>
         </div>
-        <div className="col-8">
-            <FlatButton
-              onTouchTap={ this.handleAssignOrder.bind(this) }
-              style={ ButtonStyles.orderAction }>
-              Behandel
-            </FlatButton>
-        </div>
+        <FlatButton
+          className="col-8"
+          onTouchTap={ this.handleAssignOrder.bind(this) }
+          style={ ButtonStyles.orderAction }>
+          Behandel
+        </FlatButton>
       </div>
     );
   }
@@ -258,11 +286,15 @@ class OrderPage extends Component {
       case 'NEW':
         return 'Open';
       case 'INPROGRESS':
-        return 'In Progress';
+        return 'In behandeling';
       case 'COMPLETED':
-        return 'Ready';
+        return 'Gereed';
+      case 'DELIVERED':
+        return 'Opgehaald';
+      case 'EXPIRED':
+        return 'Niet Opgehaald';
       default:
-        return 'BLALBAL';
+        return 'Open';
     }
   }
 
@@ -273,6 +305,10 @@ class OrderPage extends Component {
   handleAssignOrder() {
     this.props.orderAssignRequest(this.props.orderData.getIn(['order', 'id']));
   }
+
+  handleUpdateOrder(status) {
+    this.props.orderUpdateRequest(this.props.orderData.getIn(['order', 'id']), status);
+  }
 }
 
 export default connect(
@@ -280,5 +316,5 @@ export default connect(
     session: state.session,
     orderData: state.order,
   }),
-  dispatch => bindActionCreators({ orderRequest, orderAssignRequest, requestCompleteOrder, itemReserveRequest }, dispatch)
+  dispatch => bindActionCreators({ orderRequest, orderAssignRequest, orderUpdateRequest, itemReserveRequest }, dispatch)
 )(OrderPage);

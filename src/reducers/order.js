@@ -56,25 +56,23 @@ function orderReducer(state = INITIAL_STATE, action = {}) {
         isLoading: false,
       }));
     case ITEM_RESERVE_REQUEST:
-      return state.merge(fromJS({
-        dataError: '',
-        isLoading: true,
-      }));
-    case ITEM_RESERVE_ERROR:
-      return state.merge(fromJS({
-        isLoading: false,
-        dataError: action.payload.error.message,
-      }));
-    case ITEM_RESERVE_SUCCESS:
-      const itemIndex = state.get('order').get('items').findIndex((item) => {
-        return item.get('id') === action.payload.itemId;
-      });
-
       return state
-        .setIn(['order', 'items', itemIndex, 'status'], 'RESERVED')
+        .setIn(['order', 'items', action.payload.itemIndex, 'isLoading'], true)
         .merge(fromJS({
           dataError: '',
-          isLoading: false,
+        }));
+    case ITEM_RESERVE_ERROR:
+      return state
+        .setIn(['order', 'items', action.payload.itemIndex, 'isLoading'], false)
+        .merge(fromJS({
+          dataError: action.payload.error.message,
+        }));
+    case ITEM_RESERVE_SUCCESS:
+      return state
+        .setIn(['order', 'items', action.payload.itemIndex, 'status'], 'RESERVED')
+        .setIn(['order', 'items', action.payload.itemIndex, 'isLoading'], false)
+        .merge(fromJS({
+          dataError: '',
         }));
     case ORDER_UPDATE_REQUEST:
       return state.merge(fromJS({

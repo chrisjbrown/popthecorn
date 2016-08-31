@@ -29,18 +29,18 @@ export function* item(orderId, itemId) {
 
 export function* watchItemReserve() {
   while (true) {
-    const requestAction = yield take(ITEM_RESERVE_REQUEST);
-    yield call(itemReserve, requestAction.payload.orderId, requestAction.payload.itemId);
+    const { payload: { orderId, itemId, itemIndex } } = yield take(ITEM_RESERVE_REQUEST);
+    yield call(itemReserve, orderId, itemId, itemIndex);
   }
 }
 
-export function* itemReserve(orderId, itemId) {
+export function* itemReserve(orderId, itemId, itemIndex) {
   try {
-    const status = yield call(reserveItem, orderId, itemId);
-    yield put(itemReserveSuccess(itemId));
+    const status = yield call(reserveItem, orderId, itemId, itemIndex);
+    yield put(itemReserveSuccess(itemId, itemIndex));
     return status;
   } catch (error) {
-    yield put(itemReserveError(error));
+    yield put(itemReserveError(error, itemIndex));
     return error;
   }
 }

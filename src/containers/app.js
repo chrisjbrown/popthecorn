@@ -144,7 +144,7 @@ class App extends Component {
     );
   }
 
-  renderNavMenu() {
+  renderSignOut() {
     return (
       <IconMenu
         iconButtonElement={
@@ -182,7 +182,7 @@ class App extends Component {
             iconElementLeft={ this.renderNavButton() }
             iconElementRight={
               this.props.routing.locationBeforeTransitions.pathname.includes('pickingorders') ?
-                this.renderPrintButton() : <span></span>
+                this.renderPrintButton() : this.renderSignOut()
             }
           />
           <Drawer

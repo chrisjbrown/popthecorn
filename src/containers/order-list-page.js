@@ -167,6 +167,7 @@ class OrderListPage extends Component {
         </Tabs>
         <SwipeableViews
           index={ tabIndex }
+          animateTransitions={ false }
           onChangeIndex={this.handleTabChange.bind(this)}>
 
           <Container size={4} center>
@@ -198,11 +199,11 @@ class OrderListPage extends Component {
       } else {
         this.props.orderAssignedListRequest();
       }
-    }
 
-    this.setState({
-      tabIndex: value,
-    });
+      this.setState({
+        tabIndex: value,
+      });
+    }
   }
 }
 

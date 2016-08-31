@@ -30,32 +30,35 @@ export function itemError(error) {
 }
 
 export const ITEM_RESERVE_REQUEST = 'App/ITEM_RESERVE_REQUEST';
-export function itemReserveRequest(orderId, itemId) {
+export function itemReserveRequest(orderId, itemId, itemIndex) {
   return {
     type: ITEM_RESERVE_REQUEST,
     payload: {
       orderId: orderId,
       itemId: itemId,
+      itemIndex: itemIndex,
     },
   };
 }
 
 export const ITEM_RESERVE_SUCCESS = 'App/ITEM_RESERVE_SUCCESS';
-export function itemReserveSuccess(itemId) {
+export function itemReserveSuccess(itemId, itemIndex) {
   return {
     type: ITEM_RESERVE_SUCCESS,
     payload: {
       itemId: itemId,
+      itemIndex: itemIndex,
     },
   };
 }
 
 export const ITEM_RESERVE_ERROR = 'App/ITEM_RESERVE_ERROR';
-export function itemReserveError(error) {
+export function itemReserveError(error, itemIndex) {
   return {
     type: ITEM_RESERVE_ERROR,
     payload: {
       error: error,
+      itemIndex: itemIndex,
     },
   };
 }

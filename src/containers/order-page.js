@@ -134,12 +134,12 @@ class OrderPage extends Component {
     );
   }
 
-  renderItemAction(status, orderId, itemId) {
+  renderItemAction(status, orderId, itemId, itemIndex) {
     const reserved = status === 'RESERVED';
     return (
       <div
-        onClick={ (e) => {e.stopPropagation();} }
-        onTouchTap={ reserved ? () => {} : this.handleReserveItem.bind(this, orderId, itemId) }
+        onClick={ (e) => {e.preventDefault();} }
+        onTouchTap={ reserved ? () => {} : this.handleReserveItem.bind(this, orderId, itemId, itemIndex) }
         className="col-2"
         style={ OrderListStyles.itemActionContainer }>
         <div
@@ -206,13 +206,21 @@ class OrderPage extends Component {
       const product = item.get('product');
       const status = item.get('status');
 
+      if (item.get('isLoading', false)) {
+        return (
+          <div key={ i }>
+            { this.renderLoading() }
+          </div>
+        );
+      }
+
       return (
         <div key={ i }>
           <Link to={ '/pickingorders/' + orderId + '/items/' + item.get('id') }>
             <ListItem
               innerDivStyle={ OrderListStyles.itemList }>
               <div className="flex">
-                { assigned ? this.renderItemAction(status, orderId, item.get('id')) : [] }
+                { assigned ? this.renderItemAction(status, orderId, item.get('id'), i) : [] }
                 <div className="col-3" style={ OrderListStyles.itemAvatar }>
                   <Avatar src={ product.get('imageUrl') } size={ 60 }/>
                 </div>
@@ -298,8 +306,8 @@ class OrderPage extends Component {
     }
   }
 
-  handleReserveItem(orderId, itemId) {
-    this.props.itemReserveRequest(orderId, itemId);
+  handleReserveItem(orderId, itemId, itemIndex) {
+    this.props.itemReserveRequest(orderId, itemId, itemIndex);
   }
 
   handleAssignOrder() {

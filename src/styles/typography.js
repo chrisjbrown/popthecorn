@@ -25,6 +25,12 @@ export default {
   indicatorInProgress: {
     backgroundColor: DbkColors.inProgressColor,
   },
+  indicatorDelivered: {
+    backgroundColor: DbkColors.pickedUpColor,
+  },
+  indicatorExpired: {
+    backgroundColor: DbkColors.notPickedUp,
+  },
   multiEllipsis: {
     display: '-webkit-box',
     maxWidth: '400px',

@@ -29,6 +29,36 @@
 @import 'basscss-border';
 @import 'basscss-hide';
 
+@font-face {
+  font-display: block;
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: normal;
+  src: url('./fonts/31FD94_5_0.eot');
+  src:
+    url('./fonts/31FD94_5_0.eot?#iefix') format('embedded-opentype'),
+    url('./fonts/31FD94_5_0.woff2') format('woff2'),
+    url('./fonts/31FD94_5_0.woff') format('woff'),
+    url('./fonts/31FD94_5_0.ttf') format('truetype');
+}
+
+@font-face {
+  font-display: block;
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: bold;
+  src: url('./fonts/31FD94_2_0.eot');
+  src:
+    url('./fonts/31FD94_2_0.eot?#iefix') format('embedded-opentype'),
+    url('./fonts/31FD94_2_0.woff2') format('woff2'),
+    url('./fonts/31FD94_2_0.woff') format('woff'),
+    url('./fonts/31FD94_2_0.ttf') format('truetype');
+}
+
+body {
+  font-family: 'Proxima Nova', 'Times New Roman';
+}
+
 .navbar {
   height: 64px;
 }

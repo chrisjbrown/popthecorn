@@ -7,7 +7,8 @@ import {
   itemReserveError,
   itemSuccess,
   itemError,
-} from 'app/actions/item/';
+  orderRequest,
+} from 'app/actions/';
 
 export function* watchItem() {
   while (true) {
@@ -38,6 +39,9 @@ export function* itemReserve(orderId, itemId, itemIndex) {
   try {
     const status = yield call(reserveItem, orderId, itemId, itemIndex);
     yield put(itemReserveSuccess(itemId, itemIndex));
+    if (status.data === 'UPDATE') {
+      yield put(orderRequest(orderId));
+    }
     return status;
   } catch (error) {
     yield put(itemReserveError(error, itemIndex));

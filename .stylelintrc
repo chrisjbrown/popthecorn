@@ -37,7 +37,6 @@
     "function-parentheses-newline-inside": "always-multi-line",
     "function-parentheses-space-inside": "never-single-line",
     "function-whitespace-after": "always",
-    "function-url-quotes": "single",
     "indentation": 2,
     "max-empty-lines": 1,
     "max-line-length": [ 80, {
@@ -65,7 +64,6 @@
     "selector-no-vendor-prefix": true,
     "selector-pseudo-element-colon-notation": "double",
     "selector-root-no-composition": true,
-    "string-quotes": "single",
     "value-list-comma-newline-after": "always-multi-line",
     "value-list-comma-space-after": "always-single-line",
     "value-list-comma-space-before": "never",

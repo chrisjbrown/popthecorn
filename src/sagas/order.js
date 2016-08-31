@@ -62,7 +62,7 @@ export function* watchOrderUpdate() {
 function* orderUpdate(orderId, status) {
   try {
     const response = yield call(updateOrder, orderId, status);
-    yield put(orderUpdateSuccess(response));
+    yield put(orderUpdateSuccess(status));
     return response;
   } catch (error) {
     yield put(orderUpdateError(error));

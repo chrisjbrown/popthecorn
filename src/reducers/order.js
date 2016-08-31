@@ -85,10 +85,12 @@ function orderReducer(state = INITIAL_STATE, action = {}) {
         dataError: action.payload.error.message,
       }));
     case ORDER_UPDATE_SUCCESS:
-      return state.merge(fromJS({
-        dataError: '',
-        isLoading: false,
-      }));
+      return state
+        .setIn(['order', 'status'], action.payload.status)
+        .merge(fromJS({
+          dataError: '',
+          isLoading: false,
+        }));
     default:
       return state;
   }

@@ -15,7 +15,7 @@ import {
 import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({
-  order: {},
+  order: null,
   dataError: '',
   isLoading: false,
 });
@@ -24,7 +24,7 @@ function orderReducer(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
     case ORDER_REQUEST:
       return state.merge(fromJS({
-        order: {},
+        order: null,
         dataError: '',
         isLoading: true,
       }));

@@ -12,16 +12,16 @@ import {
 
 export function* watchItem() {
   while (true) {
-    const requestAction = yield take(ITEM_REQUEST);
-    yield call(getItem, requestAction.payload.orderId, requestAction.payload.itemId);
+    const { payload: { orderId, itemId } } = yield take(ITEM_REQUEST);
+    yield call(item, orderId, itemId);
   }
 }
 
 export function* item(orderId, itemId) {
   try {
-    const status = yield call(getItem, orderId, itemId);
-    yield put(itemSuccess(itemId));
-    return status;
+    const foundItem = yield call(getItem, orderId, itemId);
+    yield put(itemSuccess(foundItem.data));
+    return foundItem;
   } catch (error) {
     yield put(itemError(error));
     return error;

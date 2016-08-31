@@ -3,9 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import CircularProgress from 'material-ui/CircularProgress';
-// import Avatar from 'material-ui/Avatar';
+import Avatar from 'material-ui/Avatar';
 // import RaisedButton from 'material-ui/RaisedButton';
-// import Divider from 'material-ui/Divider';
+import Divider from 'material-ui/Divider';
 
 import Container from 'app/components/container';
 
@@ -51,37 +51,36 @@ class ItemPage extends Component {
     );
   }
 
-  renderItem() {
-    const { itemData } = this.props;
-    const item = itemData.get('item');
+  render() {
+    const { isLoading, dataError, itemData } = this.props;
+    const product = itemData.getIn(['item', 'product']);
 
-    if (!item) {
+    if (isLoading) {
+      return ( this.renderLoading() );
+    } else if (dataError) {
+      return ( this.renderError() );
+    } else if (!itemData.get('item', false)) {
       return (
-        <div>
-          Item not found
-        </div>
+        <Container center>
+          <span> Item not found </span>
+        </Container>
       );
     }
 
     return (
-      <div>
-        <div style={ {backgroundColor: '#f6f6f6', padding: '10px'} }>
-          bla
+      <Container center>
+        <div className="mx3 my2 center">
+          <Avatar src={ product.get('imageUrl') } size={ 250 }/>
+          <div>
+            { product.get('description') }
+            <Divider/>
+          </div>
+          <div>
+            <strong>Artikelnummer: </strong>
+            { product.get('code') }
+            <Divider/>
+          </div>
         </div>
-      </div>
-    );
-  }
-
-  render() {
-    const { isLoading, dataError } = this.props;
-
-    return (
-      <Container size={4} center>
-
-        { isLoading ? this.renderLoading() : [] }
-        { dataError ? this.renderError() : [] }
-        { !isLoading && !dataError ? this.renderItem() : [] }
-
       </Container>
     );
   }

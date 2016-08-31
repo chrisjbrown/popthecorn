@@ -10,12 +10,12 @@ import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({
   assignedOrders: {
-    items: [],
+    items: null,
     dataError: '',
     isLoading: false,
   },
   unassignedOrders: {
-    items: [],
+    items: null,
     dataError: '',
     isLoading: false,
   },
@@ -30,7 +30,7 @@ function orderListReducer(state = INITIAL_STATE, action = {}) {
       return state.mergeDeep(fromJS({
         listType: 1,
         assignedOrders: {
-          items: [],
+          items: null,
           dataError: '',
           isLoading: true,
         },
@@ -39,7 +39,7 @@ function orderListReducer(state = INITIAL_STATE, action = {}) {
       return state.mergeDeep(fromJS({
         listType: 0,
         unassignedOrders: {
-          items: [],
+          items: null,
           dataError: '',
           isLoading: true,
         },

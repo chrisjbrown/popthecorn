@@ -160,9 +160,10 @@ class App extends Component {
   }
 
   render() {
-    const { session, error, children } = this.props;
+    const { session, error, children, orderData } = this.props;
     const { drawerOpen } = this.state;
 
+    const assigned = orderData.getIn(['order', 'assigned'], false);
     const errorMsg = error.get('message', false);
     const token = session.get('token', false);
 
@@ -181,7 +182,9 @@ class App extends Component {
             style={ {position: 'fixed'} }
             iconElementLeft={ this.renderNavButton() }
             iconElementRight={
-              this.props.routing.locationBeforeTransitions.pathname.includes('pickingorders') ?
+              assigned &&
+              this.props.routing.locationBeforeTransitions.pathname.includes('pickingorders') &&
+              !this.props.routing.locationBeforeTransitions.pathname.includes('items') ?
                 this.renderPrintButton() : this.renderSignOut()
             }
           />

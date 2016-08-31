@@ -130,6 +130,8 @@ class OrderListPage extends Component {
   render() {
     const { assignedOrders, unassignedOrders, orderListData } = this.props;
     const tabIndex = this.state.tabIndex;
+    const unassignedItems = unassignedOrders.get('items', false);
+    const assignedItems = assignedOrders.get('items', false);
 
     return (
       <div>
@@ -174,8 +176,14 @@ class OrderListPage extends Component {
             { unassignedOrders.get('isLoading') ? this.renderLoading() : [] }
             { unassignedOrders.get('dataError') ? this.renderError() : [] }
             <List>
-              { !unassignedOrders.get('isLoading') && !unassignedOrders.get('dataError') ? this.renderOrderList(unassignedOrders.get('items')) : [] }
-              { (!unassignedOrders.get('isLoading') && !unassignedOrders.get('dataError') && unassignedOrders.get('items').size === 0) ? <div>No orders found</div> : [] }
+              {
+                !unassignedOrders.get('isLoading', false) && !unassignedOrders.get('dataError', false) && unassignedItems !== null ?
+                  this.renderOrderList(unassignedItems) : []
+              }
+              {
+                !unassignedOrders.get('isLoading', false) && !unassignedOrders.get('dataError', false) && unassignedItems === null ?
+                  <div>No orders found</div> : []
+              }
             </List>
           </Container>
 
@@ -183,8 +191,14 @@ class OrderListPage extends Component {
             { assignedOrders.get('isLoading') ? this.renderLoading() : [] }
             { assignedOrders.get('dataError') ? this.renderError() : [] }
             <List>
-              { !assignedOrders.get('isLoading') && !assignedOrders.get('dataError') ? this.renderOrderList(assignedOrders.get('items')) : [] }
-              { (!assignedOrders.get('isLoading') && !assignedOrders.get('dataError') && assignedOrders.get('items').size === 0) ? <div>No orders found</div> : [] }
+              {
+                !assignedOrders.get('isLoading', false) && !assignedOrders.get('dataError', false) && assignedItems !== null ?
+                  this.renderOrderList(assignedItems) : []
+              }
+              {
+                !assignedOrders.get('isLoading', false) && !assignedOrders.get('dataError', false) && assignedItems === null ?
+                  <div>No orders found</div> : []
+              }
             </List>
           </Container>
         </SwipeableViews>

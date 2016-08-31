@@ -66,8 +66,8 @@ class OrderPage extends Component {
     const orderData = this.props.orderData;
     const assignee = orderData.getIn(['order', 'assignee'], '');
     const assignedToYou = assignee.get('id') === this.props.session.getIn(['user', 'number']);
-    const time = Moment(orderData.getIn(['order', 'placedAt'], '')).format('HH:mm');
-    const day = Moment(orderData.getIn(['order', 'placedAt'], '')).format('(DD-MM-YYYY)');
+    const time = Moment(orderData.getIn(['order', 'assignedAt'], '')).format('HH:mm');
+    const day = Moment(orderData.getIn(['order', 'assignedAt'], '')).format('(DD-MM-YYYY)');
 
     const completedButtons = (() => {
       switch (orderData.getIn(['order', 'status'])) {
@@ -259,7 +259,7 @@ class OrderPage extends Component {
       return ( this.renderLoading() );
     } else if (dataError) {
       return ( this.renderError() );
-    } else if (!orderData.get('order', false) || orderData.get('order').size === 0) {
+    } else if (!orderData.get('order', false)) {
       return (
         <Container center>
           <span> Order not found </span>

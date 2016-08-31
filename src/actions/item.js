@@ -10,11 +10,11 @@ export function itemRequest(orderId, itemId) {
 }
 
 export const ITEM_SUCCESS = 'App/ITEM_SUCCESS';
-export function itemSuccess(itemId) {
+export function itemSuccess(item) {
   return {
     type: ITEM_SUCCESS,
     payload: {
-      itemId: itemId,
+      item: item,
     },
   };
 }

@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import CircularProgress from 'material-ui/CircularProgress';
-import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
@@ -71,7 +70,7 @@ class ItemPage extends Component {
     return (
       <Container center>
         <div className="mx3 my2 center">
-          <Avatar src={ product.get('imageUrl') } size={ 250 }/>
+          <img src={ product.get('imageUrl') }/>
         </div>
         <List>
           <ListItem>

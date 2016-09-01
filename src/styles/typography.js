@@ -6,6 +6,9 @@ export default {
     height: 0,
     borderLeft: '10px solid transparent',
     borderRight: '10px solid transparent',
+    borderBottom: '10px solid' + DbkColors.disabledColor,
+  },
+  arrowUpAssignedToYou: {
     borderBottom: '10px solid' + DbkColors.accent2Color,
   },
   indicator: {

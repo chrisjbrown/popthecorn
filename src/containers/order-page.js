@@ -178,10 +178,10 @@ class OrderPage extends Component {
     );
   }
 
-  renderError() {
+  renderError(error) {
     return (
       <Container center>
-        <strong> { this.props.dataError } </strong>
+        <strong> { error } </strong>
       </Container>
     );
   }
@@ -257,7 +257,7 @@ class OrderPage extends Component {
     if (isLoading) {
       return ( this.renderLoading() );
     } else if (dataError) {
-      return ( this.renderError() );
+      return ( this.renderError(dataError) );
     } else if (!orderData.get('order', false)) {
       return (
         <Container center>

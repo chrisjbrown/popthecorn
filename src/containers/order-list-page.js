@@ -114,10 +114,10 @@ class OrderListPage extends Component {
 
     return (
       <div>
-        <div className="mx-auto" style={ Typography.arrowUp }/>
+        <div className="mx-auto" style={ Object.assign({}, Typography.arrowUp, assignedToYou ? Typography.arrowUpAssignedToYou : {}) }/>
         <div
           className="block"
-          style={ Object.assign({}, OrderListStyles.orderItemAssignedStatus, OrderListStyles.statusAssignedToYou) }>
+          style={ Object.assign({}, OrderListStyles.orderItemAssignedStatus, assignedToYou ? OrderListStyles.statusAssignedToYou : {}) }>
           <span className="h6 col-10 align-middle inline">
             { 'In behandeling door ' }
             <strong>{ assignedToYou ? 'Jou' : assignee.get('name', '') }</strong>

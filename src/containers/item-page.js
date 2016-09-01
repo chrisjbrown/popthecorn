@@ -70,23 +70,23 @@ class ItemPage extends Component {
     return (
       <Container center>
         <div className="mx3 my2 center">
-          <img src={ product.get('imageUrl') }/>
+          <img src={ product.get('imageUrl', '') }/>
         </div>
         <List>
           <ListItem>
             <span style={ Typography.secondary }>
-              { product.get('description') }
+              { product.get('description', '') }
             </span>
           </ListItem>
           <Divider/>
           <ListItem>
             <strong>Aantal: </strong>
-            { itemData.getIn(['item', 'quantity']) + 'x' }
+            { itemData.getIn(['item', 'quantity'], 0) + 'x' }
           </ListItem>
           <Divider/>
           <ListItem>
             <strong>Artikelnummer: </strong>
-            { product.get('code') }
+            { product.get('code', '') }
           </ListItem>
           <Divider/>
         </List>

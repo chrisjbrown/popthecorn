@@ -45,7 +45,7 @@ class OrderListPage extends Component {
     super(props);
 
     this.state = {
-      tabIndex: props.orderListData.get('listType'),
+      tabIndex: props.orderListData.get('listType', 0),
     };
   }
 
@@ -77,31 +77,31 @@ class OrderListPage extends Component {
 
       return (
         <div key={ i }>
-          <Link to={ '/pickingorders/' + order.get('id') }>
+          <Link to={ '/pickingorders/' + order.get('id', '') }>
             <ListItem
               rightIcon={
                 <IconChevronRight style={ OrderListStyles.itemArrow }/>
               }>
               <div>
                 <div className="clearfix">
-                  <strong>{ customer.get('name') }</strong>
+                  <strong>{ customer.get('name', '') }</strong>
                 </div>
                 <div className="clearfix mt1">
-                  <span style={ Typography.secondary }>{ order.get('orderId') }</span>
+                  <span style={ Typography.secondary }>{ order.get('orderId', '') }</span>
                 </div>
                 <div className="clearfix mt1">
-                  { order.get('numberOfItems') } artikelen
+                  { order.get('numberOfItems', '') } artikelen
                 </div>
                 <div className="clearfix mt1">
                   <span style={ Typography.time }>
                     <IconAlarm color={ DbkColors.timeColor } style={ {height: '17px'} }/>
-                    <span> { order.get('placedAt') }</span>
+                    <span> { order.get('placedAt', '') }</span>
                   </span>
                 </div>
               </div>
             </ListItem>
           </Link>
-          { order.get('assigned') ? this.renderStatusBar(order.get('assignee'), order.get('placedAt')) : <Divider /> }
+          { order.get('assigned', false) ? this.renderStatusBar(order.get('assignee', ''), order.get('placedAt', '')) : <Divider /> }
         </div>
       );
     });
@@ -110,7 +110,7 @@ class OrderListPage extends Component {
   }
 
   renderStatusBar(assignee) {
-    const assignedToYou = assignee.get('id') === this.props.session.getIn(['user', 'number']);
+    const assignedToYou = assignee.get('id', '') === this.props.session.getIn(['user', 'number']);
 
     return (
       <div>
@@ -145,7 +145,7 @@ class OrderListPage extends Component {
               <span>
                 Openstaand
                 <Badge
-                  badgeContent={ orderListData.get('numberOfUnassigned') }
+                  badgeContent={ orderListData.get('numberOfUnassigned', 0) }
                   primary={ tabIndex === 0 }
                   style={ TabStyle.tabBadge }
                 />
@@ -159,7 +159,7 @@ class OrderListPage extends Component {
               <span>
                 In Behandeling
                 <Badge
-                  badgeContent={ orderListData.get('numberOfAssigned') }
+                  badgeContent={ orderListData.get('numberOfAssigned', 0) }
                   primary={ tabIndex === 1 }
                   style={ TabStyle.tabBadge }
                 />
@@ -173,8 +173,8 @@ class OrderListPage extends Component {
           onChangeIndex={this.handleTabChange.bind(this)}>
 
           <Container size={4} center>
-            { unassignedOrders.get('isLoading') ? this.renderLoading() : [] }
-            { unassignedOrders.get('dataError') ? this.renderError() : [] }
+            { unassignedOrders.get('isLoading', false) ? this.renderLoading() : [] }
+            { unassignedOrders.get('dataError', false) ? this.renderError() : [] }
             <List>
               {
                 !unassignedOrders.get('isLoading', false) && !unassignedOrders.get('dataError', false) && unassignedItems !== null ?
@@ -188,8 +188,8 @@ class OrderListPage extends Component {
           </Container>
 
           <Container size={4} center>
-            { assignedOrders.get('isLoading') ? this.renderLoading() : [] }
-            { assignedOrders.get('dataError') ? this.renderError() : [] }
+            { assignedOrders.get('isLoading', false) ? this.renderLoading() : [] }
+            { assignedOrders.get('dataError', false) ? this.renderError() : [] }
             <List>
               {
                 !assignedOrders.get('isLoading', false) && !assignedOrders.get('dataError', false) && assignedItems !== null ?

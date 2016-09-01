@@ -11,8 +11,8 @@ const green = '#59aa00';
 
 export default {
   primary1Color: lightGrey,
-  primary2Color: '#737373',
-  primary3Color: '#000',
+  primary2Color: darkGrey,
+  primary3Color: black,
   accent1Color: dbkColor,
   accent2Color: purple,
   accent3Color: lightGrey,

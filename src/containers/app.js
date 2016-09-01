@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
@@ -24,6 +23,7 @@ import Content from 'app/components/content';
 import LoginModal from 'app/components/login/login-modal';
 import { logoutUser } from 'app/actions/session';
 
+import DbkTheme from 'app/styles/dbktheme';
 import Headings from 'app/styles/headings';
 import DbkColors from 'app/styles/colors';
 import Typography from 'app/styles/typography';
@@ -32,34 +32,6 @@ import Typography from 'app/styles/typography';
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-const dbkTheme = getMuiTheme({
-  palette: DbkColors,
-  fontFamily: 'Proxima\ Nova',
-  appBar: {
-    color: DbkColors.alternateTextColor,
-    textColor: DbkColors.textColor,
-  },
-  raisedButton: {
-    color: DbkColors.primary3Color,
-    textColor: DbkColors.alternateTextColor,
-    primaryColor: DbkColors.accent1Color,
-    secondaryColor: DbkColors.primary3Color,
-  },
-  floatingActionButton: {
-    color: DbkColors.primary3Color,
-    iconColor: DbkColors.alternateTextColor,
-  },
-  tabs: {
-    textColor: DbkColors.primary2Color,
-    selectedTextColor: DbkColors.textColor,
-  },
-  badge: {
-    primaryColor: DbkColors.primary3Color,
-    color: DbkColors.primary2Color,
-    textColor: DbkColors.alternateTextColor,
-  },
-});
-
 class App extends Component {
 
   static propTypes = {
@@ -67,7 +39,7 @@ class App extends Component {
     orderData: PropTypes.object.isRequired,
     itemData: PropTypes.object.isRequired,
     session: PropTypes.object.isRequired,
-    routing: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
     form: PropTypes.object.isRequired,
     error: PropTypes.object.isRequired,
     logoutUser: PropTypes.func.isRequired,
@@ -88,7 +60,7 @@ class App extends Component {
 
   getNavTitle() {
     // TODO find a better way to do this
-    const pathname = this.props.routing.locationBeforeTransitions.pathname;
+    const pathname = this.props.location.pathname;
     const customer = this.props.orderData.getIn(['order', 'customer'], false);
 
     if (pathname === '/') {
@@ -98,7 +70,7 @@ class App extends Component {
     } else if (pathname.includes('settings')) {
       return <span style={ Headings.dbkHeading }> SETTINGS </span>;
     } else if (pathname.includes('items') ) {
-      return <span style={ Headings.dbkHeading }> { this.props.itemData.getIn(['item', 'product', 'name']) } </span>;
+      return <span style={ Headings.dbkHeading }> { this.props.itemData.getIn(['item', 'product', 'name'], '') } </span>;
     } else if (pathname.includes('pickingorders')) {
       return (
         <div style={ Object.assign({}, Headings.dbkHeading, Headings.dbkNavHeading) }>
@@ -108,7 +80,7 @@ class App extends Component {
             </strong>
           </div>
           <div style={ Typography.secondary }>
-            { this.props.orderData.getIn(['order', 'orderId']) }
+            { this.props.orderData.getIn(['order', 'orderId'], '') }
           </div>
         </div>
       );
@@ -118,7 +90,7 @@ class App extends Component {
 
   renderNavButton() {
     // TODO find a better way to do this
-    const pathname = this.props.routing.locationBeforeTransitions.pathname;
+    const pathname = this.props.location.pathname;
 
     if (pathname.includes('pickingorders')) {
       return (
@@ -171,7 +143,7 @@ class App extends Component {
     const isLoggedIn = (token && token !== null && typeof token !== 'undefined') ? true : false;
 
     return (
-      <MuiThemeProvider muiTheme={ dbkTheme }>
+      <MuiThemeProvider muiTheme={ DbkTheme }>
         <div>
           <LoginModal
             open={ !isLoggedIn } />
@@ -183,8 +155,8 @@ class App extends Component {
             iconElementLeft={ this.renderNavButton() }
             iconElementRight={
               assigned &&
-              this.props.routing.locationBeforeTransitions.pathname.includes('pickingorders') &&
-              !this.props.routing.locationBeforeTransitions.pathname.includes('items') ?
+              this.props.location.pathname.includes('pickingorders') &&
+              !this.props.location.pathname.includes('items') ?
                 this.renderPrintButton() : this.renderSignOut()
             }
           />
@@ -248,7 +220,6 @@ export default connect(
     itemData: state.item,
     orderData: state.order,
     session: state.session,
-    routing: state.routing,
     error: state.error,
     form: state.form,
   }),

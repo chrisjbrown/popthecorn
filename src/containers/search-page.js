@@ -10,7 +10,8 @@ import IconSearch from 'material-ui/svg-icons/action/search';
 import IconChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 
 import Container from 'app/components/container';
-import * as SearchActions from 'app/actions/search';
+import { getIndicatorStyle } from 'app/utils/statusmap';
+import { searchItemRequest } from 'app/actions/search';
 
 import DbkColors from 'app/styles/colors';
 import OrderListStyles from 'app/styles/order-list';
@@ -29,21 +30,6 @@ class SearchPage extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  getIndicatorClass(status) {
-    switch (status) {
-      case 'INPROGRESS':
-        return Typography.indicatorInProgress;
-      case 'COMPLETED':
-        return Typography.indicatorReady;
-      case 'DELIVERED':
-        return Typography.indicatorDelivered;
-      case 'EXPIRED':
-        return Typography.indicatorExpired;
-      default:
-        return Typography.indicatorOpen;
-    }
   }
 
   renderLoading() {
@@ -78,23 +64,23 @@ class SearchPage extends Component {
 
       return (
         <div key={ i }>
-          <Link to={ '/pickingorders/' + item.get('id') }>
+          <Link to={ '/pickingorders/' + item.get('id', '') }>
             <ListItem
               rightIcon={
                 <IconChevronRight style={ OrderListStyles.itemArrow }/>
               }>
               <div>
                 <div className="clearfix">
-                  <strong>{ customer.get('name') }</strong>
+                  <strong>{ customer.get('name', '') }</strong>
                 </div>
                 <div className="clearfix mt1">
-                  <span style={ Typography.secondary }>{ item.get('orderId') }</span>
+                  <span style={ Typography.secondary }>{ item.get('orderId', '') }</span>
                   <span
                     className="ml1"
-                    style={ Object.assign({}, Typography.indicator, this.getIndicatorClass(item.get('status', ''))) }/>
+                    style={ Object.assign({}, Typography.indicator, getIndicatorStyle(item.get('status', ''))) }/>
                 </div>
                 <div className="clearfix mt1">
-                  { item.get('numberOfItems') } artikelen
+                  { item.get('numberOfItems', 0) } artikelen
                 </div>
               </div>
             </ListItem>
@@ -156,5 +142,5 @@ export default connect(
     dataError: state.search.get('dataError'),
     isLoading: state.search.get('isLoading'),
   }),
-  dispatch => bindActionCreators(SearchActions, dispatch)
+  dispatch => bindActionCreators({ searchItemRequest }, dispatch)
 )(SearchPage);

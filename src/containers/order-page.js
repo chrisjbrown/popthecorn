@@ -13,12 +13,14 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 
 import Container from 'app/components/container';
+import { getIndicatorStyle, mapStatusText } from 'app/utils/statusmap';
 import {
   orderRequest,
   orderAssignRequest,
   orderUpdateRequest,
   itemReserveRequest,
 } from 'app/actions/';
+
 import DbkColors from 'app/styles/colors';
 import ButtonStyles from 'app/styles/buttons';
 import Typography from 'app/styles/typography';
@@ -46,21 +48,6 @@ class OrderPage extends Component {
     this.props.orderRequest(this.props.params.orderId);
   }
 
-  getIndicatorClass(status) {
-    switch (status) {
-      case 'INPROGRESS':
-        return Typography.indicatorInProgress;
-      case 'COMPLETED':
-        return Typography.indicatorReady;
-      case 'DELIVERED':
-        return Typography.indicatorDelivered;
-      case 'EXPIRED':
-        return Typography.indicatorExpired;
-      default:
-        return Typography.indicatorOpen;
-    }
-  }
-
   renderAssignedStatus() {
     const orderData = this.props.orderData;
     const assignee = orderData.getIn(['order', 'assignee'], '');
@@ -69,7 +56,7 @@ class OrderPage extends Component {
     const day = Moment(orderData.getIn(['order', 'assignedAt'], '')).format('(DD-MM-YYYY)');
 
     const completedButtons = (() => {
-      switch (orderData.getIn(['order', 'status'])) {
+      switch (orderData.getIn(['order', 'status'], '')) {
         case 'COMPLETED':
           return (
             <div className="center">
@@ -111,9 +98,9 @@ class OrderPage extends Component {
         </div>
         <div className="flex">
           <div className="col-4">
-            <span style={ Object.assign({}, Typography.indicator, this.getIndicatorClass(orderData.getIn(['order', 'status'], ''))) }/>
+            <span style={ Object.assign({}, Typography.indicator, getIndicatorStyle(orderData.getIn(['order', 'status'], ''))) }/>
             <span>
-              { this.mapStatus(orderData.getIn(['order', 'status'], '')) }
+              { mapStatusText(orderData.getIn(['order', 'status'], '')) }
             </span>
           </div>
           <div className="col-4">
@@ -164,7 +151,7 @@ class OrderPage extends Component {
           <div>
             <span style={ Object.assign({}, Typography.indicator, Typography.indicatorOpen) }/>
             <span>
-              { this.mapStatus(orderData.getIn(['order', 'status'])) }
+              { mapStatusText(orderData.getIn(['order', 'status'], '')) }
             </span>
           </div>
         </div>
@@ -198,8 +185,8 @@ class OrderPage extends Component {
 
   renderItemList() {
     const items = this.props.orderData.getIn(['order', 'items'], false);
-    const assigned = this.props.orderData.getIn(['order', 'assigned']);
-    const orderId = this.props.orderData.getIn(['order', 'id']);
+    const assigned = this.props.orderData.getIn(['order', 'assigned'], false);
+    const orderId = this.props.orderData.getIn(['order', 'id'], '');
 
     if (!items) {
       return [];
@@ -207,7 +194,7 @@ class OrderPage extends Component {
 
     const orderItems = items.map((item, i) => {
       const product = item.get('product');
-      const status = item.get('status');
+      const status = item.get('status', '');
 
       if (item.get('isLoading', false)) {
         return (
@@ -219,17 +206,17 @@ class OrderPage extends Component {
 
       return (
         <div key={ i }>
-          <Link to={ '/pickingorders/' + orderId + '/items/' + item.get('id') }>
+          <Link to={ '/pickingorders/' + orderId + '/items/' + item.get('id', '') }>
             <ListItem
               innerDivStyle={ OrderListStyles.itemList }>
               <div className="flex">
-                { assigned ? this.renderItemAction(status, orderId, item.get('id'), i) : [] }
+                { assigned ? this.renderItemAction(status, orderId, item.get('id', ''), i) : [] }
                 <div className="col-3" style={ OrderListStyles.itemAvatar }>
-                  <Avatar src={ product.get('imageUrl') } size={ 60 }/>
+                  <Avatar src={ product.get('imageUrl', '') } size={ 60 }/>
                 </div>
                 <div>
-                  <p style={ OrderListStyles.itemPrimaryText }>{ product.get('name') }</p>
-                  <p style={ Typography.multiEllipsis }>{ product.get('description') }</p>
+                  <p style={ OrderListStyles.itemPrimaryText }>{ product.get('name', '') }</p>
+                  <p style={ Typography.multiEllipsis }>{ product.get('description', '') }</p>
                 </div>
                 <div className="col-1">
                   <IconChevronRight style={ {position: 'relative', top: '20px'} } />
@@ -247,8 +234,8 @@ class OrderPage extends Component {
 
   render() {
     const { orderData } = this.props;
-    const isLoading = orderData.get('isLoading');
-    const dataError = orderData.get('dataError');
+    const isLoading = orderData.get('isLoading', false);
+    const dataError = orderData.get('dataError', '');
     const email = orderData.getIn(['order', 'customer', 'email'], '');
     const phoneNumber = orderData.getIn(['order', 'customer', 'phoneNumber'], '');
     const time = Moment(orderData.getIn(['order', 'placedAt'], '')).format('HH:mm');
@@ -283,7 +270,7 @@ class OrderPage extends Component {
           </div>
         </div>
 
-        { orderData.getIn(['order', 'assigned']) ? this.renderAssignedStatus() : this.renderUnassignedStatus() }
+        { orderData.getIn(['order', 'assigned'], false) ? this.renderAssignedStatus() : this.renderUnassignedStatus() }
 
         <List>
           { this.renderItemList() }
@@ -292,33 +279,16 @@ class OrderPage extends Component {
     );
   }
 
-  mapStatus(status) {
-    switch (status) {
-      case 'NEW':
-        return 'Open';
-      case 'INPROGRESS':
-        return 'In behandeling';
-      case 'COMPLETED':
-        return 'Gereed';
-      case 'DELIVERED':
-        return 'Opgehaald';
-      case 'EXPIRED':
-        return 'Niet Opgehaald';
-      default:
-        return 'Open';
-    }
-  }
-
   handleReserveItem(orderId, itemId, itemIndex) {
     this.props.itemReserveRequest(orderId, itemId, itemIndex);
   }
 
   handleAssignOrder() {
-    this.props.orderAssignRequest(this.props.orderData.getIn(['order', 'id']));
+    this.props.orderAssignRequest(this.props.orderData.getIn(['order', 'id'], ''));
   }
 
   handleUpdateOrder(status) {
-    this.props.orderUpdateRequest(this.props.orderData.getIn(['order', 'id']), status);
+    this.props.orderUpdateRequest(this.props.orderData.getIn(['order', 'id'], ''), status);
   }
 }
 

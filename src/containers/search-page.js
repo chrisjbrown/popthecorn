@@ -37,6 +37,10 @@ class SearchPage extends Component {
         return Typography.indicatorInProgress;
       case 'COMPLETED':
         return Typography.indicatorReady;
+      case 'DELIVERED':
+        return Typography.indicatorDelivered;
+      case 'EXPIRED':
+        return Typography.indicatorExpired;
       default:
         return Typography.indicatorOpen;
     }

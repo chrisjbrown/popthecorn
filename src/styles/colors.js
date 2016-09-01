@@ -30,6 +30,6 @@ export default {
   inProgressColor: black,
   readyColor: dbkColor,
   pickedUpColor: green,
-  notPickedUp: scarlet,
+  notPickedUpColor: scarlet,
   printColor: darkGrey,
 };

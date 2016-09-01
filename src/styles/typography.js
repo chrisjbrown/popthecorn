@@ -32,7 +32,7 @@ export default {
     backgroundColor: DbkColors.pickedUpColor,
   },
   indicatorExpired: {
-    backgroundColor: DbkColors.notPickedUp,
+    backgroundColor: DbkColors.notPickedUpColor,
   },
   multiEllipsis: {
     display: '-webkit-box',

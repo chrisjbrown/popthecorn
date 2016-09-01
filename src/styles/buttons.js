@@ -14,6 +14,6 @@ export default {
     backgroundColor: DbkColors.pickedUpColor,
   },
   orderActionFail: {
-    backgroundColor: DbkColors.notPickedUp,
+    backgroundColor: DbkColors.notPickedUpColor,
   },
 };

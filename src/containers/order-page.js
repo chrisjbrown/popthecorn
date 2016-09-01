@@ -8,7 +8,6 @@ import CircularProgress from 'material-ui/CircularProgress';
 import { List, ListItem } from 'material-ui/List';
 import IconChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 import IconDone from 'material-ui/svg-icons/action/done';
-// import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';

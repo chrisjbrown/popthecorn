@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 
 import CircularProgress from 'material-ui/CircularProgress';
 import Avatar from 'material-ui/Avatar';
-// import RaisedButton from 'material-ui/RaisedButton';
+import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 import Container from 'app/components/container';
 
 import dbkColors from 'app/styles/colors';
+import Typography from 'app/styles/typography';
 
 import {
   itemRequest,
@@ -71,16 +72,25 @@ class ItemPage extends Component {
       <Container center>
         <div className="mx3 my2 center">
           <Avatar src={ product.get('imageUrl') } size={ 250 }/>
-          <div>
-            { product.get('description') }
-            <Divider/>
-          </div>
-          <div>
+        </div>
+        <List>
+          <ListItem>
+            <span style={ Typography.secondary }>
+              { product.get('description') }
+            </span>
+          </ListItem>
+          <Divider/>
+          <ListItem>
+            <strong>Aantal: </strong>
+            { itemData.getIn(['item', 'quantity']) + 'x' }
+          </ListItem>
+          <Divider/>
+          <ListItem>
             <strong>Artikelnummer: </strong>
             { product.get('code') }
-            <Divider/>
-          </div>
-        </div>
+          </ListItem>
+          <Divider/>
+        </List>
       </Container>
     );
   }

@@ -21,7 +21,7 @@ import Snackbar from 'material-ui/Snackbar';
 
 import Content from 'app/components/content';
 import LoginModal from 'app/components/login/login-modal';
-import { logoutUser } from 'app/actions/session';
+import { logoutUser, removeError } from 'app/actions/';
 
 import DbkTheme from 'app/styles/dbktheme';
 import Headings from 'app/styles/headings';
@@ -43,6 +43,7 @@ class App extends Component {
     form: PropTypes.object.isRequired,
     error: PropTypes.object.isRequired,
     logoutUser: PropTypes.func.isRequired,
+    removeError: PropTypes.func.isRequired,
     params: PropTypes.object,
   };
 
@@ -191,7 +192,8 @@ class App extends Component {
           <Snackbar
             open={ displayError }
             message={ displayError ? errorMsg : '' }
-            autoHideDuration={3000}
+            autoHideDuration={ 3500 }
+            onRequestClose={ this.props.removeError }
           />
         </div>
       </MuiThemeProvider>
@@ -223,5 +225,5 @@ export default connect(
     error: state.error,
     form: state.form,
   }),
-  dispatch => bindActionCreators({ logoutUser }, dispatch)
+  dispatch => bindActionCreators({ logoutUser, removeError }, dispatch)
 )(App);

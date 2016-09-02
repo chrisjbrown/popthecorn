@@ -71,44 +71,6 @@ class OrderListPage extends Component {
     );
   }
 
-  renderOrderList(orders) {
-    const orderListItems = orders.map((order, i) => {
-      const customer = order.get('customer');
-
-      return (
-        <div key={ i }>
-          <Link to={ '/pickingorders/' + order.get('id', '') }>
-            <ListItem
-              rightIcon={
-                <IconChevronRight style={ OrderListStyles.itemArrow }/>
-              }>
-              <div>
-                <div className="clearfix">
-                  <strong>{ customer.get('name', '') }</strong>
-                </div>
-                <div className="clearfix mt1">
-                  <span style={ Typography.secondary }>{ order.get('orderId', '') }</span>
-                </div>
-                <div className="clearfix mt1">
-                  { order.get('numberOfItems', '') } artikelen
-                </div>
-                <div className="clearfix mt1">
-                  <span style={ Typography.time }>
-                    <IconAlarm color={ DbkColors.timeColor } style={ {height: '17px'} }/>
-                    <span> { order.get('placedAt', '') }</span>
-                  </span>
-                </div>
-              </div>
-            </ListItem>
-          </Link>
-          { order.get('assigned', false) ? this.renderStatusBar(order.get('assignee', ''), order.get('placedAt', '')) : <Divider /> }
-        </div>
-      );
-    });
-
-    return orderListItems;
-  }
-
   renderStatusBar(assignee) {
     const assignedToYou = assignee.get('id', '') === this.props.session.getIn(['user', 'number']);
 
@@ -132,6 +94,10 @@ class OrderListPage extends Component {
     const tabIndex = this.state.tabIndex;
     const unassignedItems = unassignedOrders.get('items', false);
     const assignedItems = assignedOrders.get('items', false);
+    const renderUnassigned = !unassignedOrders.get('isLoading', false) && !unassignedOrders.get('dataError', false) && unassignedItems !== null;
+    const renderAssigned = !assignedOrders.get('isLoading', false) && !assignedOrders.get('dataError', false) && assignedItems !== null;
+    const noUnassigned = !unassignedOrders.get('isLoading', false) && !unassignedOrders.get('dataError', false) && unassignedItems === null;
+    const noAssigned = !assignedOrders.get('isLoading', false) && !assignedOrders.get('dataError', false) && assignedOrders === null;
 
     return (
       <div>
@@ -176,14 +142,8 @@ class OrderListPage extends Component {
             { unassignedOrders.get('isLoading', false) ? this.renderLoading() : [] }
             { unassignedOrders.get('dataError', false) ? this.renderError() : [] }
             <List>
-              {
-                !unassignedOrders.get('isLoading', false) && !unassignedOrders.get('dataError', false) && unassignedItems !== null ?
-                  this.renderOrderList(unassignedItems) : []
-              }
-              {
-                !unassignedOrders.get('isLoading', false) && !unassignedOrders.get('dataError', false) && unassignedItems === null ?
-                  <div>No orders found</div> : []
-              }
+              { renderUnassigned ? this.mapOrders(unassignedItems) : [] }
+              { noUnassigned ? <div>No orders found</div> : [] }
             </List>
           </Container>
 
@@ -191,19 +151,68 @@ class OrderListPage extends Component {
             { assignedOrders.get('isLoading', false) ? this.renderLoading() : [] }
             { assignedOrders.get('dataError', false) ? this.renderError() : [] }
             <List>
-              {
-                !assignedOrders.get('isLoading', false) && !assignedOrders.get('dataError', false) && assignedItems !== null ?
-                  this.renderOrderList(assignedItems) : []
-              }
-              {
-                !assignedOrders.get('isLoading', false) && !assignedOrders.get('dataError', false) && assignedItems === null ?
-                  <div>No orders found</div> : []
-              }
+              { renderAssigned ? this.mapOrders(this.filterCurrentUser(assignedItems)) : [] }
+              { renderAssigned ? this.mapOrders(this.filterOtherUsers(assignedItems)) : [] }
+              { noAssigned ? <div>No orders found</div> : [] }
             </List>
           </Container>
         </SwipeableViews>
       </div>
     );
+  }
+
+  filterOtherUsers(orders) {
+    const currentUser = this.props.session.getIn(['user', 'number'], '');
+    const otherUserOrders = orders.filter((order) => {
+      return order.getIn(['assignee', 'id'], '') !== currentUser;
+    });
+
+    return otherUserOrders;
+  }
+
+  filterCurrentUser(orders) {
+    const currentUser = this.props.session.getIn(['user', 'number'], '');
+    const currentUserOrders = orders.filter((order) => {
+      return order.getIn(['assignee', 'id'], '') === currentUser;
+    });
+
+    return currentUserOrders;
+  }
+
+  mapOrders(orders) {
+    return orders.map((order, i) => {
+      const customer = order.get('customer');
+
+      return (
+        <div key={ i }>
+          <Link to={ '/pickingorders/' + order.get('id', '') }>
+            <ListItem
+              rightIcon={
+                <IconChevronRight style={ OrderListStyles.itemArrow }/>
+              }>
+              <div>
+                <div className="clearfix">
+                  <strong>{ customer.get('name', '') }</strong>
+                </div>
+                <div className="clearfix mt1">
+                  <span style={ Typography.secondary }>{ order.get('orderId', '') }</span>
+                </div>
+                <div className="clearfix mt1">
+                  { order.get('numberOfItems', '') } artikelen
+                </div>
+                <div className="clearfix mt1">
+                  <span style={ Typography.time }>
+                    <IconAlarm color={ DbkColors.timeColor } style={ {height: '17px'} }/>
+                    <span> { order.get('placedAt', '') }</span>
+                  </span>
+                </div>
+              </div>
+            </ListItem>
+          </Link>
+          { order.get('assigned', false) ? this.renderStatusBar(order.get('assignee', ''), order.get('placedAt', '')) : <Divider /> }
+        </div>
+      );
+    });
   }
 
   handleTabChange(value) {

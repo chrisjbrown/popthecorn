@@ -19,6 +19,7 @@ import {
   orderAssignRequest,
   orderUpdateRequest,
   itemReserveRequest,
+  addError,
 } from 'app/actions/';
 
 import DbkColors from 'app/styles/colors';
@@ -38,6 +39,7 @@ class OrderPage extends Component {
     orderAssignRequest: PropTypes.func,
     orderUpdateRequest: PropTypes.func,
     itemReserveRequest: PropTypes.func,
+    addError: PropTypes.func,
   };
 
   constructor(props) {
@@ -280,7 +282,11 @@ class OrderPage extends Component {
   }
 
   handleReserveItem(orderId, itemId, itemIndex) {
-    this.props.itemReserveRequest(orderId, itemId, itemIndex);
+    if (this.props.orderData.getIn(['order', 'assignee', 'id']) === this.props.session.getIn(['user', 'number'])) {
+      this.props.itemReserveRequest(orderId, itemId, itemIndex);
+    } else {
+      this.props.addError('This item is not assigned to you');
+    }
   }
 
   handleAssignOrder() {
@@ -288,7 +294,11 @@ class OrderPage extends Component {
   }
 
   handleUpdateOrder(status) {
-    this.props.orderUpdateRequest(this.props.orderData.getIn(['order', 'id'], ''), status);
+    if (this.props.orderData.getIn(['order', 'assignee', 'id']) === this.props.session.getIn(['user', 'number'])) {
+      this.props.orderUpdateRequest(this.props.orderData.getIn(['order', 'id'], ''), status);
+    } else {
+      this.props.addError('This order is not assigned to you');
+    }
   }
 }
 
@@ -297,5 +307,5 @@ export default connect(
     session: state.session,
     orderData: state.order,
   }),
-  dispatch => bindActionCreators({ orderRequest, orderAssignRequest, orderUpdateRequest, itemReserveRequest }, dispatch)
+  dispatch => bindActionCreators({ orderRequest, orderAssignRequest, orderUpdateRequest, itemReserveRequest, addError }, dispatch)
 )(OrderPage);

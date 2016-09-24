@@ -1,3 +1,4 @@
+require('babel-polyfill');
 import 'es5-shim';
 import 'es6-shim';
 import 'es6-promise';
@@ -12,4 +13,3 @@ context.keys().forEach(
       context(key);
     }
   });
-

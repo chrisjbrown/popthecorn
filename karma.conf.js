@@ -1,5 +1,5 @@
 process.env.TEST = true;
-
+const path = require('path');
 const loaders = require('./webpack/loaders');
 const postcssInit = require('./webpack/postcss');
 const plugins = require('./webpack/plugins');
@@ -24,6 +24,7 @@ module.exports = (config) => {
       'karma-sourcemap-loader',
       'karma-spec-reporter',
       'karma-chrome-launcher',
+      'karma-phantomjs-launcher',
       'karma-remap-istanbul',
     ],
 
@@ -46,13 +47,27 @@ module.exports = (config) => {
       module: {
         loaders: combinedLoaders(),
         postLoaders: config.singleRun
-          ? [ loaders.istanbulInstrumenter ]
+          ? [loaders.istanbulInstrumenter]
           : [ ],
       },
       stats: {
         colors: true,
         reasons: true,
       },
+      resolve: {
+        alias: {
+          app: path.join(__dirname, 'src'),
+        },
+        extensions: ['', '.js', '.jsx', '.json'],
+      },
+      externals: {
+        'react/addons': true,
+        'react/lib/ExecutionEnvironment': true,
+        'react/lib/ReactContext': true,
+      },
+      noParse: [
+        /\/sinon\.js/,
+      ],
       debug: config.singleRun ? false : true,
       plugins,
       postcss: postcssInit,
@@ -67,9 +82,9 @@ module.exports = (config) => {
       .concat(coverage.length > 0 ? ['karma-remap-istanbul'] : []),
 
     remapIstanbulReporter: {
-      src: 'coverage/chrome/coverage-final.json',
+      src: './coverage/coverage-final.json',
       reports: {
-        html: 'coverage',
+        lcovonly: 'coverage/lcov.info',
       },
       timeoutNotCreated: 2000,
       timeoutNoMoreFiles: 2000,
@@ -79,9 +94,17 @@ module.exports = (config) => {
       reporters: [
         { type: 'json' },
       ],
-      dir: './coverage/',
+      dir: 'coverage',
+      file: 'coverage-final.json',
       subdir: (browser) => {
         return browser.toLowerCase().split(/[ /-]/)[0]; // returns 'chrome'
+      },
+      check: {
+        global: {
+          statements: 40,
+          branches: 30,
+          functions: 40,
+        },
       },
     },
 
@@ -89,7 +112,6 @@ module.exports = (config) => {
     colors: true,
     logLevel: config.singleRun ? config.LOG_INFO : config.LOG_DEBUG,
     autoWatch: true,
-    browsers: ['Chrome'], // Alternatively: 'PhantomJS'
     captureTimeout: 6000,
   });
 };
@@ -97,13 +119,12 @@ module.exports = (config) => {
 function combinedLoaders() {
   return Object.keys(loaders).reduce(function reduce(aggregate, k) {
     switch (k) {
-    case 'istanbulInstrumenter':
-    case 'eslint':
-      return aggregate;
-    default:
-      return aggregate.concat([loaders[k]]);
+      case 'istanbulInstrumenter':
+      case 'eslint':
+        return aggregate;
+      default:
+        return aggregate.concat([loaders[k]]);
     }
   },
   []);
 }
-

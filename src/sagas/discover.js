@@ -6,7 +6,7 @@ import { discoverMovieSuccess, discoverMovieError } from 'app/actions/discover/'
 import {
   DISCOVER_MOVIE_REQUEST,
   DISCOVER_MOVIE_RESET,
-} from 'app/actions/discover';
+} from 'app/actions';
 
 /**
  * [watchDiscoverMovie: wait for discover]

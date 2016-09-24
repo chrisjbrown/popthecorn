@@ -1,7 +1,7 @@
 {
-  "name": "stock-runner",
+  "name": "popthecorn",
   "version": "0.1.0",
-  "description": "deBijenkorf offline stock runner",
+  "description": "popthecorn",
   "license": "MIT",
   "engines": {
     "node": "4.4.4"
@@ -33,6 +33,7 @@
     "eslint": "3.1.1",
     "eslint-loader": "^1.4.1",
     "eslint-plugin-react": "^5.2.2",
+    "gh-pages": "^0.11.0",
     "istanbul": "^1.0.0-alpha.2",
     "istanbul-instrumenter-loader": "^0.2.0",
     "jasmine-core": "^2.4.1",
@@ -121,7 +122,6 @@
     "redux-saga": "^0.11.0",
     "require-hacker": "^2.1.2",
     "rimraf": "^2.4.3",
-    "serviceworker-loader": "^0.1.0",
     "sinon": "^1.17.3",
     "style-loader": "^0.13.0",
     "stylelint": "^6.8.0",
@@ -135,9 +135,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/deBijenkorf/stock-runner.git"
+    "url": "git://github.com/chrisjbrown/popthecorn.git"
   },
   "bugs": {
-    "url": "https://github.com/deBijenkorf/stock-runner/issues"
+    "url": "https://github.com/chrisjbrown/popthecorn/issues"
   }
 }

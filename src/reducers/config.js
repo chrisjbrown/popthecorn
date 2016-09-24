@@ -1,32 +1,35 @@
 import {
-  ITEM_LIST_REQUEST,
-  ITEM_LIST_SUCCESS,
-  ITEM_LIST_ERROR,
+  CONFIG_REQUEST,
+  CONFIG_SUCCESS,
+  CONFIG_ERROR,
 } from 'app/actions';
 import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({
-  items: [],
+  changeKeys: null,
+  images: null,
   dataError: '',
   isLoading: false,
 });
 
-function itemListReducer(state = INITIAL_STATE, action = {}) {
+function configReducer(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
-    case ITEM_LIST_REQUEST:
+    case CONFIG_REQUEST:
       return state.merge(fromJS({
-        items: [],
+        changeKeys: null,
+        images: null,
         dataError: '',
         isLoading: true,
       }));
-    case ITEM_LIST_ERROR:
+    case CONFIG_ERROR:
       return state.merge(fromJS({
         isLoading: false,
         dataError: action.payload.error.message,
       }));
-    case ITEM_LIST_SUCCESS:
+    case CONFIG_SUCCESS:
       return state.merge(fromJS({
-        items: action.payload.data.items,
+        changeKeys: action.payload.config.change_keys,
+        images: action.payload.config.images,
         dataError: '',
         isLoading: false,
       }));
@@ -35,4 +38,4 @@ function itemListReducer(state = INITIAL_STATE, action = {}) {
   }
 }
 
-export default itemListReducer;
+export default configReducer;

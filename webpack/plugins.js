@@ -13,6 +13,7 @@ const basePlugins = [
     __TEST__: JSON.stringify(process.env.TEST),
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     __API__: JSON.stringify(endpoints.apiEndpoint),
+    __API_KEY__: JSON.stringify(endpoints.apiKey),
   }),
   new HtmlWebpackPlugin({
     template: './src/index.html',

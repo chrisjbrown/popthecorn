@@ -1,43 +1,43 @@
 import {
-  SEARCH_ITEM_REQUEST,
-  SEARCH_ITEM_SUCCESS,
-  SEARCH_ITEM_ERROR,
-  SEARCH_ITEM_RESET,
+  DISCOVER_MOVIE_REQUEST,
+  DISCOVER_MOVIE_SUCCESS,
+  DISCOVER_MOVIE_ERROR,
+  DISCOVER_MOVIE_RESET,
 } from 'app/actions';
 import { fromJS } from 'immutable';
 
 const INITIAL_STATE = fromJS({
   items: [],
-  searchCriteria: {},
+  discoverCriteria: {},
   dataError: '',
   isLoading: false,
 });
 
-function searchItemReducer(state = INITIAL_STATE, action = {}) {
+function discoverMovieReducer(state = INITIAL_STATE, action = {}) {
   switch (action.type) {
-    case SEARCH_ITEM_REQUEST:
+    case DISCOVER_MOVIE_REQUEST:
       return state.merge(fromJS({
         items: [],
-        searchCriteria: action.payload.criteria,
+        discoverCriteria: action.payload.criteria,
         dataError: '',
         isLoading: true,
       }));
-    case SEARCH_ITEM_ERROR:
+    case DISCOVER_MOVIE_ERROR:
       return state.merge(fromJS({
         isLoading: false,
         dataError: action.payload.error.message,
       }));
-    case SEARCH_ITEM_SUCCESS:
+    case DISCOVER_MOVIE_SUCCESS:
       return state.merge(fromJS({
-        items: action.payload.searchResults.data.items || [],
+        items: action.payload.discoverResults.results || [],
         dataError: '',
         isLoading: false,
       }));
-    case SEARCH_ITEM_RESET:
+    case DISCOVER_MOVIE_RESET:
       return state.merge(INITIAL_STATE);
     default:
       return state;
   }
 }
 
-export default searchItemReducer;
+export default discoverMovieReducer;

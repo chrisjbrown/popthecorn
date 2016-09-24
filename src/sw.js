@@ -1,3 +1,5 @@
+const dataCacheName = 'popthecorndata-v1';
+
 self.addEventListener('install', () => {
   console.log('SW installed');
 });
@@ -6,19 +8,16 @@ self.addEventListener('activate', () => {
   console.log('SW activated');
 });
 
-self.addEventListener('push', (event) => {
-  console.log('Received a push message', event);
-
-  const title = 'Yay a message.';
-  const body = 'We have received a push message.';
-  const icon = '/assets/icons/icon-4x.png';
-  const tag = 'simple-push-demo-notification-tag';
-
-  event.waitUntil(
-    self.registration.showNotification(title, {
-      body: body,
-      icon: icon,
-      tag: tag,
+self.addEventListener('fetch', (e) => {
+  console.log('[ServiceWorker] Fetch', e.request.url);
+  e.respondWith(
+    fetch(e.request)
+    .then((response) => {
+      return caches.open(dataCacheName).then((cache) => {
+        cache.put(e.request.url, response.clone());
+        console.log('[ServiceWorker] Fetched&Cached Data');
+        return response;
+      });
     })
   );
 });

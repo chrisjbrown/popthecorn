@@ -1,7 +1,7 @@
 {
-  "name": "Stock Runner Push",
+  "name": "Pop The Corn",
   "gcm_sender_id": "491730819178",
-  "short_name": "Stock Runner",
+  "short_name": "Pop Corn",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

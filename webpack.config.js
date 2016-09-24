@@ -31,7 +31,7 @@ module.exports = {
   devServer: {
     historyApiFallback: { index: '/' },
     proxy: {
-      '/dropshipper/*': {
+      '*': {
         target: endpoints.apiEndpoint,
         secure: false,
         changeOrigin: true,

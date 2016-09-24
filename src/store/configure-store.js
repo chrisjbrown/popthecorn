@@ -54,7 +54,7 @@ function _enableHotLoader(store) {
 
 function _getStorageConfig() {
   return {
-    key: 'stockrunner',
+    key: 'popthecorn',
     serialize: (store) => {
       return store && store.session ?
         JSON.stringify(store.session.toJS()) : store;

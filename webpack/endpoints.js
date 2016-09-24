@@ -1,3 +1,4 @@
 module.exports = {
-  apiEndpoint: 'https://ceres-dropshipper.sit.debijenkorf.nl',
+  apiEndpoint: 'http://api.themoviedb.org/3/',
+  apiKey: 'cd42740a0e7182f8feeb76ecf070ce75',
 };

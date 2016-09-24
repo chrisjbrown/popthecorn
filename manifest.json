@@ -1,0 +1,37 @@
+{
+  "name": "Pop The Corn",
+  "gcm_sender_id": "491730819178",
+  "short_name": "Pop Corn",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "splash_screens": [
+    {
+      "src": "1461f26cb57fd499508c2016e772d022.png",
+      "sizes": "1920x1080",
+      "type": "image/png"
+    },
+    {
+      "src": "fa42712ffa3ff712ded33215423ef189.png",
+      "sizes": "2560x1440",
+      "type": "image/png"
+    }
+  ],
+  "icons": [
+    {
+      "src": "34dff2b5ac6803984d8db34754139e33.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "b345f9340effadd1fdfc57f56ac1b3de.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "6b45d31f987ac8f4f6bd17d9c772e878.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

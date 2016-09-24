@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-// import Divider from 'material-ui/Divider';
+import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import {GridList, GridTile} from 'material-ui/GridList';
@@ -69,15 +69,24 @@ class DiscoverPage extends Component {
 
     return (
       <div className="flex-wrap center">
-        {genres.map((genre, i) => (
+        <div className="my2">
+          {genres.map((genre, i) => (
+            <RaisedButton
+              key={ i }
+              label={ genre.get('name') }
+              onTouchTap={ this.handleSelectGenre.bind(this, genre.get('id')) }
+              primary= { selectedGenres.includes(genre.get('id')) }
+              className="m1"
+            />
+          ))}
+        </div>
+        <Divider className="my2" />
+        <div className="my2">
           <RaisedButton
-            key={ i }
-            label={ genre.get('name') }
-            onTouchTap={ this.handleSelectGenre.bind(this, genre.get('id')) }
-            primary= { selectedGenres.includes(genre.get('id')) }
-            className="m1"
+            label="Clear Genres"
+            onTouchTap={ this.handleClearGenres.bind(this) }
           />
-        ))}
+        </div>
       </div>
     );
   }
@@ -87,7 +96,7 @@ class DiscoverPage extends Component {
     const isLoading = discover.get('isLoading');
     const dataError = discover.get('dataError');
     const disoverResults = discover.get('items');
-    const baseUrl = config.getIn(['images', 'base_url'], '');
+    const baseUrl = config.getIn(['images', 'secure_base_url'], '');
     const posterSizes = config.getIn(['images', 'poster_sizes', 4], '');
 
     if (isLoading) {
@@ -97,7 +106,7 @@ class DiscoverPage extends Component {
     }
 
     return (
-      <GridList cols={ 6 }>
+      <GridList cols={ 6 } cellHeight={ 300 }>
         {disoverResults.map((result, i) => (
           <GridTile
             key={ i }
@@ -115,11 +124,21 @@ class DiscoverPage extends Component {
     return (
       <Container center>
         { this.renderGenres() }
-        <div className="mx2 my2 flex-wrap justify-between">
+        <div className="m2 flex-wrap justify-between">
           { this.renderMovieGrid() }
         </div>
       </Container>
     );
+  }
+
+  handleClearGenres() {
+    if (this.state.selectedGenres.length > 0) {
+      this.props.discoverMovieRequest([]);
+    }
+
+    this.setState({
+      selectedGenres: [],
+    });
   }
 
   handleSelectGenre(genreName) {

@@ -9,7 +9,7 @@ const devmode = process.env.NODE_ENV !== 'production';
 
 function getEntrySources(sources) {
   if (devmode) {
-    sources.push('webpack-dev-server/client?http://0.0.0.0:8080');
+    sources.push('webpack-dev-server/client?http://0.0.0.0:8060');
     sources.push('webpack/hot/only-dev-server');
   }
 
@@ -29,6 +29,7 @@ module.exports = {
   plugins: plugins,
 
   devServer: {
+    port: 8060,
     historyApiFallback: { index: '/' },
     proxy: {
       '*': {

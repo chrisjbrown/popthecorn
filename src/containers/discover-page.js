@@ -6,6 +6,7 @@ import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import {GridList, GridTile} from 'material-ui/GridList';
+import Slider from 'material-ui/Slider';
 
 import {
   removeError,
@@ -31,13 +32,21 @@ class DiscoverPage extends Component {
     super(props);
 
     this.state = {
+      voteSlider: 5,
       selectedGenres: [],
+      voteCountSlider: 200,
     };
   }
 
   componentDidMount() {
     this.props.discoverMovieRequest();
     this.props.genresRequest();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState !== this.state) {
+      this.handleDiscoverRequest();
+    }
   }
 
   renderError() {
@@ -80,11 +89,36 @@ class DiscoverPage extends Component {
             />
           ))}
         </div>
-        <Divider className="my2" />
         <div className="my2">
           <RaisedButton
             label="Clear Genres"
             onTouchTap={ this.handleClearGenres.bind(this) }
+          />
+        </div>
+        <Divider className="my2" />
+        <div className="mx4">
+          <span className="center-align">
+            vote average greater than: { this.state.voteSlider }
+          </span>
+          <Slider
+            min={ 0 }
+            max={ 10 }
+            defaultValue={ 5 }
+            value={this.state.voteSlider}
+            onChange={this.handleVoteSlider.bind(this)}
+          />
+        </div>
+        <Divider className="my2" />
+        <div className="mx4">
+          <span className="center-align">
+            vote count greater than: { this.state.voteCountSlider }
+          </span>
+          <Slider
+            min={ 0 }
+            max={ 5000 }
+            defaultValue={ 200 }
+            value={this.state.voteCountSlider}
+            onChange={this.handleVoteCountSlider.bind(this)}
           />
         </div>
       </div>
@@ -132,12 +166,20 @@ class DiscoverPage extends Component {
   }
 
   handleClearGenres() {
-    if (this.state.selectedGenres.length > 0) {
-      this.props.discoverMovieRequest([]);
-    }
-
     this.setState({
       selectedGenres: [],
+    });
+  }
+
+  handleVoteSlider(event, value) {
+    this.setState({
+      voteSlider: value,
+    });
+  }
+
+  handleVoteCountSlider(event, value) {
+    this.setState({
+      voteCountSlider: value,
     });
   }
 
@@ -153,8 +195,6 @@ class DiscoverPage extends Component {
         selectedGenres: newGenres,
       });
 
-      this.props.discoverMovieRequest(newGenres.join(','));
-
       return;
     }
 
@@ -163,8 +203,16 @@ class DiscoverPage extends Component {
     this.setState({
       selectedGenres: selectedGenres,
     });
+  }
 
-    this.props.discoverMovieRequest({ with_genres: selectedGenres.join(',') });
+  handleDiscoverRequest() {
+    const { selectedGenres, voteSlider, voteCountSlider } = this.state;
+
+    this.props.discoverMovieRequest({
+      with_genres: selectedGenres.join(','),
+      'vote_average.gte': voteSlider,
+      'vote_count.gte': voteCountSlider,
+    });
   }
 }
 
